@@ -1,0 +1,118 @@
+-- MySQL Workbench Synchronization
+-- Generated: 2023-07-15 08:38
+-- Model: New Model
+-- Version: 1.0
+-- Project: Name of the project
+-- Author: ppwangun
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+ALTER TABLE `udm_academy`.`admission` 
+ADD INDEX `fk_admission_academic_year1_idx` (`academic_year_id` ASC) ,
+ADD INDEX `fk_admission_degree1_idx` (`degree_id` ASC) ,
+DROP INDEX `fk_admission_degree1_idx` ,
+DROP INDEX `fk_admission_academic_year1_idx` ;
+;
+
+ALTER TABLE `udm_academy`.`class_of_study` 
+DROP COLUMN `is_core_curriculum`,
+ADD COLUMN `is_core_curriculum` INT(11) NULL DEFAULT 0 AFTER `name`,
+ADD INDEX `fk_class_of_study_degree1_idx` (`degree_id` ASC) ,
+DROP INDEX `fk_class_of_study_degree1_idx` ;
+;
+
+ALTER TABLE `udm_academy`.`degree` 
+ADD INDEX `fk_degree_department1_idx` (`department_id` ASC) ,
+ADD INDEX `fk_degree_OPtion1_idx` (`OPtion_id` ASC, `OPtion_speciality_id` ASC) ,
+DROP INDEX `fk_degree_OPtion1_idx` ,
+DROP INDEX `fk_degree_department1_idx` ;
+;
+
+ALTER TABLE `udm_academy`.`exam` 
+ADD INDEX `fk_exam_class_of_study_has_semester1_idx` (`class_of_study_has_semester_id` ASC) ,
+DROP INDEX `fk_exam_class_of_study_has_semester1_idx` ;
+;
+
+ALTER TABLE `udm_academy`.`exam_registration` 
+ADD INDEX `fk_exam_registration_student1_idx` (`student_id` ASC) ,
+DROP INDEX `fk_exam_registration_student1_idx` ;
+;
+
+ALTER TABLE `udm_academy`.`field_of_study` 
+ADD INDEX `fk_field_of_study_department1_idx` (`department_id` ASC) ,
+ADD INDEX `fk_field_of_study_faculty1_idx` (`faculty_id1` ASC) ,
+DROP INDEX `fk_field_of_study_faculty1_idx` ,
+DROP INDEX `fk_field_of_study_department1_idx` ;
+;
+
+ALTER TABLE `udm_academy`.`payment` 
+ADD INDEX `fk_payment_admin_registration1_idx` (`admin_registration_id` ASC) ,
+ADD INDEX `fk_payment_academic_year1_idx` (`academic_year_id` ASC) ,
+DROP INDEX `fk_payment_academic_year1_idx` ,
+DROP INDEX `fk_payment_admin_registration1_idx` ;
+;
+
+ALTER TABLE `udm_academy`.`semester` 
+ADD INDEX `fk_semester_academic_year1_idx` (`academic_year_id` ASC) ,
+DROP INDEX `fk_semester_academic_year1_idx` ;
+;
+
+ALTER TABLE `udm_academy`.`student_sem_registration` 
+ADD INDEX `fk_student_sem_registration_student1_idx` (`student_id` ASC) ,
+DROP INDEX `fk_student_sem_registration_student1_idx` ;
+;
+
+ALTER TABLE `udm_academy`.`person_in_charge` 
+ADD INDEX `fk_person_in_charge_school_employee1_idx` (`school_employee_id` ASC) ,
+ADD INDEX `fk_person_in_charge_school1_idx` (`school_id` ASC) ,
+ADD INDEX `fk_person_in_charge_faculty1_idx` (`faculty_id` ASC) ,
+ADD INDEX `fk_person_in_charge_degree1_idx` (`degree_id` ASC) ,
+ADD INDEX `fk_person_in_charge_department1_idx` (`department_id` ASC) ,
+DROP INDEX `fk_person_in_charge_department1_idx` ,
+DROP INDEX `fk_person_in_charge_degree1_idx` ,
+DROP INDEX `fk_person_in_charge_faculty1_idx` ,
+DROP INDEX `fk_person_in_charge_school1_idx` ,
+DROP INDEX `fk_person_in_charge_school_employee1_idx` ;
+;
+
+ALTER TABLE `udm_academy`.`speciality` 
+ADD INDEX `fk_department_field_of_study1_idx` (`field_of_study_id` ASC) ,
+DROP INDEX `fk_department_field_of_study1_idx` ;
+;
+
+ALTER TABLE `udm_academy`.`department` 
+ADD INDEX `fk_department_faculty1_idx` (`faculty_id` ASC) ,
+ADD INDEX `fk_department_person_in_charge1_idx` (`person_in_charge_id` ASC) ,
+DROP INDEX `fk_department_person_in_charge1_idx` ,
+DROP INDEX `fk_department_faculty1_idx` ;
+;
+
+ALTER TABLE `udm_academy`.`degree_has_class_of_study` 
+ADD INDEX `fk_degree_has_class_of_study_class_of_study1_idx` (`class_of_study_id` ASC) ,
+ADD INDEX `fk_degree_has_class_of_study_degree1_idx` (`degree_id` ASC) ,
+ADD INDEX `fk_degree_has_class_of_study_training_curriculum1_idx` (`training_curriculum_id` ASC) ,
+DROP INDEX `fk_degree_has_class_of_study_training_curriculum1_idx` ,
+DROP INDEX `fk_degree_has_class_of_study_degree1_idx` ,
+DROP INDEX `fk_degree_has_class_of_study_class_of_study1_idx` ;
+;
+
+ALTER TABLE `udm_academy`.`OPtion` 
+ADD INDEX `fk_OPtion_speciality1_idx` (`speciality_id` ASC) ,
+DROP INDEX `fk_OPtion_speciality1_idx` ;
+;
+
+ALTER TABLE `udm_academy`.`admission_batch` 
+ADD INDEX `fk_admission_batch_student1_idx` (`student_id` ASC) ,
+ADD INDEX `fk_admission_batch_admin_registration1_idx` (`admin_registration_id` ASC) ,
+ADD INDEX `fk_admission_batch_admission1_idx` (`admission_id` ASC) ,
+DROP INDEX `fk_admission_batch_admission1_idx` ,
+DROP INDEX `fk_admission_batch_admin_registration1_idx` ,
+DROP INDEX `fk_admission_batch_student1_idx` ;
+;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

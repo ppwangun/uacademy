@@ -1,0 +1,227 @@
+'use strict';
+
+// Declare app level module which depends on views, and components
+angular.module('myApp', [
+  'ngMaterial',
+  'ngMessages',
+  'ngRoute',
+  'toastr',
+  'angular-loading-bar',
+  'dashboard',
+  'myApp.acadyrList',
+  'app.acadyr',
+  'faculty',
+  'department',
+  'filiere',
+  'degree',
+  'classes',
+  'student',
+  'payment',
+  'exam',
+  'users',
+  'teachingunit',
+  'myApp.version',
+  'datatables',
+  'datatables.buttons',
+  'datatables.fixedheader'
+]).
+config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
+  $locationProvider.hashPrefix('!');
+
+  $routeProvider
+          .when('/dashboard',{
+              templateUrl: 'dashboard'
+          })
+          .when('/admission',{
+              templateUrl: 'admission'
+          })  
+          .when('/newStdRegistrationFeesMgt',{
+              templateUrl: 'newStdRegistrationFeesMgt'
+          })          
+          .when('/faculty',{
+              template: '<faculty-list></faculty-list>'
+          })
+          .when('/department',{
+              template: '<department-list></department-list>'
+          })   
+          .when('/newDpt/:id',{
+              template: '<department-details></department-details>'
+          })          
+          .when('/filiere',{
+              template: '<filiere-details></filiere-details>'
+          })
+          .when('/degree',{
+              template: '<degree-details></degree-details>'
+          })
+          .when('/newdegree',{
+              template: '<new-degree></new-degree>'
+          })
+          .when('/updatedegree/:id',{
+              template: '<new-degree></new-degree>'
+          })
+          .when('/classes',{
+              template: '<classes-details></classes-details>'
+          })
+          .when('/newclasse',{
+              template: '<new-classe></new-classe>'
+          }).when('/newclasse/:id',{
+              template: '<new-classe></new-classe>'
+          }).when('/assignedteachingunit',{
+              template: '<assignedteachingunit-details></assignedteachingunit-details>'
+          }).when('/assignnewteachingunit/:id/:ue_class_id/:ue_sem_id',{
+              template: '<assignnewteachingunit-details></assignnewteachingunit-details>'
+          }).when('/assignnewteachingunit',{
+              template: '<assignnewteachingunit-details></assignnewteachingunit-details>'
+          })
+          .when('/teachingunit',{
+              template: '<teachingunit-details></teachingunit-details>'
+          })
+          .when('/newteachingunit',{
+              template: '<new-teachingunit></new-teachingunit>'
+          }).when('/newteachingunit/:id/:ue_class_id',{
+              template: '<new-teachingunit></new-teachingunit>'
+          }).when('/students',{
+              template: '<student-list></student-list>'
+          })
+          .when('/studentinfos/:id', {
+              template: '<student-details></student-details>',
+              resolve:{
+                    "check":function(accessFac,$location,$route){
+                        var access = false;
+                        var perm = '';
+               
+                        accessFac.checkClassePermission(perm,$route.current.params.id).then(function(data){
+                           access = data; 
+                        
+                        //function to be resolved, accessFac and $location Injected
+                        if(access){    //check if the user has permission -- This happens before the page loads
+                       
+                        }else{
+                            $location.path('/');                //redirect user to home if it does not have permission.
+                            alert("Accès non autorisé");
+                        }
+                        });
+
+                    }
+                },
+              
+          })
+          .when('/stdList',{
+              templateUrl: 'stdList'
+          })
+          .when('/pedagogicalReg',{
+              template: '<pedagogical-reg></pedagogical-reg>'
+          })          
+          .when('/transcripts',{
+              templateUrl: 'transcripts'
+          })
+          .when('/scholarshipCertificates',{
+              templateUrl: 'scholarshipCertificates'
+          }) 
+          .when('/studentCards',{
+              templateUrl: 'studentCards'
+          })          
+          .when('/registrationStat',{
+              templateUrl: 'registrationStat'
+          })          
+          .when('/payments', {
+              template: '<payment-list></payment-list>'
+              
+          })
+          .when('/paymentdetails/:id', {
+              template: '<payment-details></payment-details>'
+              
+          })
+          .when('/moratorium', {
+              template: '<moratorium-list></moratorium-list>'
+              
+          }).when('/newmoratorium',{
+              template: '<new-moratorium></new-moratorium>'
+          }).when('/examlist',{
+              template: '<exam-list></exam-list>'
+          }).when('/newexam',{
+              template: '<new-exam></new-exam>'
+          }).when('/calculnotes',{
+              template: '<calcul-notes></calcul-notes>'
+          }).when('/calculmps',{
+              template: '<calcul-mps></calcul-mps>'
+          }).when('/newexam/:exam_id', {
+              template: '<new-exam></new-exam>'
+              
+          }).when('/gradeconfig',{
+              template: '<grade-config></grade-config>'
+          }).when('/newgrade',{
+              template: '<new-grade></new-grade>'
+          }).when('/newgrade/:id',{
+              template: '<new-grade></new-grade>'
+          }).when('/deliberation',{
+              template: '<delib-config></delib-config>'
+          }).when('/deliberation/:id',{
+              templateUrl: 'admission'
+          }).when('/newDelibCondition',{
+              template: '<newdelib-config></newdelib-config>'
+          }).when('/newDeliberation/:id',{
+              template: '<newdelib-config></newdelib-config>'
+          }).when('/suiviparcourt',{
+              template: '<suivi-parcourt></suivi-parcourt>'
+          }).when('/usermanagement',{
+              template: '<user-management></user-management>'
+          }).when('/newuser',{
+              template: '<new-user></new-user>'
+          }).when('/newuser/:user_id', {
+              template: '<new-user></new-user>'
+              
+          }).when('/groupmanagement', {
+              template: '<group-management></group-management>',
+                  resolve:{
+                    "check":function(accessFac,$location){
+                        var access = false;
+                        var perm = 'manage.groups';
+                        
+                        accessFac.checkPermission(perm).then(function(data){
+                           access = data; 
+                        
+                        //function to be resolved, accessFac and $location Injected
+                        if(access){    //check if the user has permission -- This happens before the page loads
+
+                        }else{
+                            $location.path('/');                //redirect user to home if it does not have permission.
+                            alert("Vous n'ets pas autoriser à accèder à l'objet: "+perm);
+                        }
+                        });
+
+                    }
+                },
+              
+          }).when('/newgroup/', {
+              template: '<new-group></new-group>'
+              
+          }).when('/newgroup/:group_id', {
+              template: '<new-group></new-group>'
+              
+          }).otherwise({redirectTo: '/dashboard'});
+          
+}]).factory('accessFac',function($http){
+    var obj = {}
+    this.access = false;
+    obj.getPermission = function(){    //set the permission to true
+        this.access = true;
+    }
+    obj.checkPermission = function(perm){
+        var data = {permission_type:perm};
+        return  $http.post('checkpermission',data).then(function(response){
+          return response.data[0];
+        })           //returns the users permission level 
+    }
+    obj.checkClassePermission = function(perm,id){
+        var data = {permission_type:perm,std_id:id};
+        return  $http.post('checkpermission',data).then(function(response){
+          return response.data[0];
+        })           //returns the users permission level 
+    }
+    return obj;
+}).controller('testCtrl',function($scope,accessFac){
+    $scope.getAccess = function(){
+        accessFac.getPermission();       //call the method in acccessFac to allow the user permission.
+    }
+});
