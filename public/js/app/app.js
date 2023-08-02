@@ -46,6 +46,9 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
           })   
           .when('/newDpt/:id',{
               template: '<department-details></department-details>'
+          })    
+          .when('/updateDpt/:id',{
+              template: '<update-dpt></update-dpt>'
           })          
           .when('/filiere',{
               template: '<filiere-details></filiere-details>'

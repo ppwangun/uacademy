@@ -12,6 +12,12 @@ angular.module('department')
             controller: departmentCtrl 
 });
 
+angular.module('department')
+        .component('updateDpt',{
+            templateUrl: 'updateDpt',
+            controller: departmentCtrl 
+});
+
 function departmentCtrl($scope,$http,$timeout,$mdDialog,$location){
     var $ctrl=this;
     $scope.faculties=null;

@@ -343,6 +343,15 @@ class IndexController extends AbstractActionController
         $view->setTerminal(true);
 
         return $view;            
+    }   
+    public function updateDptAction()
+    {
+        $view = new ViewModel([
+         ]);
+        // Disable layouts; `MvcEvent` will use this View Model instead
+        $view->setTerminal(true);
+
+        return $view;            
     }    
     public function degreetplAction()
     {

@@ -132,7 +132,17 @@ return [
                         'action'        => 'newDpt',
                     ],
                 ],
-            ],             
+            ], 
+            'newDept' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/updateDpt',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'updateDpt',
+                    ],
+                ],
+            ],            
             'filieretpl' => [
                 'type'    => Literal::class,
                 'options' => [
