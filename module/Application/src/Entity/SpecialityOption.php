@@ -5,12 +5,12 @@
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FieldOfStudy
+ * SpecialityOption
  *
- * @ORM\Table(name="field_of_study", indexes={@ORM\Index(name="fk_training_faculty1_idx", columns={"faculty_id"}), @ORM\Index(name="fk_field_of_study_department1_idx", columns={"department_id"})})
+ * @ORM\Table(name="speciality_option", indexes={@ORM\Index(name="fk_speciality_option_speciality1_idx", columns={"speciality_id"})})
  * @ORM\Entity
  */
-class FieldOfStudy
+class SpecialityOption
 {
     /**
      * @var int
@@ -24,43 +24,33 @@ class FieldOfStudy
     /**
      * @var string|null
      *
-     * @ORM\Column(name="code", type="string", length=45, nullable=true)
+     * @ORM\Column(name="Code", type="string", length=45, nullable=true)
      */
     private $code;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     * @ORM\Column(name="Name", type="string", length=45, nullable=true)
      */
     private $name;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="status", type="integer", nullable=true)
+     * @ORM\Column(name="status", type="integer", nullable=true, options={"default"="1"})
      */
-    private $status;
+    private $status = 1;
 
     /**
-     * @var \Department
+     * @var \Speciality
      *
-     * @ORM\ManyToOne(targetEntity="Department")
+     * @ORM\ManyToOne(targetEntity="Speciality")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="department_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="speciality_id", referencedColumnName="id")
      * })
      */
-    private $department;
-
-    /**
-     * @var \Faculty
-     *
-     * @ORM\ManyToOne(targetEntity="Faculty")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="faculty_id", referencedColumnName="id")
-     * })
-     */
-    private $faculty;
+    private $speciality;
 
 
 
@@ -79,7 +69,7 @@ class FieldOfStudy
      *
      * @param string|null $code
      *
-     * @return FieldOfStudy
+     * @return SpecialityOption
      */
     public function setCode($code = null)
     {
@@ -103,7 +93,7 @@ class FieldOfStudy
      *
      * @param string|null $name
      *
-     * @return FieldOfStudy
+     * @return SpecialityOption
      */
     public function setName($name = null)
     {
@@ -127,7 +117,7 @@ class FieldOfStudy
      *
      * @param int|null $status
      *
-     * @return FieldOfStudy
+     * @return SpecialityOption
      */
     public function setStatus($status = null)
     {
@@ -147,50 +137,26 @@ class FieldOfStudy
     }
 
     /**
-     * Set department.
+     * Set speciality.
      *
-     * @param \Department|null $department
+     * @param \Speciality|null $speciality
      *
-     * @return FieldOfStudy
+     * @return SpecialityOption
      */
-    public function setDepartment(\Department $department = null)
+    public function setSpeciality(\Speciality $speciality = null)
     {
-        $this->department = $department;
+        $this->speciality = $speciality;
     
         return $this;
     }
 
     /**
-     * Get department.
+     * Get speciality.
      *
-     * @return \Department|null
+     * @return \Speciality|null
      */
-    public function getDepartment()
+    public function getSpeciality()
     {
-        return $this->department;
-    }
-
-    /**
-     * Set faculty.
-     *
-     * @param \Faculty|null $faculty
-     *
-     * @return FieldOfStudy
-     */
-    public function setFaculty(\Faculty $faculty = null)
-    {
-        $this->faculty = $faculty;
-    
-        return $this;
-    }
-
-    /**
-     * Get faculty.
-     *
-     * @return \Faculty|null
-     */
-    public function getFaculty()
-    {
-        return $this->faculty;
+        return $this->speciality;
     }
 }

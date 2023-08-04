@@ -20,12 +20,12 @@ li.active a.ng-binding {
 <div class="well"  style="margin-left: -30px; margin-right: -30px;" ng-init="$ctrl.init()">
         
             <div class="row">
-                <div class='col-md-4'>
+                <div class='col-md-6'>
 
-                    <button  ng-show=" <?=($this->access('global.system.admin', null))||($this->access('exam.create', null))?true:false?> && !$ctrl.isUpdate" type="button" ng-click="$ctrl.newExam()" class="btn btn-danger" ng-disabled="examForm.$invalid" >Enrégistrer</button>
+                    <button  ng-show=" <?=($this->access('global.system.admin', null))?true:false?> && !$ctrl.isUpdate" type="button" ng-click="$ctrl.newDpt(dpt)" class="btn btn-danger" ng-disabled="myForm.$invalid" ><span class="fa fa-plus-square"></span>&nbsp;Ajouter Département</button>
                     <span> <a href="#!/department">Retour</a></span>
                 </div>
-                <div class="col-md-2"></div>
+                <div class="col-md-6" > <h4>Gérer les Départements</h4></div>
 
                 
 
@@ -39,14 +39,14 @@ li.active a.ng-binding {
 
 
     <md-content layout-padding >
-        <form   name="dptForm">
+        <form   name="myForm">
 
    
       <div class="md-dialog-content"  ng-init="init()">
         
             <div layout="row">
 
-                    <md-select name="faculty" placeholder="Choisir la établissement" ng-model="dpt.fac_id"  style="min-width: 400px;" required>
+                <md-select name="faculty" placeholder="Choisir la établissement" ng-model="dpt.fac_id"  ng-change="$ctrl.searchDptByFaculty(dpt.fac_id)" style="min-width: 400px;" required>
                          <md-option ng-disabled="true"><em>---Choix de l'établissement---</em></md-option>
                         <md-option ng-value="faculty.id" ng-repeat="faculty in faculties">{{faculty.name}}</md-option>
                     </md-select>
@@ -55,7 +55,7 @@ li.active a.ng-binding {
                 <md-input-container flex="flex" style="width: 60%" >
                     <label>Nom du département:</label>
                     <input type='text'  name='name' ng-model="dpt.name" width='80%' md-no-asterisk required />
-                        <div ng-messages="dptForm.name.$error">
+                        <div ng-messages="myForm.name.$error">
                             <div ng-message="required">le champ code département est obligatoire</div>
                             <div ng-message="minlength">le code doit avoir au moins 3 caractères</div>
                         </div>                    
@@ -65,14 +65,14 @@ li.active a.ng-binding {
                   
                     <label>Code département:</label>
                     <input type='text'  name="code" ng-model="dpt.code" width='80%' minlength="2" md-no-asterisk required />
-                        <div ng-messages="dptForm.code.$error">
+                        <div ng-messages="myForm.code.$error">
                             <div ng-message="required">le champ code département est obligatoire</div>
                             <div ng-message="minlength">le code doit avoir au moins 3 caractères</div>
                         </div>
                 </md-input-container> 
             </div>
 
-           <md-checkbox ng-model="dpt.status" aria-label="Actif ?" md-no-ink >Actif ?</md-checkbox>
+          <md-checkbox class='md-primary' ng-model="dpt.status"  ng-checked="(dpt.status===1)?true:false"aria-label="Actif ?" md-no-ink >Actif ?</md-checkbox>
 
 
       </div>
@@ -102,28 +102,25 @@ li.active a.ng-binding {
                          <thead>
                              <tr class="bg-primary">
                                  <th>Num</th>
-                                 <th>Matricule</th>
-                                 <th>Nom</th>
-                                 <th >Classe</th>
-                                 <th >Présence</th>
-                                 <th>Anonymat</th>
-                                 <th>Note_E</th>
-                                 <th>Note_V</th>
-                                 <th>Note_F</th>
+                                 <th>Code Département</th>
+                                 <th>Nom Département</th>
+                                 <th >status</th>
+                                 <th ></th>
 
                              </tr>
                          </thead>
                          <tbody>
-                             <tr ng-repeat="std in $ctrl.registeredStd" >
-                               <td ng-bind="std.num"></td>
-                               <td ng-bind="std.matricule"></td>
-                               <td ng-bind="std.nom"></td>
-                               <td ng-bind="std.studentCurrentClasse"></td>
-                               <td ng-bind='std.attendance==="P"?"":"A"' ng-class="{'zf-green fa fa-check': std.attendance==='P','zf-red': std.attendance==='A' }"> </td>
-                               <td ng-bind="std.anonymat"></td>
-                               <td ng-bind='std.isMarkFromCatchUpExam===1?std.registeredMark+"[R]":std.registeredMark' ng-class="{'zf-red': std.isMarkFromCatchUpExam===1}"></td>
-                               <td ng-bind='(std.isMarkFromCatchUpExam===1&&std.isMarkValidated===1)?std.validatedMark+"[R]":std.validatedMark' ng-class="{'zf-red': (std.isMarkFromCatchUpExam===1&&isMarkValidated===1)}"></td>
-                               <td ng-bind='(std.isMarkFromCatchUpExam===1&&std.isMarkConfirmed===1)?std.confirmedMark+"[R]":std.confirmedMark' ng-class="{'zf-red': (std.isMarkFromCatchUpExam===1&&std.isMarkConfirmed===1)}" ></td>
+                             <tr ng-repeat="dep in dpts" >
+                               <td >{{$ctrl.cpt + $index}}</td>
+                               <td ng-bind="dep.code"></td>
+                               <td ng-bind="dep.name"></td> 
+                               <td ng-bind='dep.status?"":"x"' ng-class="{'zf-green fa fa-check': dep.status,'zf-red': !dep.status }"> </td>
+                               <td>
+                                   <div class="btn-group">
+                                    <button type="button" ng-click="$ctrl.updateDpt(dep)" class="btn btn-default btn-xs btn-info"><i class="fa fa-edit"></i></button>
+                                    <button  type="button" ng-click="$ctrl.deleteDpt(dep)" class="btn btn-default btn-xs btn-danger" ><i class="fa fa-trash-o"></i></button>   
+                                   </div>
+                               </td>
 
                              </tr>
                          </tbody>

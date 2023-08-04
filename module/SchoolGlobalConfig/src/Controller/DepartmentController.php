@@ -11,6 +11,7 @@ use Laminas\Mvc\Controller\AbstractRestfulController;
 use Laminas\View\Model\JsonModel;
 use Laminas\Hydrator\Reflection as ReflectionHydrator;
 use Application\Entity\FieldOfStudy;
+use Application\Entity\Department;
 use Application\Entity\Faculty;
 
 class DepartmentController extends AbstractRestfulController
@@ -43,18 +44,17 @@ class DepartmentController extends AbstractRestfulController
         $this->entityManager->getConnection()->beginTransaction();
         try
         {      
-            $filieres = $this->entityManager->getRepository(FieldOfStudy::class)->findAll();
-            foreach($filieres as $key=>$value)
+            $dpts = $this->entityManager->getRepository(Department::class)->findAll();
+            foreach($dpts as $key=>$value)
             {
                 $hydrator = new ReflectionHydrator();
                 $data = $hydrator->extract($value);
-
-                $filieres[$key] = $data;
+                $dpts[$key] = $data;
             }
             $this->entityManager->getConnection()->commit();
 
             return new JsonModel([
-                    $filieres
+                    $dpts
             ]);
             }
         catch(Exception $e)
@@ -84,23 +84,24 @@ class DepartmentController extends AbstractRestfulController
         
         $this->entityManager->getConnection()->beginTransaction();
         try
-        {
+        {            
             
-            $filiere= new FieldOfStudy();
-            $filiere->setName($data['name']);
-            $filiere->setCode($data['code']);
- 
-            $faculty = $this->entityManager->getRepository(Faculty::class)->findOneById($data['fac_id']);
-     
-            $filiere->setFaculty($faculty);
-            $this->entityManager->persist($filiere);
+            $dpt= new Department();
+            $dpt->setName($data['name']);
+            $dpt->setCode($data['code']);
+            $faculty = $this->entityManager->getRepository(Faculty::class)->find($data['fac_id']);
+       
+            
+            $dpt->setStatus($data["status"]);    
+            $dpt->setFaculty($faculty); 
+            $this->entityManager->persist($dpt);
             $this->entityManager->flush();
             
-            $filieres = $this->getList();
+            $dpts = $this->getList();
             $this->entityManager->getConnection()->commit();
             
             return new JsonModel([
-                $filieres
+                $dpts
             ]);  
         }
         catch(Exception $e)
@@ -119,11 +120,11 @@ class DepartmentController extends AbstractRestfulController
         $this->entityManager->getConnection()->beginTransaction();
         try
         {
-            $filiere = $this->entityManager->getRepository(FieldOfStudy::class)->findOneById($id);
-            if($filiere)
+            $dpt = $this->entityManager->getRepository(Department::class)->findOneById($id);
+            if($dpt)
             {
                 
-                $this->entityManager->remove($filiere);
+                $this->entityManager->remove($dpt);
                 $this->entityManager->flush();
                 $this->entityManager->getConnection()->commit();
             }

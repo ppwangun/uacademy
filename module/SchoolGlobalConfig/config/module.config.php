@@ -126,14 +126,14 @@ return [
             'newDept' => [
                 'type'    => Literal::class,
                 'options' => [
-                    'route'    => '/newDpt',
+                    'route'    => '/newDept',
                     'defaults' => [
                         'controller' => Controller\IndexController::class,
-                        'action'        => 'newDpt',
+                        'action'        => 'newDept',
                     ],
                 ],
             ], 
-            'newDept' => [
+            'updateDept' => [
                 'type'    => Literal::class,
                 'options' => [
                     'route'    => '/updateDpt',
@@ -283,6 +283,16 @@ return [
                     ],
                 ],
             ],
+            'searchDptByFaculty' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/searchDptByFaculty',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'searchDptByFaculty',
+                    ],
+                ],
+            ],            
             'school' => [
                 'type'    => Segment::class,
                 'options' => [

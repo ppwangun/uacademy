@@ -13,6 +13,8 @@ use Laminas\View\Model\ViewModel;
 use Laminas\Hydrator\Reflection as ReflectionHydrator;
 use SchoolGlobalConfig\Form\AnneeAcadForm;
 
+use Application\Entity\Faculty;
+use Application\Entity\Department;
 use Application\Entity\FieldOfStudy;
 use Application\Entity\Degree;
 use Application\Entity\TrainingCurriculum;
@@ -270,7 +272,32 @@ class IndexController extends AbstractActionController
       }
         
     }
-    
+    public function searchDptByFacultyAction()
+    {
+      $this->entityManager->getConnection()->beginTransaction();
+      try
+      {
+            $data = $this->params()->fromQuery();            
+            $faculty = $this->entityManager->getRepository(Faculty::class)->find($data['fac_id']);
+            $dpts = $this->entityManager->getRepository(Department::class)->findBy(array('faculty'=>$faculty),array("name"=>"ASC"));
+            foreach($dpts as $key=>$value)
+            {
+                $hydrator = new ReflectionHydrator();
+                $data = $hydrator->extract($value);
+
+                $dpts[$key] = $data;
+            }
+        $this->entityManager->getConnection()->commit();
+        return new JsonModel([
+                $dpts
+        ]);          
+      }
+      catch(Exception $e){
+            $this->entityManager->getConnection()->rollBack();
+            throw $e; 
+      }
+        
+    }    
     public function newacadyrAction()
     {
         //$form = new AnneeAcadForm();
@@ -335,7 +362,7 @@ class IndexController extends AbstractActionController
 
         return $view;            
     }
-    public function newDptAction()
+    public function newDeptAction()
     {
         $view = new ViewModel([
          ]);

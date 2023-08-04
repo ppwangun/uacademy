@@ -10,7 +10,7 @@ namespace SchoolGlobalConfig\Controller\Factory;
 
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use SchoolGlobalConfig\Controller\FiliereController;
+use SchoolGlobalConfig\Controller\DepartmentController;
 
 /**
  * This is the factory for IndexController. Its purpose is to instantiate the

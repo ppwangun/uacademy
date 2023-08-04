@@ -5,12 +5,12 @@
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FieldOfStudy
+ * Speciality
  *
- * @ORM\Table(name="field_of_study", indexes={@ORM\Index(name="fk_training_faculty1_idx", columns={"faculty_id"}), @ORM\Index(name="fk_field_of_study_department1_idx", columns={"department_id"})})
+ * @ORM\Table(name="speciality", indexes={@ORM\Index(name="fk_department_field_of_study1_idx", columns={"field_of_study_id"})})
  * @ORM\Entity
  */
-class FieldOfStudy
+class Speciality
 {
     /**
      * @var int
@@ -31,36 +31,26 @@ class FieldOfStudy
     /**
      * @var string|null
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     * @ORM\Column(name="name", type="string", length=45, nullable=true)
      */
     private $name;
 
     /**
-     * @var int|null
+     * @var string|null
      *
-     * @ORM\Column(name="status", type="integer", nullable=true)
+     * @ORM\Column(name="status", type="string", length=45, nullable=true)
      */
     private $status;
 
     /**
-     * @var \Department
+     * @var \FieldOfStudy
      *
-     * @ORM\ManyToOne(targetEntity="Department")
+     * @ORM\ManyToOne(targetEntity="FieldOfStudy")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="department_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="field_of_study_id", referencedColumnName="id")
      * })
      */
-    private $department;
-
-    /**
-     * @var \Faculty
-     *
-     * @ORM\ManyToOne(targetEntity="Faculty")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="faculty_id", referencedColumnName="id")
-     * })
-     */
-    private $faculty;
+    private $fieldOfStudy;
 
 
 
@@ -79,7 +69,7 @@ class FieldOfStudy
      *
      * @param string|null $code
      *
-     * @return FieldOfStudy
+     * @return Speciality
      */
     public function setCode($code = null)
     {
@@ -103,7 +93,7 @@ class FieldOfStudy
      *
      * @param string|null $name
      *
-     * @return FieldOfStudy
+     * @return Speciality
      */
     public function setName($name = null)
     {
@@ -125,9 +115,9 @@ class FieldOfStudy
     /**
      * Set status.
      *
-     * @param int|null $status
+     * @param string|null $status
      *
-     * @return FieldOfStudy
+     * @return Speciality
      */
     public function setStatus($status = null)
     {
@@ -139,7 +129,7 @@ class FieldOfStudy
     /**
      * Get status.
      *
-     * @return int|null
+     * @return string|null
      */
     public function getStatus()
     {
@@ -147,50 +137,26 @@ class FieldOfStudy
     }
 
     /**
-     * Set department.
+     * Set fieldOfStudy.
      *
-     * @param \Department|null $department
+     * @param \FieldOfStudy|null $fieldOfStudy
      *
-     * @return FieldOfStudy
+     * @return Speciality
      */
-    public function setDepartment(\Department $department = null)
+    public function setFieldOfStudy(\FieldOfStudy $fieldOfStudy = null)
     {
-        $this->department = $department;
+        $this->fieldOfStudy = $fieldOfStudy;
     
         return $this;
     }
 
     /**
-     * Get department.
+     * Get fieldOfStudy.
      *
-     * @return \Department|null
+     * @return \FieldOfStudy|null
      */
-    public function getDepartment()
+    public function getFieldOfStudy()
     {
-        return $this->department;
-    }
-
-    /**
-     * Set faculty.
-     *
-     * @param \Faculty|null $faculty
-     *
-     * @return FieldOfStudy
-     */
-    public function setFaculty(\Faculty $faculty = null)
-    {
-        $this->faculty = $faculty;
-    
-        return $this;
-    }
-
-    /**
-     * Get faculty.
-     *
-     * @return \Faculty|null
-     */
-    public function getFaculty()
-    {
-        return $this->faculty;
+        return $this->fieldOfStudy;
     }
 }
