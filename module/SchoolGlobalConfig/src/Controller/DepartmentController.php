@@ -50,6 +50,7 @@ class DepartmentController extends AbstractRestfulController
                 $hydrator = new ReflectionHydrator();
                 $data = $hydrator->extract($value);
                 $dpts[$key] = $data;
+                $dpts[$key]["fac_id"] = $value->getFaculty()->getId();
             }
             $this->entityManager->getConnection()->commit();
 
@@ -141,4 +142,37 @@ class DepartmentController extends AbstractRestfulController
                // $this->getFaculty($data["school_id"])
         ]);
     }
+    
+    public function update($id,$data)
+    {
+
+        $this->entityManager->getConnection()->beginTransaction();
+        try
+        {
+            $dpt = $this->entityManager->getRepository(Department::class)->findOneById($id);
+            if($dpt)
+            {
+
+                $dpt->setName($data['name']);
+                $dpt->setCode($data['code']);
+                $faculty = $this->entityManager->getRepository(Faculty::class)->find($data['fac_id']);
+
+
+                $dpt->setStatus($data["status"]);    
+                $dpt->setFaculty($faculty); 
+                $this->entityManager->flush();
+            }
+
+            $this->entityManager->getConnection()->commit();
+        }
+        catch(Exception $e)
+        {
+            $this->entityManager->getConnection()->rollBack();
+            throw $e;    
+        }
+        
+        return new JsonModel([
+               // $this->getFaculty($data["school_id"])
+        ]);
+    }    
 }

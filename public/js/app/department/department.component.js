@@ -63,8 +63,9 @@ function departmentCtrl($scope,$http,$timeout,$mdDialog,$location,toastr){
         
         $http.post('department',dep).then(
             function successCallback(response){
-                $scope.dpts.push($scope.dep);
+                $scope.dpts.push(dep);
                 toastr.success("Opération effectuée avec succès")
+                $scope.dpt = null;
             },
             function errorCallback(response){
                 toastr.error("une erreur inattendue s'est produite");
@@ -77,11 +78,11 @@ function departmentCtrl($scope,$http,$timeout,$mdDialog,$location,toastr){
     
       $ctrl.deleteDpt= function(dep,ev)
       {
-      var data = {id: dep.id}; 
-      var config = {
-      params: data,
-      headers : {'Accept' : 'application/json'}
-      };
+            var data = {id: dep.id}; 
+            var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+            };
 
 // Preparing the confirm windows
       var confirm = $mdDialog.confirm()
@@ -137,11 +138,11 @@ function departmentCtrl($scope,$http,$timeout,$mdDialog,$location,toastr){
      /*-------------------------------------------------------------------------
      *--------------------------- updating filiere------------------------------
      *----------------------------------------------------------------------- */
-            $scope.updateFiliere=function(fil,ev){
-                $scope.filiere= fil;
+            $ctrl.updateDpt=function(dep,ev){
+                $scope.dpt= dep;
 
             $mdDialog.show({
-              controller: DialogController,
+              controller: DptController,
               templateUrl: 'js/my_js/globalconfig/dptupdateformtpl.html',
               parent: angular.element(document.body),
              // parent: angular.element(document.querySelector('#component-tpl')),
@@ -160,30 +161,21 @@ function departmentCtrl($scope,$http,$timeout,$mdDialog,$location,toastr){
         }
     
 
-    
-    /*--------------------------------------------------------------------------
-     *--------------------------- Load faculties--------------------------------
-     *----------------------------------------------------------------------- */
-    $http.get('faculty').then(
-        function(response){
-        $scope.faculties = response.data[0];
-    });
-         
-    $scope.loadFaculties = function(){
-        return $scope.faculties;
-    };
-    
   //Dialog Controller
-  function DialogController($scope, $mdDialog) {
+  function DptController($scope, $mdDialog,toastr) {
       
-   /* $scope.faculty = {name:'', code:'',respo:'',created_date:'',school_id: $ctrl.school.id};       
-    $scope.createFaculty = function() {
-        $http.post('faculty',$scope.faculty)
+        
+    $scope.dptUpdate = function(dep) {
+        var data = {id: dep.id,code:dep.code,name:dep.name,status:dep.status,fac_id:dep.fac_id}; 
+        var config = {
+        params :  data,
+        headers : {'Accept' : 'application/json'}
+        };
+        $http.put('department',data,config)
             .then(function succesCallback(response)
             {
                  //$ctrl.school=response.data[0];
-                console.log(response.data[0]);
-                $ctrl.faculties= response.data[0];
+                toastr.success("operation effectuée avec succès");
                 $mdDialog.cancel();
                 
             },
@@ -193,18 +185,17 @@ function departmentCtrl($scope,$http,$timeout,$mdDialog,$location,toastr){
                  
                   alert(response.data);
                 });       
-    };*/
+    };
 
     $scope.cancel = function() {
       //$scope.faculties=[];
       
-      $scope.filiere={nom:'',code:'',fac_id:$scope.faculty.id,status:''};
+   
       $mdDialog.cancel();
     };
 
     $scope.answer = function(answer) {
-      //$scope.faculties=[];
-      $scope.filiere={nom:'',code:'',fac_id:$scope.faculty.id,status:''};
+
       $mdDialog.hide(answer);
     };
     };

@@ -151,7 +151,7 @@ class CalculNotesController extends AbstractRestfulController
             }
 
             
-
+           
            
 
 
@@ -167,10 +167,10 @@ class CalculNotesController extends AbstractRestfulController
             
             $msge = $this->computeNotesAndReport($ueExams, $semester, $ue, $subject); 
                 if (strcmp($msge, "ERROR_PED_REGISTRATION")==0) return new JsonModel([ "ERROR_PED_REGISTRATION"  ]);
-                        
+                    
             switch($this->checkTypeOfExamsDone($ueExams))
             {
-                
+               
                 case "CC_EXAM": 
                     
                     
@@ -245,20 +245,20 @@ class CalculNotesController extends AbstractRestfulController
 
                 case "STAGE_CLINIQUE_EXAM_CLINIQUE" :
                     
-                    
+                   
                     $stdRegisteredToSubject = $this->entityManager->getRepository(UnitRegistration::class)->findBy(array("teachingUnit"=>$ue,"subject"=>$subject,"semester"=>$semester ));
                     foreach($stdRegisteredToSubject as $std)
-                    {
-                        if($std->getNoteExamc()<60)
-                            $note =$std->getNoteExam();
-                        else
-                            $note = round(($std->getNoteCc()*0.40 + $std->getNoteExam()*0.60),2, PHP_ROUND_HALF_UP);
+                    { 
+                        
+                        $note = round(($std->getNoteCc()*0.40 + $std->getNoteExam()*0.60),2, PHP_ROUND_HALF_UP);
+                        if($std->getNoteExam()<60) $note =$std->getNoteExam();
+                        
                         $std->setNoteFinal($note);
                         $std->setGrade($this->computeGradeSur100($classe, $note));
                         $std->setPoints($this->computePointsSur100($classe, $note));
                         $this->entityManager->flush();
                         
-                    }                    
+                    }                  
                     break;
                 case "STAGE_ENTREPRISE" :
                     
@@ -278,6 +278,24 @@ class CalculNotesController extends AbstractRestfulController
                         
                     }                      
                     break;
+                case "STAGE_HOSPITALIER" :
+                    
+                    $stdRegisteredToSubject = $this->entityManager->getRepository(UnitRegistration::class)->findBy(array("teachingUnit"=>$ue,"subject"=>$subject,"semester"=>$semester ));
+                    foreach($stdRegisteredToSubject as $std)
+                    {
+                        
+                        $note = round(($std->getNoteExam()),2, PHP_ROUND_HALF_UP);
+                        $std->setNoteFinal($note);
+                        $std->setGrade($this->computeGradeSur100($classe, $note));
+                        $std->setPoints($this->computePointsSur100($classe, $note));
+                        $std->setNoteCctp(NULL);
+                        $std->setNoteExamtp(NULL);
+                        $std->setNoteCc(NULL);
+                        $std->setNoteExam(NULL);
+                        $this->entityManager->flush();
+                        
+                    }                      
+                    break;                    
                 case "ECN" :
                     
                     
@@ -366,11 +384,12 @@ class CalculNotesController extends AbstractRestfulController
        $isExamCliniquePerformed = FALSE;
        $isStageExamPerformed = FALSE;
        $isStageEntreprisePerformed = FALSE;
+       $isStageHospitalierPerformed = FALSE;
        $isEcnPerformed = FALSE;
        $isThesePerformed = FALSE;
 
         foreach($exams as $exam)
-        {
+        { 
             
                 switch($exam->getType())
                 {
@@ -405,7 +424,11 @@ class CalculNotesController extends AbstractRestfulController
                     case 'STAE':
                         if($exam->getIsMarkRegistered()==1)
                             $isStageEntreprisePerformed = true;
-                        break;      
+                        break;  
+                    case 'STAH':
+                        if($exam->getIsMarkRegistered()==1)
+                            $isStageHospitalierPerformed = true;
+                        break;                         
                     case 'ECN':
                         if($exam->getIsMarkRegistered()==1)
                             $isEcnPerformed = true;
@@ -433,6 +456,8 @@ class CalculNotesController extends AbstractRestfulController
             return "STAGE_CLINIQUE_EXAM_CLINIQUE";
         if($isStageEntreprisePerformed)
             return "STAGE_ENTREPRISE";
+        if($isStageHospitalierPerformed)
+            return "STAGE_HOSPITALIER";        
         if($isEcnPerformed)
             return "ECN";  
         if($isThesePerformed)
@@ -463,6 +488,7 @@ class CalculNotesController extends AbstractRestfulController
         $countSTAGEC = 0;
         $countEXAMC = 0;
         $countSTAGEE = 0;
+        $countSTAGEH = 0;
         $countRAT = 0;
         $countECN = 0;
         $countTHESE = 0;
@@ -471,6 +497,7 @@ class CalculNotesController extends AbstractRestfulController
         $noteCctp = [];
         $noteExamtp = [];
         $noteStagee = [];
+        $noteStageh = [];
         $noteStagec = [];
         $noteRat = [];
         $noteECN = [];
@@ -487,6 +514,7 @@ class CalculNotesController extends AbstractRestfulController
                 $noteCctp[$std->getStudent()->getId()] = 0;
                 $noteExamtp[$std->getStudent()->getId()] = 0;
                 $noteStagee[$std->getStudent()->getId()] = 0;
+                $noteStageh[$std->getStudent()->getId()] = 0;
                 $noteStagec[$std->getStudent()->getId()] = 0;
                 $noteRat[$std->getStudent()->getId()] = 0;
                 $noteECN[$std->getStudent()->getId()] = 0;
@@ -586,6 +614,16 @@ class CalculNotesController extends AbstractRestfulController
                 }
 
             }
+            if($exam->getType()=="STAH")
+            {
+                $countSTAGEH++;
+                foreach ($examRegistration as $examR)
+                {
+                    if(!array_key_exists($examR->getStudent()->getId(), $noteStageh)) return "ERROR_PED_REGISTRATION";
+                        $noteStageh[$examR->getStudent()->getId()] += $this->getMark($examObject, $examR);
+                }
+
+            }            
             if($exam->getType()=="ECN")
             {
                 $countECN++; 
@@ -662,12 +700,22 @@ class CalculNotesController extends AbstractRestfulController
             $std = $this->entityManager->getRepository(Student::class)->findOneBy(array("id"=>$key ));
             $std = $this->entityManager->getRepository(UnitRegistration::class)->findOneBy(array("teachingUnit"=>$ue,"subject"=>$subject,"semester"=>$sem,"student"=>$std ));
            // if(!is_null($value)) $std->setNoteStagee(round($value/$countSTAGEE,2,PHP_ROUND_HALF_UP));
-            if($countSTAGEE>0)if(isset($value)) $std->setNoteExam(round($value/$countSTAGEE,2,PHP_ROUND_HALF_UP));
+            if($countSTAGEE>0) $std->setNoteExam(round($value/$countSTAGEE,2,PHP_ROUND_HALF_UP));
      
             $this->entityManager->flush();
         }
-        foreach($noteStagec as $key=>$value)
+        foreach($noteStageh as $key=>$value)
         {
+            //Collect all student registered to the given unit for a given semester
+            $std = $this->entityManager->getRepository(Student::class)->findOneBy(array("id"=>$key ));
+            $std = $this->entityManager->getRepository(UnitRegistration::class)->findOneBy(array("teachingUnit"=>$ue,"subject"=>$subject,"semester"=>$sem,"student"=>$std ));
+           // if(!is_null($value)) $std->setNoteStagee(round($value/$countSTAGEE,2,PHP_ROUND_HALF_UP));
+            if($countSTAGEH>0) $std->setNoteExam(round($value/$countSTAGEH,2,PHP_ROUND_HALF_UP));
+     
+            $this->entityManager->flush();
+        }        
+        foreach($noteStagec as $key=>$value)
+        { 
             //Collect all student registered to the given unit for a given semester
             $std = $this->entityManager->getRepository(Student::class)->findOneBy(array("id"=>$key ));
             $std = $this->entityManager->getRepository(UnitRegistration::class)->findOneBy(array("teachingUnit"=>$ue,"subject"=>$subject,"semester"=>$sem,"student"=>$std ));
@@ -675,7 +723,7 @@ class CalculNotesController extends AbstractRestfulController
             if($countSTAGEC>0)$std->setNoteCc(round($value/$countSTAGEC,2,PHP_ROUND_HALF_UP));
 
             $this->entityManager->flush();
-        }
+        } 
         foreach($noteECN as $key=>$value)
         {
             //Collect all student registered to the given unit related exam
@@ -690,7 +738,7 @@ class CalculNotesController extends AbstractRestfulController
             $std = $this->entityManager->getRepository(Student::class)->findOneBy(array("id"=>$key ));
             $std = $this->entityManager->getRepository(UnitRegistration::class)->findOneBy(array("teachingUnit"=>$ue,"subject"=>$subject,"semester"=>$sem,"student"=>$std ));
             //if(!is_null($value)) $std->setNoteExam(round($value/$countTHESE,2,PHP_ROUND_HALF_UP));
-            if($countEXAMC>0) $std->setNoteExam(round($value/$countTHESE,2,PHP_ROUND_HALF_UP));
+            if($countEXAMC>0 && $countTHESE>0) $std->setNoteExam(round($value/$countTHESE,2,PHP_ROUND_HALF_UP));
             $this->entityManager->flush();
         } 
         
