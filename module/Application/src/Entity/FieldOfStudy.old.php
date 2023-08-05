@@ -1,19 +1,19 @@
 <?php
 
-namespace Application\Entity;
+
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * FieldOfStudy
  *
- * @ORM\Table(name="field_of_study", indexes={@ORM\Index(name="fk_training_faculty1_idx", columns={"faculty_id"})})
+ * @ORM\Table(name="field_of_study", indexes={@ORM\Index(name="fk_training_faculty1_idx", columns={"faculty_id"}), @ORM\Index(name="fk_field_of_study_department1_idx", columns={"department_id"})})
  * @ORM\Entity
  */
 class FieldOfStudy
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -22,25 +22,35 @@ class FieldOfStudy
     private $id;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="code", type="string", length=45, nullable=true)
      */
     private $code;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="name", type="string", length=45, nullable=true)
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name;
 
     /**
-     * @var integer
+     * @var int|null
      *
      * @ORM\Column(name="status", type="integer", nullable=true)
      */
     private $status;
+
+    /**
+     * @var \Department
+     *
+     * @ORM\ManyToOne(targetEntity="Department")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="department_id", referencedColumnName="id")
+     * })
+     */
+    private $department;
 
     /**
      * @var \Faculty
@@ -55,9 +65,9 @@ class FieldOfStudy
 
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -65,23 +75,23 @@ class FieldOfStudy
     }
 
     /**
-     * Set code
+     * Set code.
      *
-     * @param string $code
+     * @param string|null $code
      *
      * @return FieldOfStudy
      */
-    public function setCode($code)
+    public function setCode($code = null)
     {
         $this->code = $code;
-
+    
         return $this;
     }
 
     /**
-     * Get code
+     * Get code.
      *
-     * @return string
+     * @return string|null
      */
     public function getCode()
     {
@@ -89,23 +99,23 @@ class FieldOfStudy
     }
 
     /**
-     * Set name
+     * Set name.
      *
-     * @param string $name
+     * @param string|null $name
      *
      * @return FieldOfStudy
      */
-    public function setName($name)
+    public function setName($name = null)
     {
         $this->name = $name;
-
+    
         return $this;
     }
 
     /**
-     * Get name
+     * Get name.
      *
-     * @return string
+     * @return string|null
      */
     public function getName()
     {
@@ -113,23 +123,23 @@ class FieldOfStudy
     }
 
     /**
-     * Set status
+     * Set status.
      *
-     * @param integer $status
+     * @param int|null $status
      *
      * @return FieldOfStudy
      */
-    public function setStatus($status)
+    public function setStatus($status = null)
     {
         $this->status = $status;
-
+    
         return $this;
     }
 
     /**
-     * Get status
+     * Get status.
      *
-     * @return integer
+     * @return int|null
      */
     public function getStatus()
     {
@@ -137,27 +147,50 @@ class FieldOfStudy
     }
 
     /**
-     * Set faculty
+     * Set department.
      *
-     * @param Faculty $faculty
+     * @param \Department|null $department
      *
      * @return FieldOfStudy
      */
-    public function setFaculty(Faculty $faculty = null)
+    public function setDepartment(\Department $department = null)
     {
-        $this->faculty = $faculty;
-
+        $this->department = $department;
+    
         return $this;
     }
 
     /**
-     * Get faculty
+     * Get department.
      *
-     * @return \Faculty
+     * @return \Department|null
+     */
+    public function getDepartment()
+    {
+        return $this->department;
+    }
+
+    /**
+     * Set faculty.
+     *
+     * @param \Faculty|null $faculty
+     *
+     * @return FieldOfStudy
+     */
+    public function setFaculty(\Faculty $faculty = null)
+    {
+        $this->faculty = $faculty;
+    
+        return $this;
+    }
+
+    /**
+     * Get faculty.
+     *
+     * @return \Faculty|null
      */
     public function getFaculty()
     {
         return $this->faculty;
     }
-
 }

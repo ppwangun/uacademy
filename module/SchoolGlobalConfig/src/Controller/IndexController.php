@@ -297,7 +297,63 @@ class IndexController extends AbstractActionController
             throw $e; 
       }
         
-    }    
+    }   
+    
+    public function searchFilByDptAction()
+    {
+      $this->entityManager->getConnection()->beginTransaction();
+      try
+      {
+            $data = $this->params()->fromQuery();            
+            $dpt= $this->entityManager->getRepository(Department::class)->find($data['dpt_id']);
+            $filieres = $this->entityManager->getRepository(FieldOfStudy::class)->findBy(array('department'=>$dpt),array("name"=>"ASC"));
+            foreach($filieres as $key=>$value)
+            {
+                $hydrator = new ReflectionHydrator();
+                $data = $hydrator->extract($value);
+                $data['fac_id'] = $value->getFaculty()->getId();
+               ($value->getDepartment())? $data['dpt_id'] = $value->getDepartment()->getId():$data['dpt_id']=-1;
+                $filieres[$key] = $data;
+            }
+        $this->entityManager->getConnection()->commit();
+        return new JsonModel([
+                $filieres
+        ]);          
+      }
+      catch(Exception $e){
+            $this->entityManager->getConnection()->rollBack();
+            throw $e; 
+      }
+        
+    } 
+    public function searchFilByFacultyAction()
+    {
+      $this->entityManager->getConnection()->beginTransaction();
+      try
+      {
+            $data = $this->params()->fromQuery();            
+            $fac= $this->entityManager->getRepository(Faculty::class)->find($data['fac_id']);
+            $filieres = $this->entityManager->getRepository(FieldOfStudy::class)->findBy(array('faculty'=>$fac),array("name"=>"ASC"));
+            foreach($filieres as $key=>$value)
+            {
+                $hydrator = new ReflectionHydrator();
+                $data = $hydrator->extract($value);
+                $data['fac_id'] = $value->getFaculty()->getId();
+               ($value->getDepartment())? $data['dpt_id'] = $value->getDepartment()->getId():$data['dpt_id']=-1;
+                $filieres[$key] = $data;
+            }
+        $this->entityManager->getConnection()->commit();
+        return new JsonModel([
+                $filieres
+        ]);          
+      }
+      catch(Exception $e){
+            $this->entityManager->getConnection()->rollBack();
+            throw $e; 
+      }
+        
+    }
+    
     public function newacadyrAction()
     {
         //$form = new AnneeAcadForm();
@@ -352,6 +408,24 @@ class IndexController extends AbstractActionController
 
         return $view;            
     }
+    public function newFilAction()
+    {
+        $view = new ViewModel([
+         ]);
+        // Disable layouts; `MvcEvent` will use this View Model instead
+        $view->setTerminal(true);
+
+        return $view;            
+    }   
+    public function updateFilAction()
+    {
+        $view = new ViewModel([
+         ]);
+        // Disable layouts; `MvcEvent` will use this View Model instead
+        $view->setTerminal(true);
+
+        return $view;            
+    }     
     
     public function departmentplAction()
     {

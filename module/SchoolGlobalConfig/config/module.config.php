@@ -153,6 +153,26 @@ return [
                     ],
                 ],
             ], 
+            'newFil' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/newFil',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'newFil',
+                    ],
+                ],
+            ], 
+            'updateFil' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/updateFil',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'updateFil',
+                    ],
+                ],
+            ],             
             'degreetpl' => [
                 'type'    => Literal::class,
                 'options' => [
@@ -292,6 +312,26 @@ return [
                         'action'        => 'searchDptByFaculty',
                     ],
                 ],
+            ],    
+            'searchFilByDpt' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/searchFilByDpt',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'searchFilByDpt',
+                    ],
+                ],
+            ],  
+            'searchFilByFaculty' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/searchFilByFaculty',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'searchFilByFaculty',
+                    ],
+                ],
             ],            
             'school' => [
                 'type'    => Segment::class,
@@ -425,6 +465,19 @@ return [
         ],
     ],
     'view_manager' => [
+        'template_map' => [
+            'school-global-config/index/anneedetails' => __DIR__ . '/../view/schoolglobalconfig/Index/anneedetails.phtml',
+            'school-global-config/index/newacadyr' => __DIR__ . '/../view/schoolglobalconfig/Index/newacadyr.phtml',
+            'school-global-config/index/assignedteachingunitpl' => __DIR__ . '/../view/schoolglobalconfig/Index/assignedteachingunitpl.phtml',
+            'school-global-config/index/assignnewteachingunitpl' => __DIR__ . '/../view/schoolglobalconfig/Index/assignnewteachingunitpl.phtml',
+            'school-global-config/index/facultytpl' => __DIR__ . '/../view/schoolglobalconfig/Index/facultytpl.phtml',
+            'school-global-config/index/departmentpl' => __DIR__ . '/../view/schoolglobalconfig/Index/departmentpl.phtml',
+            'school-global-config/index/new-dept' => __DIR__ . '/../view/schoolglobalconfig/Index/newdept.phtml',
+            'school-global-config/index/update-dpt' => __DIR__ . '/../view/schoolglobalconfig/Index/updatedpt.phtml',
+            'school-global-config/index/filieretpl' => __DIR__ . '/../view/schoolglobalconfig/Index/filieretpl.phtml',
+            'school-global-config/index/new-fil' => __DIR__ . '/../view/schoolglobalconfig/Index/newfil.phtml', 
+            'school-global-config/index/update-fil' => __DIR__ . '/../view/schoolglobalconfig/Index/updatefil.phtml',
+        ],
         'template_path_stack' => [
             __DIR__ . '/../view',
         ],

@@ -18,7 +18,7 @@ angular.module('department')
             controller: departmentCtrl 
 });
 
-function departmentCtrl($scope,$http,$timeout,$mdDialog,$location,toastr){
+function departmentCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routeParams){
     var $ctrl=this;
     $scope.faculties=null;
     $scope.faculty={name:'',id:''};
@@ -35,7 +35,13 @@ function departmentCtrl($scope,$http,$timeout,$mdDialog,$location,toastr){
      $scope.dptId=id;
 
     };
-     $scope.init = function(){
+    $ctrl.redirectUpdate= function(id){
+
+     $location.path("/updateDpt/"+id);
+     $scope.dptId=id;
+
+    };    
+     $ctrl.init = function(){
     /*--------------------------------------------------------------------------
      *--------------------------- Load faculties--------------------------------
      *----------------------------------------------------------------------- */
@@ -48,7 +54,30 @@ function departmentCtrl($scope,$http,$timeout,$mdDialog,$location,toastr){
     $http.get('department').then(
         function(response){
         $scope.dpts = response.data[0];
-    });         
+    });   
+    
+    if($routeParams.id && $routeParams.id !=-1)
+    {
+        var config = {
+            params: {id : $routeParams.id },
+            headers : {'Accept' : 'application/json'}
+        };
+        $http.get('department',config).then(
+        function(response){
+        $scope.dpt = response.data[0];
+        });
+        
+        
+        var config = {
+            params: {dpt_id : $routeParams.id },
+            headers : {'Accept' : 'application/json'}
+        };        
+        $http.get('searchFilByDpt',config).then(
+        function(response){
+        $scope.filieres = response.data[0];
+        });        
+        
+    }
         
     }
     
@@ -111,6 +140,69 @@ function departmentCtrl($scope,$http,$timeout,$mdDialog,$location,toastr){
          // $scope.status = 'You decided to keep your debt.';
         });
 
+      }; 
+      
+    $ctrl.updateDept = function(dep) {
+        var data = dep; 
+        var config = {
+        params :  data,
+        headers : {'Accept' : 'application/json'}
+        };
+        $http.put('department',data,config)
+            .then(function succesCallback(response)
+            {
+                 //$ctrl.school=response.data[0];
+                toastr.success("operation effectuée avec succès");
+
+                
+            },
+            function errorCallback(response) {
+                  // called asynchronously if an error occurs
+                  // or server returns response with an error status.
+                 
+                  alert(response.data);
+                });       
+    };   
+    
+     /*-------------------------------------------------------------------------
+     *--------------------------- deleting filiere------------------------------
+     *----------------------------------------------------------------------- */
+    
+      $ctrl.deleteFil= function(fil,ev)
+      {
+            var data = {id: fil.id}; 
+            var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+            };
+
+// Preparing the confirm windows
+      var confirm = $mdDialog.confirm()
+            .title('Voulez vous vraiment supprimer?')
+            .textContent('Toutes les données associées à cette information seront perdues')
+             // .ariaLabel('Lucky day')
+            .targetEvent(ev)
+            .ok('Supprimer')
+            .cancel('Annuler');
+    //open de confirm window
+        $mdDialog.show(confirm).then(function() {
+            //in case delete is pressee excute  the delete backend 
+            $http.delete('filiere',config).then(
+              function successCallback(response){
+                  //check the index of the current object in the array
+                  var x;
+                  var index = $scope.dpts.findIndex(x => x.id === fil.id);
+                  //remove the current object from the array
+                  $scope.filieres.splice(index,1);
+                  toastr.success("Opération effectuée avec succès")
+             },
+            function errorCallback(response){
+                 toastr.error("une erreur inattendue s'est produite");
+                });
+        }, function() {
+         // $scope.status = 'You decided to keep your debt.';
+        });
+
       };    
  
      /*--------------------------------------------------------------------------
@@ -133,6 +225,27 @@ function departmentCtrl($scope,$http,$timeout,$mdDialog,$location,toastr){
             });    
         
     }
+    
+     /*--------------------------------------------------------------------------
+     *--------------------------- loading all filières  by departement   ---------------------
+     *----------------------------------------------------------------------- */
+    $ctrl.searchFilByDpt = function(id){
+      var data = {dpt_id: id}; 
+      var config = {
+      params: data,
+      headers : {'Accept' : 'application/json'}
+      };
+        $http.get('searchFilByDpt',config).then(
+            function successCallback(response){
+                $ctrl.cpt =1;
+                $scope.filieres = response.data[0];
+            
+            },
+            function errorCallback(response){
+                toastr.error("une erreur inattendue s'est produite");
+            });    
+        
+    }    
 
 
      /*-------------------------------------------------------------------------

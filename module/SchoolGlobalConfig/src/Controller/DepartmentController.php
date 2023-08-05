@@ -28,10 +28,11 @@ class DepartmentController extends AbstractRestfulController
     
     public function get($id)
     {
-        $faculty= $this->entityManager->getRepository(Filiere::class)->findOneById($id);
+        $dpt= $this->entityManager->getRepository(Department::class)->find($id);
 
             $hydrator = new ReflectionHydrator();
-            $data = $hydrator->extract($faculty);
+            $data = $hydrator->extract($dpt);
+            $data["fac_id"] = $dpt->getFaculty()->getId();
 
         return new JsonModel([
                 $data

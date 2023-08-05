@@ -12,6 +12,7 @@ use Laminas\View\Model\JsonModel;
 use Laminas\Hydrator\Reflection as ReflectionHydrator;
 use Application\Entity\FieldOfStudy;
 use Application\Entity\Faculty;
+use Application\Entity\Department;
 
 class FiliereController extends AbstractRestfulController
 {
@@ -27,10 +28,12 @@ class FiliereController extends AbstractRestfulController
     
     public function get($id)
     {
-        $faculty= $this->entityManager->getRepository(Filiere::class)->findOneById($id);
+        $filiere= $this->entityManager->getRepository(FieldOfStudy::class)->find($id);
 
             $hydrator = new ReflectionHydrator();
-            $data = $hydrator->extract($faculty);
+            $data = $hydrator->extract($filiere);
+            $data['fac_id'] = $filiere->getFaculty()->getId();
+           ($filiere->getDepartment())? $data['dpt_id'] = $filiere->getDepartment()->getId():$data['dpt_id']=-1;            
 
         return new JsonModel([
                 $data
@@ -43,13 +46,16 @@ class FiliereController extends AbstractRestfulController
         $this->entityManager->getConnection()->beginTransaction();
         try
         {      
-            $filieres = $this->entityManager->getRepository(FieldOfStudy::class)->findAll();
+            $filieres = $this->entityManager->getRepository(FieldOfStudy::class)->findAll([],array("name"=>"ASC"));
+            
             foreach($filieres as $key=>$value)
             {
                 $hydrator = new ReflectionHydrator();
                 $data = $hydrator->extract($value);
 
                 $filieres[$key] = $data;
+                $filieres[$key]['fac_id'] = $value->getFaculty()->getId();
+               ($value->getDepartment())? $filieres[$key]['dpt_id'] = $value->getDepartment()->getId():$filieres[$key]['dpt_id']=-1;
             }
             $this->entityManager->getConnection()->commit();
 
@@ -89,10 +95,11 @@ class FiliereController extends AbstractRestfulController
             $filiere= new FieldOfStudy();
             $filiere->setName($data['name']);
             $filiere->setCode($data['code']);
- 
-            $faculty = $this->entityManager->getRepository(Faculty::class)->findOneById($data['fac_id']);
-     
+            $filiere->setStatus($data['status']);
+            $faculty = $this->entityManager->getRepository(Faculty::class)->find($data['fac_id']);
+            $dpt = $this->entityManager->getRepository(Department::class)->find($data['dpt_id']);
             $filiere->setFaculty($faculty);
+            $filiere->setDepartment($dpt);
             $this->entityManager->persist($filiere);
             $this->entityManager->flush();
             
@@ -140,4 +147,40 @@ class FiliereController extends AbstractRestfulController
                // $this->getFaculty($data["school_id"])
         ]);
     }
+    
+    public function update($id,$data)
+    {
+
+        $this->entityManager->getConnection()->beginTransaction();
+        try
+        {
+            $fil = $this->entityManager->getRepository(FieldOfStudy::class)->findOneById($id);
+            if($fil)
+            {
+
+                $fil->setName($data['name']);
+                $fil->setCode($data['code']);
+                $fil->setStatus($data["status"]); 
+                $faculty = $this->entityManager->getRepository(Faculty::class)->find($data['fac_id']);
+         
+                $dpt = $this->entityManager->getRepository(Department::class)->find($data['dpt_id']);
+
+
+                $fil->setDepartment($dpt);   
+                $fil->setFaculty($faculty); 
+                $this->entityManager->flush();
+            }
+
+            $this->entityManager->getConnection()->commit();
+        }
+        catch(Exception $e)
+        {
+            $this->entityManager->getConnection()->rollBack();
+            throw $e;    
+        }
+        
+        return new JsonModel([
+               // $this->getFaculty($data["school_id"])
+        ]);
+    }    
 }

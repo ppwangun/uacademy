@@ -1,9 +1,11 @@
 <?php
 
-
+namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Application\Entity\Faculty;
+use Application\Entity\Department;
 /**
  * FieldOfStudy
  *
@@ -36,14 +38,14 @@ class FieldOfStudy
     private $name;
 
     /**
-     * @var int|null
+     * @var bool|null
      *
-     * @ORM\Column(name="status", type="integer", nullable=true)
+     * @ORM\Column(name="status", type="boolean", nullable=true)
      */
     private $status;
 
     /**
-     * @var \Department
+     * @var Department
      *
      * @ORM\ManyToOne(targetEntity="Department")
      * @ORM\JoinColumns({
@@ -53,7 +55,7 @@ class FieldOfStudy
     private $department;
 
     /**
-     * @var \Faculty
+     * @var Faculty
      *
      * @ORM\ManyToOne(targetEntity="Faculty")
      * @ORM\JoinColumns({
@@ -125,7 +127,7 @@ class FieldOfStudy
     /**
      * Set status.
      *
-     * @param int|null $status
+     * @param bool|null $status
      *
      * @return FieldOfStudy
      */
@@ -139,7 +141,7 @@ class FieldOfStudy
     /**
      * Get status.
      *
-     * @return int|null
+     * @return bool|null
      */
     public function getStatus()
     {
@@ -149,11 +151,11 @@ class FieldOfStudy
     /**
      * Set department.
      *
-     * @param \Department|null $department
+     * @param Department|null $department
      *
      * @return FieldOfStudy
      */
-    public function setDepartment(\Department $department = null)
+    public function setDepartment(Department $department = null)
     {
         $this->department = $department;
     
@@ -163,7 +165,7 @@ class FieldOfStudy
     /**
      * Get department.
      *
-     * @return \Department|null
+     * @return Department|null
      */
     public function getDepartment()
     {
@@ -173,11 +175,11 @@ class FieldOfStudy
     /**
      * Set faculty.
      *
-     * @param \Faculty|null $faculty
+     * @param Faculty|null $faculty
      *
      * @return FieldOfStudy
      */
-    public function setFaculty(\Faculty $faculty = null)
+    public function setFaculty(Faculty $faculty = null)
     {
         $this->faculty = $faculty;
     
@@ -187,7 +189,7 @@ class FieldOfStudy
     /**
      * Get faculty.
      *
-     * @return \Faculty|null
+     * @return Faculty|null
      */
     public function getFaculty()
     {
