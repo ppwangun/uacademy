@@ -1,8 +1,10 @@
 <?php
 
-
+namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
+use Application\Entity\FieldOfStudy;
 
 /**
  * Speciality
@@ -36,14 +38,14 @@ class Speciality
     private $name;
 
     /**
-     * @var string|null
+     * @var bool|null
      *
-     * @ORM\Column(name="status", type="string", length=45, nullable=true)
+     * @ORM\Column(name="status", type="boolean", nullable=true)
      */
     private $status;
 
     /**
-     * @var \FieldOfStudy
+     * @var FieldOfStudy
      *
      * @ORM\ManyToOne(targetEntity="FieldOfStudy")
      * @ORM\JoinColumns({
@@ -115,7 +117,7 @@ class Speciality
     /**
      * Set status.
      *
-     * @param string|null $status
+     * @param bool|null $status
      *
      * @return Speciality
      */
@@ -129,7 +131,7 @@ class Speciality
     /**
      * Get status.
      *
-     * @return string|null
+     * @return bool|null
      */
     public function getStatus()
     {
@@ -139,11 +141,11 @@ class Speciality
     /**
      * Set fieldOfStudy.
      *
-     * @param \FieldOfStudy|null $fieldOfStudy
+     * @param FieldOfStudy|null $fieldOfStudy
      *
      * @return Speciality
      */
-    public function setFieldOfStudy(\FieldOfStudy $fieldOfStudy = null)
+    public function setFieldOfStudy(FieldOfStudy $fieldOfStudy = null)
     {
         $this->fieldOfStudy = $fieldOfStudy;
     
@@ -153,7 +155,7 @@ class Speciality
     /**
      * Get fieldOfStudy.
      *
-     * @return \FieldOfStudy|null
+     * @return FieldOfStudy|null
      */
     public function getFieldOfStudy()
     {

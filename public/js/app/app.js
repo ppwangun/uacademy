@@ -13,6 +13,7 @@ angular.module('myApp', [
   'faculty',
   'department',
   'filiere',
+  'specialite',
   'degree',
   'classes',
   'student',
@@ -59,6 +60,15 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
           .when('/filiere',{
               template: '<filiere-list></filiere-list>'
           })
+          .when('/newSpe/:id',{
+              template: '<speciality-details></speciality-details>'
+          })    
+          .when('/updateSpe/:id',{
+              template: '<update-spe></update-spe>'
+          })          
+          .when('/specialite',{
+              template: '<speciality-list></speciality-list>'
+          })          
           .when('/degree',{
               template: '<degree-details></degree-details>'
           })

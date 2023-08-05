@@ -16,6 +16,7 @@ return [
             Controller\FacultyController::class => Controller\Factory\FacultyControllerFactory::class,
             Controller\SchoolController::class => Controller\Factory\SchoolControllerFactory::class,
             Controller\DepartmentController::class => Controller\Factory\DepartmentControllerFactory::class,
+            Controller\SpecialiteController::class => Controller\Factory\SpecialiteControllerFactory::class,
             Controller\FiliereController::class => Controller\Factory\FiliereControllerFactory::class,
             Controller\DegreeController::class => Controller\Factory\DegreeControllerFactory::class,
             Controller\CycleController::class => Controller\Factory\CycleControllerFactory::class,
@@ -170,6 +171,36 @@ return [
                     'defaults' => [
                         'controller' => Controller\IndexController::class,
                         'action'        => 'updateFil',
+                    ],
+                ],
+            ],   
+            'specialitetpl' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/specialitetpl',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'specialitetpl',
+                    ],
+                ],
+            ], 
+            'newSpe' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/newSpe',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'newSpe',
+                    ],
+                ],
+            ], 
+            'updateSpe' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/updateSpe',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'updateSpe',
                     ],
                 ],
             ],             
@@ -370,6 +401,15 @@ return [
                     ],
                 ],
             ],
+            'speailite' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/speailite[/:id]',
+                    'defaults' => [
+                        'controller' => Controller\speailiteController::class,
+                    ],
+                ],
+            ],            
             'degree' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -477,6 +517,9 @@ return [
             'school-global-config/index/filieretpl' => __DIR__ . '/../view/schoolglobalconfig/Index/filieretpl.phtml',
             'school-global-config/index/new-fil' => __DIR__ . '/../view/schoolglobalconfig/Index/newfil.phtml', 
             'school-global-config/index/update-fil' => __DIR__ . '/../view/schoolglobalconfig/Index/updatefil.phtml',
+            'school-global-config/index/specialitetpl' => __DIR__ . '/../view/schoolglobalconfig/Index/specialitetpl.phtml',
+            'school-global-config/index/new-spe' => __DIR__ . '/../view/schoolglobalconfig/Index/newspe.phtml', 
+            'school-global-config/index/update-spe' => __DIR__ . '/../view/schoolglobalconfig/Index/updatespe.phtml',            
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',

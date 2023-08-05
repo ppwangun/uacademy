@@ -408,6 +408,7 @@ class IndexController extends AbstractActionController
 
         return $view;            
     }
+    
     public function newFilAction()
     {
         $view = new ViewModel([
@@ -426,7 +427,33 @@ class IndexController extends AbstractActionController
 
         return $view;            
     }     
-    
+    public function specialitetplAction()
+    {
+        $view = new ViewModel([
+         ]);
+        // Disable layouts; `MvcEvent` will use this View Model instead
+        $view->setTerminal(true);
+
+        return $view;            
+    } 
+    public function newSpeAction()
+    {
+        $view = new ViewModel([
+         ]);
+        // Disable layouts; `MvcEvent` will use this View Model instead
+        $view->setTerminal(true);
+
+        return $view;            
+    }   
+    public function updateSpeAction()
+    {
+        $view = new ViewModel([
+         ]);
+        // Disable layouts; `MvcEvent` will use this View Model instead
+        $view->setTerminal(true);
+
+        return $view;            
+    }     
     public function departmentplAction()
     {
         $view = new ViewModel([
