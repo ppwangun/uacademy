@@ -12,9 +12,9 @@ angular.module('specialite')
             controller: specialiteCtrl 
 });
 
-angular.module('filiere')
+angular.module('specialite')
         .component('updateSpe',{
-            templateUrl: 'updateFil',
+            templateUrl: 'updateSpe',
             controller: specialiteCtrl 
 });
 
@@ -40,7 +40,7 @@ function specialiteCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routeP
     };
     $ctrl.redirectUpdate= function(id){
 
-     $location.path("/updateFil/"+id);
+     $location.path("/updateSpe/"+id);
      $scope.filId=id;
 
     };    
@@ -49,20 +49,25 @@ function specialiteCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routeP
      *--------------------------- Load faculties--------------------------------
      *----------------------------------------------------------------------- */
 
-    $http.get('faculty').then(
-        function(response){
+    $timeout(
+        $http.get('faculty').then(function(response){
         $scope.faculties = response.data[0];
-    });
+    }),1000);
     
-    $http.get('department').then(
+    $timeout($http.get('department').then(
         function(response){
         $scope.dpts = response.data[0];
-    }); 
+    }),1000); 
     
-    $http.get('filiere').then(
+    $timeout($http.get('filiere').then(
         function(response){
         $scope.filieres = response.data[0];
-    });    
+    }),1000); 
+    
+     $timeout($http.get('specialite').then(
+        function(response){
+        $scope.specialites = response.data[0];
+    }),1000);   
     
     if($routeParams.id && $routeParams.id !=-1)
     {
@@ -70,15 +75,19 @@ function specialiteCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routeP
             params: {id : $routeParams.id },
             headers : {'Accept' : 'application/json'}
         };
-        $http.get('filiere',config).then(
-        function(response){
-        $scope.filiere = response.data[0];
-        });
         
-        $http.get('searchSpeByFil',config).then(
+        $timeout($http.get('specialite',config).then(
+        function(response){
+        $scope.specialite = response.data[0];
+        }),5000);
+        var config = {
+            params: {fil_id : $routeParams.id },
+            headers : {'Accept' : 'application/json'}
+        };        
+        $timeout($http.get('searchSpeByFil',config).then(
         function(response){
         $scope.filieres = response.data[0];
-        });        
+        }),1000);        
         
     }
         
@@ -93,11 +102,11 @@ function specialiteCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routeP
        
 
         
-        $http.post('filiere',filiere).then(
+        $http.post('specialite',specialite).then(
             function successCallback(response){
-                $scope.filieres.push(filiere);
+                $scope.specialites.push(specialite);
                 toastr.success("Opération effectuée avec succès")
-                $scope.filiere = null;
+                $scope.specialite={dpt_id: -1,status:true};
             },
             function errorCallback(response){
                 toastr.error("une erreur inattendue s'est produite");
@@ -105,12 +114,12 @@ function specialiteCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routeP
     }
     
      /*-------------------------------------------------------------------------
-     *--------------------------- deleting filiere------------------------------
+     *--------------------------- deleting specialite------------------------------
      *----------------------------------------------------------------------- */
     
-      $ctrl.deleteFil= function(fil,ev)
+      $ctrl.deleteSpe= function(spe,ev)
       {
-            var data = {id: fil.id}; 
+            var data = {id: spe.id}; 
             var config = {
             params: data,
             headers : {'Accept' : 'application/json'}
@@ -127,13 +136,13 @@ function specialiteCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routeP
     //open de confirm window
         $mdDialog.show(confirm).then(function() {
             //in case delete is pressee excute  the delete backend 
-            $http.delete('filiere',config).then(
+            $http.delete('specialite',config).then(
               function successCallback(response){
                   //check the index of the current object in the array
                   var x;
-                  var index = $scope.dpts.findIndex(x => x.id === fil.id);
+                  var index = $scope.specialites.findIndex(x => x.id === spe.id);
                   //remove the current object from the array
-                  $scope.filieres.splice(index,1);
+                  $scope.specialites.splice(index,1);
                   toastr.success("Opération effectuée avec succès")
              },
             function errorCallback(response){
@@ -145,13 +154,13 @@ function specialiteCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routeP
 
       }; 
       
-    $ctrl.updateFil = function(fil) {
-        var data = {id: fil.id,code:fil.code,name:fil.name,status:fil.status,fac_id:fil.fac_id,dpt_id:fil.dpt_id}; 
+    $ctrl.updateSpe = function(spe) {
+        var data = {id: spe.id,code:spe.code,name:spe.name,status:spe.status,fil_id:spe.fil_id}; 
         var config = {
         params :  data,
         headers : {'Accept' : 'application/json'}
         };
-        $http.put('filiere',data,config)
+        $http.put('specialite',data,config)
             .then(function succesCallback(response)
             {
                  //$ctrl.school=response.data[0];
@@ -230,15 +239,35 @@ function specialiteCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routeP
         
     }   
     
+      /*--------------------------------------------------------------------------
+     *--------------------------- loading all specilaities  by field of study   ---------------------
+     *----------------------------------------------------------------------- */
+    $ctrl.searchSpeByFil = function(id){
+      var data = {fil_id: id}; 
+      var config = {
+      params: data,
+      headers : {'Accept' : 'application/json'}
+      };
+        $http.get('searchSpeByFil',config).then(
+            function successCallback(response){
+                $ctrl.cpt =1;
+                $scope.specialites = response.data[0];
+            
+            },
+            function errorCallback(response){
+                toastr.error("une erreur inattendue s'est produite");
+            });    
+        
+    }     
      /*-------------------------------------------------------------------------
      *--------------------------- updating filiere------------------------------
      *----------------------------------------------------------------------- */
-            $ctrl.updateFiliere=function(fil,ev){
-                $scope.filiere= fil;
+            $ctrl.updateSpecialite=function(spe,ev){
+                $scope.specialite= spe;
 
             $mdDialog.show({
-              controller: FilController,
-              templateUrl: 'js/my_js/globalconfig/filupdateformtpl.html',
+              controller: SpeController,
+              templateUrl: 'js/my_js/globalconfig/speupdateformtpl.html',
               parent: angular.element(document.body),
              // parent: angular.element(document.querySelector('#component-tpl')),
               scope: $scope,
@@ -257,16 +286,16 @@ function specialiteCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routeP
     
 
   //Dialog Controller
-  function FilController($scope, $mdDialog,toastr) {
+  function SpeController($scope, $mdDialog,toastr) {
       
         
-    $scope.filUpdate = function(fil) {
-        var data = {id: fil.id,code:fil.code,name:fil.name,status:fil.status,fac_id:fil.fac_id,dpt_id:fil.dpt_id}; 
+    $scope.speUpdate = function(spe) {
+        var data = {id: spe.id,code:spe.code,name:spe.name,status:spe.status,fil_id:spe.fil_id}; 
         var config = {
         params :  data,
         headers : {'Accept' : 'application/json'}
         };
-        $http.put('filiere',data,config)
+        $http.put('specialite',data,config)
             .then(function succesCallback(response)
             {
                  //$ctrl.school=response.data[0];

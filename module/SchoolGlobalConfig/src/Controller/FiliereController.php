@@ -54,6 +54,8 @@ class FiliereController extends AbstractRestfulController
                 $data = $hydrator->extract($value);
 
                 $filieres[$key] = $data;
+                $filieres[$key]["faculty"] = null;
+                $filieres[$key]["department"] = null;
                 $filieres[$key]['fac_id'] = $value->getFaculty()->getId();
                ($value->getDepartment())? $filieres[$key]['dpt_id'] = $value->getDepartment()->getId():$filieres[$key]['dpt_id']=-1;
             }

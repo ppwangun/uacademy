@@ -13,6 +13,7 @@ use Laminas\Hydrator\Reflection as ReflectionHydrator;
 use Application\Entity\FieldOfStudy;
 use Application\Entity\Faculty;
 use Application\Entity\Department;
+use Application\Entity\Speciality;
 
 class SpecialiteController extends AbstractRestfulController
 {
@@ -28,12 +29,16 @@ class SpecialiteController extends AbstractRestfulController
     
     public function get($id)
     {
-        $filiere= $this->entityManager->getRepository(FieldOfStudy::class)->find($id);
+        $spe= $this->entityManager->getRepository(Speciality::class)->find($id);
 
             $hydrator = new ReflectionHydrator();
-            $data = $hydrator->extract($filiere);
+            $data = $hydrator->extract($spe);
+           
+            $filiere = $spe->getFieldOfStudy();
+            $data["fieldOfStudy"] = null;
+            $data['fil_id'] = $filiere->getId();
             $data['fac_id'] = $filiere->getFaculty()->getId();
-           ($filiere->getDepartment())? $data['dpt_id'] = $filiere->getDepartment()->getId():$data['dpt_id']=-1;            
+            ($filiere->getDepartment())? $data['dpt_id'] = $filiere->getDepartment()->getId():$data['dpt_id']=-1;            
 
         return new JsonModel([
                 $data
@@ -46,21 +51,24 @@ class SpecialiteController extends AbstractRestfulController
         $this->entityManager->getConnection()->beginTransaction();
         try
         {      
-            $filieres = $this->entityManager->getRepository(FieldOfStudy::class)->findAll([],array("name"=>"ASC"));
+            $spes = $this->entityManager->getRepository(Speciality::class)->findAll([],array("name"=>"ASC"));
             
-            foreach($filieres as $key=>$value)
+            foreach($spes as $key=>$value)
             {
                 $hydrator = new ReflectionHydrator();
                 $data = $hydrator->extract($value);
 
-                $filieres[$key] = $data;
-                $filieres[$key]['fac_id'] = $value->getFaculty()->getId();
-               ($value->getDepartment())? $filieres[$key]['dpt_id'] = $value->getDepartment()->getId():$filieres[$key]['dpt_id']=-1;
+                $spes[$key] = $data;
+                $filiere = $value->getFieldOfStudy();
+                $spes[$key]["fieldOfStudy"] = null;
+                $spes[$key]['fil_id'] = $filiere->getId();
+               $spes[$key]['fac_id'] = $filiere->getFaculty()->getId();
+               ($filiere->getDepartment())? $spes[$key]['dpt_id'] = $filiere->getDepartment()->getId():$spes[$key]['dpt_id']=-1;
             }
             $this->entityManager->getConnection()->commit();
 
             return new JsonModel([
-                    $filieres
+                    $spes
             ]);
             }
         catch(Exception $e)
@@ -92,15 +100,15 @@ class SpecialiteController extends AbstractRestfulController
         try
         {
             
-            $filiere= new FieldOfStudy();
-            $filiere->setName($data['name']);
-            $filiere->setCode($data['code']);
-            $filiere->setStatus($data['status']);
-            $faculty = $this->entityManager->getRepository(Faculty::class)->find($data['fac_id']);
-            $dpt = $this->entityManager->getRepository(Department::class)->find($data['dpt_id']);
-            $filiere->setFaculty($faculty);
-            $filiere->setDepartment($dpt);
-            $this->entityManager->persist($filiere);
+            $spe= new Speciality();
+            $spe->setName($data['name']);
+            $spe->setCode($data['code']);
+            $spe->setStatus($data['status']);
+
+            $fil = $this->entityManager->getRepository(FieldOfStudy::class)->find($data['fil_id']);
+            $spe->setFieldOfStudy($fil);
+
+            $this->entityManager->persist($spe);
             $this->entityManager->flush();
             
             $filieres = $this->getList();
@@ -126,11 +134,11 @@ class SpecialiteController extends AbstractRestfulController
         $this->entityManager->getConnection()->beginTransaction();
         try
         {
-            $filiere = $this->entityManager->getRepository(FieldOfStudy::class)->findOneById($id);
-            if($filiere)
+            $spe = $this->entityManager->getRepository(Speciality::class)->find($id);
+            if($spe)
             {
                 
-                $this->entityManager->remove($filiere);
+                $this->entityManager->remove($spe);
                 $this->entityManager->flush();
                 $this->entityManager->getConnection()->commit();
             }
@@ -154,20 +162,16 @@ class SpecialiteController extends AbstractRestfulController
         $this->entityManager->getConnection()->beginTransaction();
         try
         {
-            $fil = $this->entityManager->getRepository(FieldOfStudy::class)->findOneById($id);
-            if($fil)
+            $spe = $this->entityManager->getRepository(Speciality::class)->find($id);
+            if($spe)
             {
 
-                $fil->setName($data['name']);
-                $fil->setCode($data['code']);
-                $fil->setStatus($data["status"]); 
-                $faculty = $this->entityManager->getRepository(Faculty::class)->find($data['fac_id']);
-         
-                $dpt = $this->entityManager->getRepository(Department::class)->find($data['dpt_id']);
-
-
-                $fil->setDepartment($dpt);   
-                $fil->setFaculty($faculty); 
+                $spe->setName($data['name']);
+                $spe->setCode($data['code']);
+                $spe->setStatus($data["status"]); 
+                $fil = $this->entityManager->getRepository(FieldOfStudy::class)->find($data['fil_id']);
+  
+                $spe->setFieldOfStudy($fil); 
                 $this->entityManager->flush();
             }
 

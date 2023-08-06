@@ -16,7 +16,7 @@ use SchoolGlobalConfig\Controller\SpecialiteController;
  * This is the factory for IndexController. Its purpose is to instantiate the
  * controller.
  */
-class FiliereControllerFactory implements FactoryInterface
+class SpecialiteControllerFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, 
                      $requestedName, array $options = null)

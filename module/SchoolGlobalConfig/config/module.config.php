@@ -363,7 +363,17 @@ return [
                         'action'        => 'searchFilByFaculty',
                     ],
                 ],
-            ],            
+            ],   
+            'searchSpeByFil' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/searchSpeByFil',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'searchSpeByFil',
+                    ],
+                ],
+            ],             
             'school' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -401,12 +411,12 @@ return [
                     ],
                 ],
             ],
-            'speailite' => [
+            'specialite' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/speailite[/:id]',
+                    'route'    => '/specialite[/:id]',
                     'defaults' => [
-                        'controller' => Controller\speailiteController::class,
+                        'controller' => Controller\SpecialiteController::class,
                     ],
                 ],
             ],            
@@ -519,7 +529,11 @@ return [
             'school-global-config/index/update-fil' => __DIR__ . '/../view/schoolglobalconfig/Index/updatefil.phtml',
             'school-global-config/index/specialitetpl' => __DIR__ . '/../view/schoolglobalconfig/Index/specialitetpl.phtml',
             'school-global-config/index/new-spe' => __DIR__ . '/../view/schoolglobalconfig/Index/newspe.phtml', 
-            'school-global-config/index/update-spe' => __DIR__ . '/../view/schoolglobalconfig/Index/updatespe.phtml',            
+            'school-global-config/index/update-spe' => __DIR__ . '/../view/schoolglobalconfig/Index/updatespe.phtml',
+            'school-global-config/index/degreetpl' => __DIR__ . '/../view/schoolglobalconfig/Index/degreetpl.phtml', 
+            'school-global-config/index/newdegreetpl' => __DIR__ . '/../view/schoolglobalconfig/Index/newdegreetpl.phtml',
+            'school-global-config/index/classetpl' => __DIR__ . '/../view/schoolglobalconfig/Index/classetpl.phtml',
+            'school-global-config/index/newclassetpl' => __DIR__ . '/../view/schoolglobalconfig/Index/newclassetpl.phtml',
         ],
         'template_path_stack' => [
             __DIR__ . '/../view',

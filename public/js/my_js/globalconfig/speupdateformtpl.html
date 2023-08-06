@@ -1,43 +1,30 @@
-<script src="js/app/department/department.component.js"></script>
-<link rel="stylesheet" href='js/datatables-plugins/dataTables.bootstrap.css'>
-
-
 <style> 
 .md-datepicker-calendar-pane{
 z-index: 120000}
 
 .md-select-menu-container {z-index: 120000;}
-
-li.active a.ng-binding {
-  color: #000 !important;
-	background-color: #eeeeee !important;
-	text-decoration: none;
-}
-
 </style>
 
 
-<div class="well"  style="margin-left: -30px; margin-right: -30px;" ng-init="$ctrl.init()">
-        
-            <div class="row">
-                <div class='col-md-6'>
+<md-dialog  style="    max-width: 60%;
+    max-height: 60%;
+    width: 60%;
+    height: 60%;
+    border-radius: 0;" aria-label="Ajouter une faculté">
+  <form   name="myForm">
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Modifier Département</h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon md-svg-src="img/ic_close_24px.svg" aria-label="Close dialog"></md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
 
-                    <button  ng-show=" <?=($this->access('global.system.admin', null))?true:false?> && !$ctrl.isUpdate" type="button" ng-click="$ctrl.newSpe(specialite)" class="btn btn-danger" ng-disabled="myForm.$invalid" ><span class="fa fa-plus-square"></span>&nbsp;Ajouter Spécialité</button>
-                    <span> <a href="#!/specialite">Retour</a></span>
-                </div>
-                <div class="col-md-6" > <h4>Gestion des Spécialitées</h4></div>
-
-                
-
-                
-            </div>
-</div>
-
-<div class="form-view-main">
-    <div class="form-view">
-        <div   ng-cloak class="md-inline-form">
-
-
+    <md-dialog-content>
+      <div class="md-dialog-content" >
+           <form ng-cloak name="filiereForm">
     <md-content layout-padding >
         <form   name="myForm">
 
@@ -66,7 +53,7 @@ li.active a.ng-binding {
             <div layout layout-sm="column">
                 <md-input-container flex="flex" style="width: 60%; margin-top: 10px;" >
                     <label>Filière:</label>
-                    <md-select name="dpt" placeholder="Choisir la filière" ng-model="specialite.fil_id"  ng-change="$ctrl.searchSpeByFil(specialite.fil_id)" style="width: 60%;" required >
+                    <md-select name="dpt" placeholder="Choisir la filière" ng-model="specialite.fil_id"  ng-change="$ctrl.searchSpeByDil(specialite.fil_id)" style="width: 60%;" required >
                          <md-option ng-disabled="true"><em>---Choix de l'établissement---</em></md-option>
                         <md-option ng-value="fil.id" ng-repeat="fil in filieres">{{fil.name}}</md-option>
                     </md-select>
@@ -97,58 +84,20 @@ li.active a.ng-binding {
       </div>
     </form>
   </md-content>
-</div>
-        
+                  
 
-        
-<p>&nbsp;</p>
-              <!--tabs widget-->
-              
-    <uib-tabset>
-      <uib-tab >
-          <uib-tab-heading>
-              <span>Liste des département</span>
-          </uib-tab-heading>
-        <div class="tab-container">              
-                <div class="row" >
-                    <table class="table table-striped table-condensed">
-                         <thead>
-                             <tr class="bg-primary">
-                                 <th>N°</th>
-                                 <th>Code Spécialité</th>
-                                 <th>Nom Spécialité</th>
-                                 <th >status</th>
-                                 <th ></th>
+      </div>
+    </md-dialog-content>
 
-                             </tr>
-                         </thead>
-                         <tbody>
-                             <tr ng-repeat="spe in specialites" >
-                               <td >{{$ctrl.cpt + $index}}</td>
-                               <td ng-bind="spe.code"></td>
-                               <td ng-bind="spe.name"></td> 
-                               <td ng-bind='spe.status?"":"x"' ng-class="{'zf-green fa fa-check': spe.status,'zf-red': !spe.status }"> </td>
-                               <td>
-                                   <div class="btn-group">
-                                    <button type="button" ng-click="$ctrl.updateSpecialite(spe)" class="btn btn-default btn-xs btn-info"><i class="fa fa-edit"></i></button>
-                                    <button  type="button" ng-click="$ctrl.deleteSpe(spe)" class="btn btn-default btn-xs btn-danger" ><i class="fa fa-trash-o"></i></button>   
-                                   </div>
-                               </td>
+    <md-dialog-actions layout="row">
 
-                             </tr>
-                         </tbody>
-                     </table>
-                 </div>
-                <!--End tab-->
-                
-            </div>  
-            </uib-tab>
-              <uib-tab>
-                <uib-tab-heading>
-                    <span>Liste des Responsables</span>
-                </uib-tab-heading>
-                <div class="tab-container"> 
-                </div>
-            </uib-tab>
-        </div>
-
+      <span flex></span>
+      <md-button ng-click="cancel()">
+        Annuler
+      </md-button>
+      <md-button class="md-warn" ng-click="speUpdate(specialite)" ng-disabled="myForm.$invalid">
+        Modifier
+      </md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

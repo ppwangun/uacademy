@@ -38,12 +38,7 @@ class ClassListView
      */
     private $name;
     
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="option", type="string", length=255, nullable=true)
-     */
-    private $option;    
+   
     
      /**
      * @var integer
@@ -169,15 +164,7 @@ class ClassListView
         return $this->name;
     }
     
-     /**
-     * Get option
-     *
-     * @return string
-     */
-    public function getOptioni()
-    {
-        return $this->option;
-    }    
+   
     
      /**
      * Get isEndCycle

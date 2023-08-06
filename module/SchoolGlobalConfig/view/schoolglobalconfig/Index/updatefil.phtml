@@ -97,7 +97,7 @@ li.active a.ng-binding {
     <uib-tabset>
       <uib-tab >
           <uib-tab-heading>
-              <span>Liste des département</span>
+              <span>Liste des sécialitées</span>
           </uib-tab-heading>
         <div class="tab-container">              
                 <div class="row" >
@@ -105,23 +105,23 @@ li.active a.ng-binding {
                          <thead>
                              <tr class="bg-primary">
                                  <th>Num</th>
-                                 <th>Code Filière</th>
-                                 <th>Nom Filière</th>
+                                 <th>Code Spécaialité</th>
+                                 <th>Nom spécialité</th>
                                  <th >status</th>
                                  <th ></th>
 
                              </tr>
                          </thead>
                          <tbody>
-                             <tr ng-repeat="fil in filieres" >
+                             <tr ng-repeat="spe in specialites" >
                                <td >{{$ctrl.cpt + $index}}</td>
-                               <td ng-bind="fil.code"></td>
-                               <td ng-bind="fil.name"></td> 
-                               <td ng-bind='fil.status?"":"x"' ng-class="{'zf-green fa fa-check': fil.status,'zf-red': !fil.status }"> </td>
+                               <td ng-bind="spe.code"></td>
+                               <td ng-bind="spe.name"></td> 
+                               <td ng-bind='spe.status?"":"x"' ng-class="{'zf-green fa fa-check': spe.status,'zf-red': !spe.status }"> </td>
                                <td>
                                    <div class="btn-group">
-                                    <button type="button" ng-click="$ctrl.updateFiliere(fil)" class="btn btn-default btn-xs btn-info"><i class="fa fa-edit"></i></button>
-                                    <button  type="button" ng-click="$ctrl.deleteFil(fil)" class="btn btn-default btn-xs btn-danger" ><i class="fa fa-trash-o"></i></button>   
+                                
+                                    <button  type="button" ng-click="$ctrl.deleteSpe(spe)" class="btn btn-default btn-xs btn-danger" ><i class="fa fa-trash-o"></i></button>   
                                    </div>
                                </td>
 

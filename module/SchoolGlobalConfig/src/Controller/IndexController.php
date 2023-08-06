@@ -16,6 +16,7 @@ use SchoolGlobalConfig\Form\AnneeAcadForm;
 use Application\Entity\Faculty;
 use Application\Entity\Department;
 use Application\Entity\FieldOfStudy;
+use Application\Entity\Speciality;
 use Application\Entity\Degree;
 use Application\Entity\TrainingCurriculum;
 use Application\Entity\AcademicYear;
@@ -326,6 +327,38 @@ class IndexController extends AbstractActionController
       }
         
     } 
+    public function searchSpeByFilAction()
+    {
+      $this->entityManager->getConnection()->beginTransaction();
+      try
+      {
+            $data = $this->params()->fromQuery(); 
+            (isset($data['fil_id']))?"":$data["fil_id"]=-1;
+            $fil= $this->entityManager->getRepository(FieldOfStudy::class)->find($data['fil_id']);
+            $spes = $this->entityManager->getRepository(Speciality::class)->findBy(array('fieldOfStudy'=>$fil),array("name"=>"ASC"));
+            foreach($spes as $key=>$value)
+            {
+                $hydrator = new ReflectionHydrator();
+                $data = $hydrator->extract($value);
+
+                $spes[$key] = $data;
+                $filiere = $value->getFieldOfStudy();
+                $spes[$key]["fieldOfStudy"] = null;
+                $spes[$key]['fil_id'] = $filiere->getId();
+               $spes[$key]['fac_id'] = $filiere->getFaculty()->getId();
+               ($filiere->getDepartment())? $spes[$key]['dpt_id'] = $filiere->getDepartment()->getId():$spes[$key]['dpt_id']=-1;
+            }
+        $this->entityManager->getConnection()->commit();
+        return new JsonModel([
+                $spes
+        ]);          
+      }
+      catch(Exception $e){
+            $this->entityManager->getConnection()->rollBack();
+            throw $e; 
+      }
+        
+    }
     public function searchFilByFacultyAction()
     {
       $this->entityManager->getConnection()->beginTransaction();
@@ -352,7 +385,7 @@ class IndexController extends AbstractActionController
             throw $e; 
       }
         
-    }
+    }    
     
     public function newacadyrAction()
     {

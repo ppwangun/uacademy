@@ -1,9 +1,9 @@
 <?php
 
-
+namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Application\Entity\Speciality;
 /**
  * SpecialityOption
  *
@@ -43,7 +43,7 @@ class SpecialityOption
     private $status = 1;
 
     /**
-     * @var \Speciality
+     * @var Speciality
      *
      * @ORM\ManyToOne(targetEntity="Speciality")
      * @ORM\JoinColumns({
@@ -139,11 +139,11 @@ class SpecialityOption
     /**
      * Set speciality.
      *
-     * @param \Speciality|null $speciality
+     * @param Speciality|null $speciality
      *
      * @return SpecialityOption
      */
-    public function setSpeciality(\Speciality $speciality = null)
+    public function setSpeciality(Speciality $speciality = null)
     {
         $this->speciality = $speciality;
     
@@ -153,7 +153,7 @@ class SpecialityOption
     /**
      * Get speciality.
      *
-     * @return \Speciality|null
+     * @return Speciality|null
      */
     public function getSpeciality()
     {

@@ -22,7 +22,7 @@ li.active a.ng-binding {
             <div class="row">
                 <div class='col-md-6'>
 
-                    <button  ng-show=" <?=($this->access('global.system.admin', null))?true:false?> && !$ctrl.isUpdate" type="button" ng-click="$ctrl.newSpe(specialite)" class="btn btn-danger" ng-disabled="myForm.$invalid" ><span class="fa fa-plus-square"></span>&nbsp;Ajouter Spécialité</button>
+                    <button  ng-show=" <?=($this->access('global.system.admin', null))?true:false?> && !$ctrl.isUpdate" type="button" ng-click="$ctrl.updateSpe(specialite)" class="btn btn-danger" ng-disabled="myForm.$invalid" ><span class="fa fa-plus-square"></span>&nbsp;Modifier Spécialité</button>
                     <span> <a href="#!/specialite">Retour</a></span>
                 </div>
                 <div class="col-md-6" > <h4>Gestion des Spécialitées</h4></div>
@@ -107,7 +107,7 @@ li.active a.ng-binding {
     <uib-tabset>
       <uib-tab >
           <uib-tab-heading>
-              <span>Liste des département</span>
+              <span>Liste des options</span>
           </uib-tab-heading>
         <div class="tab-container">              
                 <div class="row" >
@@ -115,19 +115,19 @@ li.active a.ng-binding {
                          <thead>
                              <tr class="bg-primary">
                                  <th>N°</th>
-                                 <th>Code Spécialité</th>
-                                 <th>Nom Spécialité</th>
+                                 <th>Code Option</th>
+                                 <th>Nom Option</th>
                                  <th >status</th>
                                  <th ></th>
 
                              </tr>
                          </thead>
                          <tbody>
-                             <tr ng-repeat="spe in specialites" >
+                             <tr ng-repeat="opt in options" >
                                <td >{{$ctrl.cpt + $index}}</td>
-                               <td ng-bind="spe.code"></td>
-                               <td ng-bind="spe.name"></td> 
-                               <td ng-bind='spe.status?"":"x"' ng-class="{'zf-green fa fa-check': spe.status,'zf-red': !spe.status }"> </td>
+                               <td ng-bind="opt.code"></td>
+                               <td ng-bind="opt.name"></td> 
+                               <td ng-bind='opt.status?"":"x"' ng-class="{'zf-green fa fa-check': opt.status,'zf-red': !opt.status }"> </td>
                                <td>
                                    <div class="btn-group">
                                     <button type="button" ng-click="$ctrl.updateSpecialite(spe)" class="btn btn-default btn-xs btn-info"><i class="fa fa-edit"></i></button>

@@ -3,7 +3,7 @@ angular.module("degree").component("newDegree",{
     controller: degreeCtrl
 });
 
-function degreeCtrl($http,$q,$timeout,$routeParams,$mdDialog,$location,$scope)
+function degreeCtrl($http,$q,$timeout,$routeParams,$mdDialog,$location,$scope,toastr)
 {
     var id;
     var $ctrl= this;
@@ -58,23 +58,31 @@ function degreeCtrl($http,$q,$timeout,$routeParams,$mdDialog,$location,$scope)
                 };
                 //Loading selected degree information for update
 
-                $timeout(function() {
+              
                     $http.get('degree',config).then(function(response){
-                    $ctrl.degree = response.data[0]; 
-                    });
-                }, 800);
-      
-                $timeout(function() {
-                    $http.get('filfrmdegree',config).then(function(response){
-                          $ctrl.fil = response.data[0];
-                          $ctrl.selectedItem={id:$ctrl.fil.id,code:$ctrl.fil.code,name:$ctrl.fil.name};
-                      });
-
+                        $ctrl.degree = response.data[0]
+                
+                        var data = {id: $ctrl.degree.fil_id};
+                        var config = {
+                        params: data,
+                        headers : {'Accept' : 'application/json'}
+                        };      
+                        $timeout(
+                            $http.get('filiere',config).then(function(response){
+                                  $ctrl.fil = response.data[0];
+                                  $ctrl.selectedItem={id:$ctrl.fil.id,code:$ctrl.fil.code,name:$ctrl.fil.name};
+                        }),3000);                    
+                    })
+                    
+                 
                     $http.get('cyclebydegree',config).then(function(response){
-                          $scope.cycles= response.data[0];
+                    $scope.cycles = response.data[0]; 
+                    })                    
+                    
 
-                      });
-                }, 1000);
+
+          
+
             }
               
               
@@ -87,7 +95,7 @@ function degreeCtrl($http,$q,$timeout,$routeParams,$mdDialog,$location,$scope)
      *----------------------------- adding degree-------------------------------
      *----------------------------------------------------------------------- */    
    $ctrl.addDegree = function(){
-       $ctrl.degree.filiere_id=$ctrl.selectedItem.id;
+       $ctrl.degree.fil_id=$ctrl.selectedItem.id;
        $http.post('degree',$ctrl.degree).then(
             function successCallback(response){
                 //reinitialise form
@@ -97,7 +105,7 @@ function degreeCtrl($http,$q,$timeout,$routeParams,$mdDialog,$location,$scope)
                 $location.path("/degree");
             },
             function errorCallback(response){
-                alert("Une erreur inattendue s'est produite");
+               toastr.error("une erreur inattendue s'est produite")
            
             });
    };
@@ -110,7 +118,7 @@ function degreeCtrl($http,$q,$timeout,$routeParams,$mdDialog,$location,$scope)
         params: data,
         headers : {'Accept' : 'application/json'}
       };
-       $ctrl.degree.filiere_id=$ctrl.selectedItem.id;
+       $ctrl.degree.fil_id=$ctrl.selectedItem.id;
        $http.put('degree',data,config).then(
             function successCallback(response){
                 //reinitialise form
@@ -311,7 +319,26 @@ function degreeCtrl($http,$q,$timeout,$routeParams,$mdDialog,$location,$scope)
 
     }
     
-   
+      /*--------------------------------------------------------------------------
+     *--------------------------- loading all specilaities  by field of study   ---------------------
+     *----------------------------------------------------------------------- */
+    $ctrl.searchSpeByFil = function(id){
+      var data = {fil_id: id}; 
+      var config = {
+      params: data,
+      headers : {'Accept' : 'application/json'}
+      };
+        $http.get('searchSpeByFil',config).then(
+            function successCallback(response){
+                $ctrl.cpt =1;
+                $scope.specialites = response.data[0];
+            
+            },
+            function errorCallback(response){
+                toastr.error("une erreur inattendue s'est produite");
+            });    
+        
+    }    
 //Dialog Controller
   function DialogController($scope, $mdDialog) {
       

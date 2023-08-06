@@ -48,20 +48,20 @@ function filiereCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routePara
      *--------------------------- Load faculties--------------------------------
      *----------------------------------------------------------------------- */
 
-    $http.get('faculty').then(
+   $timeout($http.get('faculty').then(
         function(response){
         $scope.faculties = response.data[0];
-    });
+    }),1000);
     
-    $http.get('department').then(
+    $timeout($http.get('department').then(
         function(response){
         $scope.dpts = response.data[0];
-    }); 
+    }),1000); 
     
-    $http.get('filiere').then(
+    $timeout($http.get('filiere').then(
         function(response){
         $scope.filieres = response.data[0];
-    });    
+    }),1000);    
     
     if($routeParams.id && $routeParams.id !=-1)
     {
@@ -69,15 +69,18 @@ function filiereCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routePara
             params: {id : $routeParams.id },
             headers : {'Accept' : 'application/json'}
         };
-        $http.get('filiere',config).then(
+        $timeout($http.get('filiere',config).then(
         function(response){
         $scope.filiere = response.data[0];
-        });
-        
-        $http.get('searchSpeByFil',config).then(
+        }),2500);
+       var config = {
+            params: {fil_id : $routeParams.id },
+            headers : {'Accept' : 'application/json'}
+        };        
+        $timout($http.get('searchSpeByFil',config).then(
         function(response){
-        $scope.filieres = response.data[0];
-        });        
+        $scope.specialites = response.data[0];
+        }),1000);        
         
     }
         
@@ -130,7 +133,7 @@ function filiereCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routePara
               function successCallback(response){
                   //check the index of the current object in the array
                   var x;
-                  var index = $scope.dpts.findIndex(x => x.id === fil.id);
+                  var index = $scope.filieres.findIndex(x => x.id === fil.id);
                   //remove the current object from the array
                   $scope.filieres.splice(index,1);
                   toastr.success("Opération effectuée avec succès")
@@ -227,7 +230,48 @@ function filiereCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routePara
                 toastr.error("une erreur inattendue s'est produite");
             });    
         
-    }   
+    } 
+    
+     /*-------------------------------------------------------------------------
+     *--------------------------- deleting specialite------------------------------
+     *----------------------------------------------------------------------- */
+    
+      $ctrl.deleteSpe= function(spe,ev)
+      {
+            var data = {id: spe.id}; 
+            var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+            };
+
+// Preparing the confirm windows
+      var confirm = $mdDialog.confirm()
+            .title('Voulez vous vraiment supprimer?')
+            .textContent('Toutes les données associées à cette information seront perdues')
+             // .ariaLabel('Lucky day')
+            .targetEvent(ev)
+            .ok('Supprimer')
+            .cancel('Annuler');
+    //open de confirm window
+        $mdDialog.show(confirm).then(function() {
+            //in case delete is pressee excute  the delete backend 
+            $http.delete('specialite',config).then(
+              function successCallback(response){
+                  //check the index of the current object in the array
+                  var x;
+                  var index = $scope.specialites.findIndex(x => x.id === spe.id);
+                  //remove the current object from the array
+                  $scope.specialites.splice(index,1);
+                  toastr.success("Opération effectuée avec succès")
+             },
+            function errorCallback(response){
+                 toastr.error("une erreur inattendue s'est produite");
+                });
+        }, function() {
+         // $scope.status = 'You decided to keep your debt.';
+        });
+
+      };     
     
      /*-------------------------------------------------------------------------
      *--------------------------- updating filiere------------------------------

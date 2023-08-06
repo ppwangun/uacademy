@@ -66,10 +66,10 @@ class Degree extends \Application\Entity\Degree implements \Doctrine\ORM\Proxy\P
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'name', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'status', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'fieldStudy', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'classOfStudy'];
+            return ['__isInitialized__', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'name', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'status', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'fieldStudy', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'speciality', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'specialityOption'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'name', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'status', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'fieldStudy', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'classOfStudy'];
+        return ['__isInitialized__', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'name', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'status', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'fieldStudy', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'speciality', '' . "\0" . 'Application\\Entity\\Degree' . "\0" . 'specialityOption'];
     }
 
     /**
@@ -194,7 +194,7 @@ class Degree extends \Application\Entity\Degree implements \Doctrine\ORM\Proxy\P
     /**
      * {@inheritDoc}
      */
-    public function setCode($code)
+    public function setCode($code = NULL)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCode', [$code]);
@@ -216,7 +216,7 @@ class Degree extends \Application\Entity\Degree implements \Doctrine\ORM\Proxy\P
     /**
      * {@inheritDoc}
      */
-    public function setName($name)
+    public function setName($name = NULL)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setName', [$name]);
@@ -238,7 +238,7 @@ class Degree extends \Application\Entity\Degree implements \Doctrine\ORM\Proxy\P
     /**
      * {@inheritDoc}
      */
-    public function setStatus($status)
+    public function setStatus($status = NULL)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setStatus', [$status]);
@@ -277,6 +277,50 @@ class Degree extends \Application\Entity\Degree implements \Doctrine\ORM\Proxy\P
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFieldStudy', []);
 
         return parent::getFieldStudy();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setSpeciality(\Application\Entity\Speciality $speciality = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSpeciality', [$speciality]);
+
+        return parent::setSpeciality($speciality);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSpeciality()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSpeciality', []);
+
+        return parent::getSpeciality();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setSpecialityOption(\Application\Entity\SpecialityOption $specialityOption = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSpecialityOption', [$specialityOption]);
+
+        return parent::setSpecialityOption($specialityOption);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSpecialityOption()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSpecialityOption', []);
+
+        return parent::getSpecialityOption();
     }
 
 }
