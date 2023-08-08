@@ -1229,7 +1229,7 @@ public function printTranscriptsAction()
             $niveauEtude = $classe_1->getStudyLevel();
             
             $classe = $classe_1->getCode();
-            $specialite = $classe_1->getOption();
+           // $specialite = $classe_1->getOption();
             $diplome = $diplome->getName();
             $filiere = $filiere->getName();
             $facultyCode = $faculty->getCode();
@@ -1268,7 +1268,7 @@ public function printTranscriptsAction()
                 'semestre'=>$semestre,
                 '$semRank'=>$semRank,
                 'classe'=>$classe,
-                'specialite'=>$specialite,
+               // 'specialite'=>$specialite,
                 'studyLevel'=>$studyLevel,
                 'studentsWithBaclogs'=>$studentsWithBaclogs,
                 'filiere'=>$filiere,
