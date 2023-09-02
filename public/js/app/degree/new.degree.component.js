@@ -45,7 +45,11 @@ function degreeCtrl($http,$q,$timeout,$routeParams,$mdDialog,$location,$scope,to
                   $ctrl.degrees.push({id:item.id,code:item.code, name:item.name.toLowerCase()+"["+item.code+"]"}); 
 
                 });
-            });            
+            });  
+            $timeout($http.get('cycleFormation').then(
+                function(response){
+                $scope.cyclesFormation = response.data[0];
+            }),1000);            
             
             id = $routeParams.id; 
             if(id)

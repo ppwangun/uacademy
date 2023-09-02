@@ -12,6 +12,7 @@ angular.module('myApp', [
   'app.acadyr',
   'faculty',
   'department',
+  'cycle',
   'filiere',
   'specialite',
   'degree',
@@ -30,6 +31,11 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
   $locationProvider.hashPrefix('!');
 
   $routeProvider
+          .when('/prospects',{
+              template: '<prospective-std></prospective-std>'
+          }).when('/prospectDetails/:id',{
+              template: '<prospective-details></prospective-details>'
+          })
           .when('/dashboard',{
               templateUrl: 'dashboard'
           })
@@ -68,6 +74,15 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
           })          
           .when('/specialite',{
               template: '<speciality-list></speciality-list>'
+          }) 
+          .when('/cycleFormation',{
+              template: '<cycle-details></cycle-details>'
+          })
+          .when('/newCycle/:id',{
+              template: '<new-cycle></new-cycle>'
+          }) 
+          .when('/updateCycle/:id',{
+              template: '<update-cycle></update-cycle>'
           })          
           .when('/degree',{
               template: '<degree-details></degree-details>'
@@ -101,8 +116,7 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
               template: '<new-teachingunit></new-teachingunit>'
           }).when('/students',{
               template: '<student-list></student-list>'
-          })
-          .when('/studentinfos/:id', {
+          }).when('/studentinfos/:id', {
               template: '<student-details></student-details>',
               resolve:{
                     "check":function(accessFac,$location,$route){

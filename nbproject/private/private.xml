@@ -3,24 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/udmacademy/module/Exam/view/Exam/index/newexam.phtml</file>
-            <file>file:/C:/xampp/htdocs/udmacademy/public/js/app/faculty/faculty.component.js</file>
-            <file>file:/C:/xampp/htdocs/udmacademy/module/Registration/view/Registration/index/students.phtml</file>
-            <file>file:/C:/xampp/htdocs/udmacademy/module/SchoolGlobalConfig/config/module.config.php</file>
-            <file>file:/C:/xampp/htdocs/udmacademy/public/js/app/department/department.module.js</file>
-            <file>file:/C:/xampp/htdocs/udmacademy/public/js/app/filiere/filiere.component.js</file>
-            <file>file:/C:/xampp/htdocs/udmacademy/composer.json</file>
-            <file>file:/C:/xampp/htdocs/udmacademy/public/js/app/app.js</file>
-            <file>file:/C:/xampp/htdocs/udmacademy/module/SchoolGlobalConfig/view/school-global-config/Index/departmentpl.phtml</file>
-            <file>file:/C:/xampp/htdocs/udmacademy/public/js/app/department/department.component.js</file>
-            <file>file:/C:/xampp/htdocs/udmacademy/public/js/my_js/globalconfig/filiereupdateformtpl.html</file>
-            <file>file:/C:/xampp/htdocs/udmacademy/module/SchoolGlobalConfig/src/Controller/IndexController.php</file>
-            <file>file:/C:/xampp/htdocs/udmacademy/public/js/app/student/student.component.js</file>
-            <file>file:/C:/xampp/htdocs/udmacademy/public/js/my_js/globalconfig/degreeupdateformtpl.html</file>
-            <file>file:/C:/xampp/htdocs/udmacademy/module/SchoolGlobalConfig/view/school-global-config/Index/new-dpt.phtml</file>
-            <file>file:/C:/xampp/htdocs/udmacademy/public/js/my_js/globalconfig/filiereformtpl.html</file>
-            <file>file:/C:/xampp/htdocs/udmacademy/module/Application/view/layout/layout2.phtml</file>
-            <file>file:/C:/xampp/htdocs/udmacademy/module/SchoolGlobalConfig/view/school-global-config/Index/facultytpl.phtml</file>
+            <file>file:/C:/xampp/htdocs/uacademy/module/Registration/view/registration/index/prospect.phtml</file>
+            <file>file:/C:/xampp/htdocs/uacademy/module/Registration/src/Controller/ProspectsController.php</file>
+            <file>file:/C:/xampp/htdocs/uacademy/module/Application/src/Entity/ProspectiveStudentView.php</file>
+            <file>file:/C:/xampp/htdocs/uacademy/module/SchoolGlobalConfig/config/module.config.php</file>
+            <file>file:/C:/xampp/htdocs/uacademy/module/Registration/src/Controller/IndexController.php</file>
+            <file>file:/C:/xampp/htdocs/uacademy/module/Registration/view/registration/index/prospects.phtml</file>
         </group>
     </open-files>
 </project-private>

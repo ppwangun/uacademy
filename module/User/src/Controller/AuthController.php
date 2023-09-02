@@ -86,7 +86,7 @@ class AuthController extends AbstractActionController
 			// the 'Admin' user.
 			$this->userManager->createAdminUserIfNotExists();
 			
-
+                        $this->entityManager->getConnection()->commit();
 			// Create login form
 			$form = new LoginForm(); 
 			$form->get('redirect_url')->setValue($redirectUrl);

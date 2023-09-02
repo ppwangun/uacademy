@@ -110,7 +110,8 @@
     <script src="js/app/faculty/faculty.module.js"></script>
     <script src="js/app/faculty/faculty.component.js"></script>
     <script src="js/app/filiere/specialite.component.js"></script>
-    <script src="js/app/department/department.component.js"></script>    
+    <script src="js/app/department/department.component.js"></script>   
+    <script src="js/app/filiere/cycle.component.js"></script>
     <script src="js/app/filiere/filiere.component.js"></script>
     <script src="js/app/degree/degree.module.js"></script>
     <script src="js/app/degree/degree.component.js"></script>
@@ -151,7 +152,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand " href="index"><span class="zf-green">UdM Academy</span></a>
+                <a class="navbar-brand " href="index"><span class="zf-green">Agenla Academy</span></a>
             </div>
             <!-- /.navbar-header -->
 
@@ -386,8 +387,11 @@
                             <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> Etudiants<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="#!/admission">Admission</a>
+                                    <a href="#!/prospects">Gérer les prospects</a>
                                 </li>
+                                <li>
+                                    <a href="#!/admission">Admission</a>
+                                </li>                                
                                 <li>
                                     <a href="#!/students">Inscription/Réinscription</a>
                                 </li>
@@ -522,7 +526,11 @@
                                 </li>
                                 <li>
                                     <a href="#!/specialite">Spécialtés</a>
-                                </li>   
+                                </li>  
+                                
+                                <li>
+                                    <a href="#!/cycleFormation">Cycle de formation</a>
+                                </li>                                
                                 
                                 <li>
                                     <a href="#!/degree">Diplômes</a>
@@ -587,10 +595,10 @@
         
         </div>
         <!-- /#page-wrapper -->
-        <div class="container" style="margin-left: auto; margin-right: auto;">           
+        <div class="container" style="margin-left: auto; margin-right: auto;" >           
             <hr>
             <footer>
-                <p>&copy; 2018 - <?= date('Y') ?> by Service Informatique UdM(ppwangun).</p>
+                <p>&copy; 2023 - <?= date('Y') ?> by </p>
             </footer>
 
         <?= $this->inlineScript() ?>

@@ -18,7 +18,9 @@ z-index: 120000}
                     <button  type="button" ng-click="$ctrl.addClasse()" class="btn btn-danger" ng-show="!$ctrl.isUpdate" ng-disabled="classForm.$invalid">Enrégistrer</button>
                     <span> <a href="#!/classes">Retour</a></span>
                 </div>
-                <div class="col-lg-4"></div>
+                <div class="col-lg-4">
+                    
+                </div>
                 <div class="col-lg-2">
                     
                     <button  type="button" ng-show="$ctrl.isUpdate" ng-click="$ctrl.deleteDegree()" ng-disabled="classForm.$invalid" class="btn btn-default">Supprimer</button>
@@ -37,34 +39,46 @@ z-index: 120000}
 
 
     <md-content layout-padding >
+     <div layout='row'>
 
-    <div layout='column'>
-    <md-input-container class="md-block" >
-          <label>Diplôme:</label>
-          <md-autocomplete flex="70" md-search-text="$ctrl.searchText" 
-                           md-selected-item="$ctrl.selectedItem"  
-                           md-items="item in $ctrl.querySearch($ctrl.searchText)" 
-                           md-item-text="item.name" 
-                           md-min-length="0"
-                           placeholder="Faites d'un diplôme de formation" 
-                           md-selected-item-change="$ctrl.selectedItemChange(item)"
-                           md-input-name="degree"
-                           md-no-asterisk
-                           required>
-              <md-item-template>
-                <span md-highlight-text="$ctrl.searchText" md-highlight-flags="^i">{{item.name}}</span>
+        <md-input-container class="md-block  col-md-8 "  >
+              <label>Diplôme:</label>
+              <md-autocomplete flex="70" md-search-text="$ctrl.searchText" 
+                               md-selected-item="$ctrl.selectedItem"  
+                               md-items="item in $ctrl.querySearch($ctrl.searchText)" 
+                               md-item-text="item.name" 
+                               md-min-length="0"
+                               placeholder="Faites d'un diplôme de formation" 
+                               md-selected-item-change="$ctrl.selectedItemChange(item)"
+                               md-input-name="degree"
+                               md-no-asterisk
+                               required>
+                  <md-item-template>
+                    <span md-highlight-text="$ctrl.searchText" md-highlight-flags="^i">{{item.name}}</span>
 
-              </md-item-template>
-              <md-not-found>
-                No states matching "{{$ctrl.searchText}}" were found.
-                <a ng-click="">Create a new one!</a>
-              </md-not-found>
-        </md-autocomplete>
-              <div ng-messages="classForm.degree.$error">
-                  <div ng-message="required">Ce champ est obligatoire</div>
-              </div> 
-    </md-input-container>
-    </div>
+                  </md-item-template>
+                  <md-not-found>
+                    No states matching "{{$ctrl.searchText}}" were found.
+                    <a ng-click="">Create a new one!</a>
+                  </md-not-found>
+            </md-autocomplete>
+                  <div ng-messages="classForm.degree.$error">
+                      <div ng-message="required">Ce champ est obligatoire</div>
+                  </div> 
+        </md-input-container>
+       
+     <md-input-container class="md-block" flex='20' >
+        Tronc commun?     
+        <md-checkbox class='md-primary' ng-model="filiere.status"  ng-checked="(filiere.status)"aria-label="Actif ?" md-no-ink ></md-checkbox>
+        
+    </md-input-container>      
+    <md-input-container class="md-block" flex='10' >
+   
+                <button class="btn btn-danger" ng-click="$ctrl.associateSemToclasse()"><i class="fa fa-plus"></i></button>
+           
+    </md-input-container>  
+       
+     </div>
         
         
     <div layout='row'>

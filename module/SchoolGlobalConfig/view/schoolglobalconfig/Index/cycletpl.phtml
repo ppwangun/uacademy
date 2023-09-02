@@ -19,7 +19,7 @@ max-width: 900px;
 </style>
 <div class="row">
                 <div class="col-lg-12">
-                    <h4 class="page-header">Liste des Spécialités</h4>
+                    <h4 class="page-header">Liste des cycles de formation</h4>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -39,8 +39,8 @@ max-width: 900px;
                                 <thead>
                                     <tr>
                                         <th  > N°</th>
-                                        <th  > Nom Spécialité</th>
-                                        <th >Code Spécialité</th>
+                                        <th  > Nom Département</th>
+                                        <th >Code Département</th>
                                         <th >Statut</th>
                                        
                                         <th ></th>
@@ -48,17 +48,17 @@ max-width: 900px;
                                 </thead>
                                 <tbody>
     
-                                    <tr ng-repeat="spe in specialites" style="cursor: pointer" ng-dblclick="$ctrl.redirectUpdate(spe.id)">
+                                    <tr ng-repeat="cycle in cycles" style="cursor: pointer" ng-dblclick="$ctrl.redirectUpdate(cycle.id)">
                                             <td >{{$ctrl.cpt + $index}}</td>
-                                          <td ng-bind="spe.name"></td>
-                                          <td ng-bind="spe.code"></td>
-                                          <td ng-bind='spe.status?"":"x"' ng-class="{'zf-green fa fa-check': spe.status,'zf-red': !spe.status }"></td>
+                                          <td ng-bind="cycle.name"></td>
+                                          <td ng-bind="cycle.code"></td>
+                                          <td ng-bind='cycle.status?"":"x"' ng-class="{'zf-green fa fa-check': cycle.status,'zf-red': !cycle.status }"></td>
                                           
                                           
                                           <td>
                                               <div class="btn-group">
 
-                                              <button  type="button" ng-click="$ctrl.deleteSpe(spe)" class="btn btn-danger  btn-xs" ><i class="fa fa-trash-o"></i></button></td>
+                                              <button  type="button" ng-click="$ctrl.deleteCycle(cycle)" class="btn btn-danger  btn-xs" ><i class="fa fa-trash-o"></i></button></td>
                                               </div>
                                               
                                          </tr>

@@ -725,10 +725,11 @@ class IndexController extends AbstractActionController
                     if($std->getStudent()->getLanguage()=="ANG") $language = "ANG";
                     if($std->getStudent()->getGender()=="F") $civilite = "Mme";
                     elseif($std->getStudent()->getGender()=="M") $civilite = "Mr";
-                    $msge_prefix= "Dear ".$civilite.". ".$std->getStudent()->getNom().", ";
-                    $msge_fr_std=$msge_prefix."Vos résultats de la 1ère session pour le compte de l'année académique ".$acadYr->getCode().":  ";
-                    $msge_en_std = $msge_prefix."Your results for the ".$acadYr->getCode()." academic year: \n ";
-                    $msge_fr_parent = "Année académique ".$acadYr->getCode()." résultats de 1ère session  de  ".$std->getStudent()->getNom()."  ".$classCode.": ";
+                    $msge_fr_prefix= $civilite.". ".$std->getStudent()->getNom().", ";
+                    $msge_en_prefix= "Dear ".$civilite.". ".$std->getStudent()->getNom().", ";
+                    $msge_fr_std=$msge_fr_prefix."Vos résultats  pour le compte de l'année académique ".$acadYr->getCode().": \n ";
+                    $msge_en_std = $msge_en_prefix."Your results for the ".$acadYr->getCode()." academic year: \n ";
+                    $msge_fr_parent = "Année académique ".$acadYr->getCode()." résultats  de  ".$std->getStudent()->getNom()."  ".$classCode.": \n";
                     
                     $msge_en_parent = "Results for the ".$acadYr->getCode()." academic year of ".$civilite.". ".$std->getStudent()->getNom()."  ".$classCode.": \n"; 
                     $phoneNum = $std->getStudent()->getPhoneNumber();
@@ -739,7 +740,7 @@ class IndexController extends AbstractActionController
                     //$sponsorPhoneNum = "655524865";
                     $studentSemRegistration = $this->entityManager->getRepository(StudentSemRegistration::class)->findOneBy(array("student"=>$std->getStudent(),"semester"=>$sem));
                     if($studentSemRegistration)
-                    {
+                    { if($std->getDecision()=="AJR" || $std->getDecision()=="RED")     continue; // skip student that have failed
                         $pourcentageValide = $studentSemRegistration->getValidationPercentage();
                         $mpc = $studentSemRegistration->getMpcCurrentSem();
                         $mention = $studentSemRegistration->getAcademicProfile();
@@ -748,8 +749,8 @@ class IndexController extends AbstractActionController
                         elseif($std->getDecision()=="AJR") $decision = "Redouble";
                         //$msge.= "Crédits validés:".$pourcentageValide."%  MPC:".$mpc." Mention:".$mention." Décision: ".$decision.". Bien vouloir veiller à votre inscription académique et au paiement de vos frais de scolarité dans les delais. https://bit.ly/3yAU3P3";
                         //$msge_1 .= "Crédits validés:".$pourcentageValide."%  MPC:".$mpc." Mention:".$mention." Décision ".$decision.". Bien vouloir veiller à son inscription académique et au paiement de ses frais de scolarité dans les delais. https://bit.ly/3yAU3P3 ";
-                        $msge_fr_std.= "MPC:".$mpc." Mention:".$mention." Décision: ".$decision.". Bien vouloir veiller à votre inscription académique et au paiement de vos frais de scolarité dans les delais. https://bit.ly/3A6fY2F";
-                        $msge_fr_parent .= " MPC:".$mpc." Mention:".$mention." Décision ".$decision.". Bien vouloir veiller à son inscription académique et au paiement de ses frais de scolarité dans les delais. https://bit.ly/3A6fY2F ";
+                        $msge_fr_std.= "MPC:".$mpc."\n Mention:".$mention."\n Décision: ".$decision.".\n Bien vouloir veiller à votre inscription académique et au paiement de vos frais de scolarité dans les delais. http://bit.ly/3KGCHIF";
+                        $msge_fr_parent .= " MPC:".$mpc."\n Mention:".$mention."\n Décision ".$decision.".\n Bien vouloir veiller à son inscription académique et au paiement de ses frais de scolarité dans les delais. http://bit.ly/3KGCHIF ";
                                             
                         if($studentSemRegistration->getAcademicProfile()=="AB")  $mention ="Fairly.Good";
                         elseif($studentSemRegistration->getAcademicProfile()=="P") $mention="Fair";
@@ -762,21 +763,23 @@ class IndexController extends AbstractActionController
                         //$msge_english .= "Credits validated:".$pourcentageValide."%  GPA:".$mpc." Classification:".$mention." Decision: ".$decision.". Kindly ensure your registration and payment of your tuition  fee is done on time. https://bit.ly/3yAU3P3";
                         //$msge_to_parent .= "Credits validated:".$pourcentageValide."%  GPA:".$mpc." Classification:".$mention." Decision: ".$decision.". Please ensure that they register and pay their tuition fees on time. https://bit.ly/3yAU3P3 ";
                         
-                        $msge_en_std .= "GPA: ".$mpc."\n Classification: ".$mention."\n Decision: ".$decision."\n Please proceed to your academic year registration and payment of your tuition fees within deadline. https://bit.ly/3A6fY2F";
-                        $msge_en_parent .= "GPA: ".$mpc."\n Classification: ".$mention."\n Decision: ".$decision."\n Please proceed to his(her) academic registration and the payment of the tuition fees within deadline. https://bit.ly/3A6fY2F ";
+                        $msge_en_std .= "GPA: ".$mpc."\n Classification: ".$mention."\n Decision: ".$decision."\n Please proceed to your academic year registration and payment of your tuition fees within deadline. http://bit.ly/3KGCHIF";
+                        $msge_en_parent .= "GPA: ".$mpc."\n Classification: ".$mention."\n Decision: ".$decision."\n Please proceed to his(her) academic registration and the payment of the tuition fees within deadline. http://bit.ly/3KGCHIF ";
                         /*$msge_encoded = urlencode($msge);
                         $msge_1_encoded = urlencode($msge_1);
                         $msge_english_encoded = urlencode($msge_english);
                         $msge_to_parent_encoded = urlencode($msge_to_parent);*/
                         //if($std->getDecision()=="ADM")
                         //{
+                        $phoneNum = '+237'.$phoneNum;
+                        $sponsorPhoneNum = '+237'.$sponsorPhoneNum;
                             if($std->getStudent()->getLanguage()=="ANG")
                             { 
                                 $count++;
                                 if($this->telephoneIsCmr($phoneNum))
-                                $this->examManager->sendWeb2sms237API($phoneNum,$msge_en_std);
+                                $this->examManager->sendAvylTextSMS($phoneNum,$msge_en_std);
                                 if($this->telephoneIsCmr($sponsorPhoneNum))
-                                    $this->examManager->sendWeb2sms237API($sponsorPhoneNum,$msge_en_parent);
+                                    $this->examManager->sendAvylTextSMS($sponsorPhoneNum,$msge_en_parent);
                                 //$this->examManager->sendSMS($phoneNum,$msge_english_zncodzd);
                                 //$this->examManager->sendSMS($sponsorPhoneNum,$msge_to_parent_encoded);
                                 $totalSMS=$totalSMS+2;                                
@@ -784,9 +787,9 @@ class IndexController extends AbstractActionController
                             else{
                                 $count++;
                                 if($this->telephoneIsCmr($phoneNum))
-                                    $this->examManager->sendWeb2sms237API($phoneNum,$msge_en_std);
+                                    $this->examManager->sendAvylTextSMS($phoneNum,$msge_fr_std);
                                 if($this->telephoneIsCmr($sponsorPhoneNum))
-                                    $this->examManager->sendWeb2sms237API($sponsorPhoneNum,$msge_en_parent);
+                                    $this->examManager->sendAvylTextSMS($sponsorPhoneNum,$msge_fr_parent);
                                 //$this->examManager->sendSMS($phoneNum,$msge_english_encoded);
                                 //$this->examManager->sendSMS($sponsorPhoneNum,$msge_to_parent_encoded);
                                 $totalSMS=$totalSMS+2;
@@ -800,8 +803,8 @@ class IndexController extends AbstractActionController
                 //Send Feedback to administrator
                 $msge = $classe->getCode().": ".$totalSMS." SMS envoyés   avec succès";
                 //$msge = urlencode($msge);
-                $phoneNum="670128098";
-                $this->examManager->sendWeb2sms237API($phoneNum,$msge);
+                $phoneNum="+237670128098";
+                $this->examManager->sendAvylTextSMS($phoneNum,$msge);
                 $totalSMS++;
                 $totalSMS += $acadYr->getTotalSmsSent(); 
                 $semClasse->setSendSmsStatus(1); 

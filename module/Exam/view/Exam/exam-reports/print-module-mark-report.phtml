@@ -178,7 +178,7 @@ $tblBody.='<table width="100%" style="font-size: 8pts; " ><tr style="background-
 
 
 $tblBody.= '<table class="subtable"><thead><tr style="background-color:#F4F3F4; ">';
-foreach($students[0] as $key=>$values) $tblBody .='<th style="height: 20px; text-align: center;'.(!in_array($key,["Matricule","Nom","Note","Grade","Points"])?" width: 12%;":"").'">'.$key.'</th>';
+foreach($students[0] as $key=>$values) $tblBody .='<th style="height: 20px; text-align: center;'.(!in_array($key,["Matricule","Nom","Note","Grade","Points"])?" width: 8%;":"").'">'.$key.'</th>';
 $tblBody .='</tr>'
             .'</thead>'
             .' <tbody>';

@@ -10,10 +10,10 @@ namespace SchoolGlobalConfig\Controller;
 use Laminas\Mvc\Controller\AbstractRestfulController;
 use Laminas\View\Model\JsonModel;
 use Laminas\Hydrator\Reflection as ReflectionHydrator;
-use Application\Entity\School;
+use Application\Entity\CourseCategory;
 use Application\Entity\Faculty;
 
-class FacultyController extends AbstractRestfulController
+class CycleFormationController extends AbstractRestfulController
 {
     private $entityManager;
     
@@ -25,58 +25,44 @@ class FacultyController extends AbstractRestfulController
     
  
     
-    public function get($school)
+    public function get($data)
     {
         
-        $faculties = $this->entityManager->getRepository(Faculty::class)->findBySchool($school);
-       
-        foreach($faculties as $key=>$value)
-        {
-            $hydrator = new ReflectionHydrator();
-            $data = $hydrator->extract($value);
+        $cycle = $this->entityManager->getRepository(CourseCategory::class)->find($data);
 
-            $faculties[$key] = $data;
-        }
+            $hydrator = new ReflectionHydrator();
+            $cycle = $hydrator->extract($cycle);
+
+            
+
         
         return new JsonModel([
-                $faculties
+                $cycle
         ]);
         
         //return $faculties;
     }
    public function getList()
     {
-        $faculties = $this->entityManager->getRepository(Faculty::class)->findBy([],array("name"=>"ASC"));
+        $cycles = $this->entityManager->getRepository(CourseCategory::class)->findBy([],array("name"=>"ASC"));
         
      
-        foreach($faculties as $key=>$value)
+        foreach($cycles as $key=>$value)
         {
             $hydrator = new ReflectionHydrator();
             $data = $hydrator->extract($value);
 
-            $faculties[$key] = $data;
+            $cycles[$key] = $data;
         }
         
         return new JsonModel([
-                $faculties
+                $cycles
         ]);
         
         //return $faculties;
     }
     
-    public function getFaculty($school)
-    {
-        $faculties = $this->entityManager->getRepository(Faculty::class)->findBySchool($school);
-        foreach($faculties as $key=>$value)
-        {
-            $hydrator = new ReflectionHydrator();
-            $data = $hydrator->extract($value);
 
-            $faculties[$key] = $data;
-        }
-        return $faculties;
-        
-    }
     
     public function create($data)
     {
@@ -85,24 +71,21 @@ class FacultyController extends AbstractRestfulController
         try
         {
             
-            $faculty = new Faculty();
-            $faculty->setName($data['name']);
-            $faculty->setCode($data['code']);
- 
-            $school = $this->entityManager->getRepository(School::class)->findOneById($data['school_id']);
-     
-            $faculty->setSchool($school);
-            $this->entityManager->persist($faculty);
+            $cycle = new CourseCategory();
+            $cycle->setName($data['name']);
+            $cycle->setCode($data['code']);
+            (isset($data['status']))?$cycle->setStatus($data['status']):$cycle->setStatus(0);
+            $this->entityManager->persist($cycle);
             $this->entityManager->flush();
             
-            $faculties = $this->getFaculty($school);
+        
             
 
              
             $this->entityManager->getConnection()->commit();
             
             return new JsonModel([
-                $faculties
+                $cycle
             ]);  
         }
         catch(Exception $e)
@@ -121,11 +104,11 @@ class FacultyController extends AbstractRestfulController
         $this->entityManager->getConnection()->beginTransaction();
         try
         {
-            $faculty = $this->entityManager->getRepository(Faculty::class)->findOneById($id);
-            if($faculty)
+            $cycle = $this->entityManager->getRepository(CourseCategory::class)->find($id);
+            if( $cycle)
             {
                 
-                $this->entityManager->remove($faculty);
+                $this->entityManager->remove($cycle);
                 $this->entityManager->flush();
                 $this->entityManager->getConnection()->commit();
             }
@@ -142,4 +125,34 @@ class FacultyController extends AbstractRestfulController
                // $this->getFaculty($data["school_id"])
         ]);
     }
+    
+    public function update($id,$data)
+    {
+
+        $this->entityManager->getConnection()->beginTransaction();
+        try
+        {
+            $cycle = $this->entityManager->getRepository(CourseCategory::class)->find($id);
+            if($cycle)
+            {
+
+                $cycle->setName($data['name']);
+                $cycle->setCode($data['code']);
+                $cycle->setStatus($data["status"]); 
+ 
+                $this->entityManager->flush();
+            }
+
+            $this->entityManager->getConnection()->commit();
+        }
+        catch(Exception $e)
+        {
+            $this->entityManager->getConnection()->rollBack();
+            throw $e;    
+        }
+        
+        return new JsonModel([
+               // $this->getFaculty($data["school_id"])
+        ]);
+    }    
 }

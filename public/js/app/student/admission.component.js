@@ -1,6 +1,12 @@
 'use strict';
 
-angular.module('student')
+angular.module('student').component('prospectiveStd',{
+            templateUrl: 'prospects',
+            controller: studentCtrl 
+}).component('prospectiveDetails',{
+            templateUrl: 'prospect',
+            controller: studentCtrl 
+})
         .controller('studentCtrl',studentCtrl).config(['$routeProvider','$mdDateLocaleProvider', function($routeProvider,$mdDateLocaleProvider) {
 
     $mdDateLocaleProvider.parseDate = function(dateString) {
@@ -19,15 +25,29 @@ angular.module('student')
 }]);
 
 //Student controller
-function studentCtrl($timeout,$http,$location,$mdDialog,$scope,toastr,DTOptionsBuilder,DTColumnDefBuilder){
+function studentCtrl($timeout,$http,$location,$mdDialog,$scope,toastr,$routeParams,DTOptionsBuilder,DTColumnDefBuilder){
     var $ctrl = this;
      $ctrl.students=[];
+     $ctrl.prospects = [];
      $ctrl.stds = [];
 
      var temp =[];
      var std_id;
      var data; 
 
+    $timeout(
+     $http.get('getProspects').then(
+     function successCallback(response){
+       $scope.cpt = 1;
+        $ctrl.prospects = response.data[0]; 
+        //$ctrl.students= response.data;
+
+       //$ctrl.students=response.data.data;
+     },
+     function errorCallback(response){
+        
+     }),1000);
+     
     $timeout(
      $http.get('stdAdmitted').then(
      function successCallback(response){
@@ -46,6 +66,36 @@ function studentCtrl($timeout,$http,$location,$mdDialog,$scope,toastr,DTOptionsB
      function errorCallback(response){
          
      }),1000);
+     
+     if($routeParams.id)
+     {
+        var data = {id: $routeParams.id};
+        var config = {
+        params: data,
+        headers : {'Accept' : 'application/json'}
+        };         
+        $timeout(
+         $http.get('getProspects',config).then(
+         function successCallback(response){
+           $scope.cpt = 1;
+            $ctrl.prospect = response.data[0]; 
+            //$ctrl.students= response.data;
+
+           //$ctrl.students=response.data.data;
+         },
+         function errorCallback(response){
+
+         }).then(function(){
+            $http.get('getProspectCursus',config).then(
+                     function successCallback(response){
+                       $scope.cpt = 1;
+                        $ctrl.cursus = response.data[0]; 
+                        //$ctrl.students= response.data;
+
+                       //$ctrl.students=response.data.data;
+                     })             
+         }),1000);         
+     }
    
  
 
@@ -79,7 +129,10 @@ function studentCtrl($timeout,$http,$location,$mdDialog,$scope,toastr,DTOptionsB
       var dateOut = new Date(date);
       return dateOut;
     };
- 
+    
+ $ctrl.redirectProspectiveStd = function(id){
+    $location.path("/prospectDetails/"+id);    
+ }
  //Redirect user when double click
   $ctrl.redirect= function(id){
      
@@ -117,11 +170,90 @@ function studentCtrl($timeout,$http,$location,$mdDialog,$scope,toastr,DTOptionsB
      }),500); 
  };
  
+ $ctrl.acceptProspectivieStd = function(numDossier,ev)
+ {
+     
+        var data = {"numDossier":numDossier,"status":1}
+     
+        var confirm = $mdDialog.confirm()
+            .title('Voulez vous vraiment accepter cette candidature?')
+            .textContent('Toutes les données associées à cette information seront perdues')
+             // .ariaLabel('Lucky day')
+            .targetEvent(ev)
+            .ok('Valider la candidature')
+            .cancel('Annuler');
+        //open de confirm window
+        $mdDialog.show(confirm).then(function() {
+        //in case delete is pressee excute  the delete backend 
+        $http.post('getProspects',data).then(
+             function successCallback(response){
+                 //reinitialise form
+                 toastr.success("Opération effectuée avec succès")
+             },
+             function errorCallback(response){
+                toastr.error("une erreur inattendue s'est produite")
+
+         });
+    }, function() {
+     // $scope.status = 'You decided to keep your debt.';
+    });
+     
+     
+ }
  
+ $ctrl.rejectProspectivieStd = function(numDossier,ev)
+ {
+     
+        var data = {"numDossier":numDossier,"status":2}
+     
+        var confirm = $mdDialog.confirm()
+            .title('Voulez vous vraiment rejeter cette candidature?')
+            .textContent('Toutes les données associées à cette information seront perdues')
+             // .ariaLabel('Lucky day')
+            .targetEvent(ev)
+            .ok('Rejeter la candidature')
+            .cancel('Annuler');
+        //open de confirm window
+        $mdDialog.show(confirm).then(function() {
+        //in case delete is pressee excute  the delete backend 
+        $http.post('getProspects',data).then(
+             function successCallback(response){
+                 //reinitialise form
+                 toastr.success("Opération effectuée avec succès")
+             },
+             function errorCallback(response){
+                toastr.error("une erreur inattendue s'est produite")
+
+         });
+    }, function() {
+     // $scope.status = 'You decided to keep your debt.';
+    });    
+ } 
  
- 
- 
- 
+    /*--------------------------------------------------------------------------
+     *---------------------------Updating Student ---------------------------------
+     *----------------------------------------------------------------------- */
+    $ctrl.showPaymentProof = function(std,ev){
+        $scope.student = std;
+        $mdDialog.show({
+          controller: DialogController,
+          templateUrl: 'showpaymentproof/'+std.numDossier,
+          parent: angular.element(document.body),
+         // parent: angular.element(document.querySelector('#component-tpl')),
+          scope: $scope,
+          preserveScope: true,
+          autoWrap: false,
+          targetEvent: ev,
+          clickOutsideToClose:false,
+          fullscreen: true // Only for -xs, -sm breakpoints.
+        })
+        .then(function(answer) {
+          
+          $ctrl.status = 'You said the information was "' + answer + '".';
+        }, function() {
+          $ctrl.status = 'You cancelled the dialog.';
+        });        
+    }; 
     /*--------------------------------------------------------------------------
      *---------------------------Updating Student ---------------------------------
      *----------------------------------------------------------------------- */

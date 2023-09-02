@@ -90,14 +90,14 @@ class UserManager
         $user = $this->entityManager->getRepository(User::class)->findOneBy([]);
         if ($user==null) {
             $user = new User();
-            $user->setEmail('admin@example.com');
+            $user->setEmail('admin@agenlaacademy.com');
             $user->setNom('Admin');
             $bcrypt = new Bcrypt();
             $passwordHash = $bcrypt->create('Secur1ty');        
             $user->setPassword($passwordHash);
             $user->setStatus(User::STATUS_ACTIVE);
             //$user->setDateCreated(\DateTime::createFromFormat('Y-m-d',date('Y-m-d H:i:s')));
-            $user->setDateCreated( new \DateTime(date('Y-m-d H:i:s')));
+            //$user->setDateCreated( new \DateTime(date('Y-m-d H:i:s')));
             
             $this->entityManager->persist($user);
             $this->entityManager->flush();

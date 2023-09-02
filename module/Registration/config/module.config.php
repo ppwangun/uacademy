@@ -15,6 +15,7 @@ return [
             Controller\StdRegistrationController::class => Controller\Factory\StdRegistrationControllerFactory::class,
             Controller\SubjectRegistrationController::class => Controller\Factory\SubjectRegistrationControllerFactory::class,
             Controller\SubjectController::class => Controller\Factory\SubjectControllerFactory::class,
+            Controller\ProspectsController::class => Controller\Factory\ProspectsControllerFactory::class,
             Controller\StdRegisteredToSubjectController::class => Controller\Factory\StdRegisteredToSubjectControllerFactory::class,
             Controller\StdRegisteredToExamController::class => Controller\Factory\StdRegisteredToExamControllerFactory::class,
             Controller\StdAdmissionController::class => Controller\Factory\StdAdmissionControllerFactory::class,
@@ -74,7 +75,60 @@ return [
                     ],
                 ],
             ],
-            
+             'prospects' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/prospects',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'prospects',
+                       
+                    ],
+                ],
+            ],  
+             'getProspects' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/getProspects[/:id]',
+                    'defaults' => [
+                        'controller' => Controller\ProspectsController::class,
+                      
+                    ],
+                ],
+            ],  
+             'prospect' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/prospect[/:id]',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'prospect',
+                      
+                    ],
+                ],
+            ],  
+             'getProspectCursus' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/getProspectCursus[/:id]',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'getProspectCursus',
+                      
+                    ],
+                ],
+            ], 
+             'showpaymentproof' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/showpaymentproof[/:id]',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'showpaymentproof',
+                      
+                    ],
+                ],
+            ],            
              'admission' => [
                 'type'    => Literal::class,
                 'options' => [

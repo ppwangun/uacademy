@@ -45,7 +45,7 @@ class DepartmentController extends AbstractRestfulController
         $this->entityManager->getConnection()->beginTransaction();
         try
         {      
-            $dpts = $this->entityManager->getRepository(Department::class)->findAll();
+            $dpts = $this->entityManager->getRepository(Department::class)->findBy([],array("name"=>"ASC"));
             foreach($dpts as $key=>$value)
             {
                 $hydrator = new ReflectionHydrator();
@@ -93,8 +93,8 @@ class DepartmentController extends AbstractRestfulController
             $dpt->setCode($data['code']);
             $faculty = $this->entityManager->getRepository(Faculty::class)->find($data['fac_id']);
        
-            
-            $dpt->setStatus($data["status"]);    
+            (isset($data['status']))?$dpt->setStatus($data['status']):$dpt->setStatus(0);
+                
             $dpt->setFaculty($faculty); 
             $this->entityManager->persist($dpt);
             $this->entityManager->flush();

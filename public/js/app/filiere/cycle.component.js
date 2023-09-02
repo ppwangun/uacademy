@@ -1,31 +1,31 @@
 'use strict';
-angular.module("filiere",["ngRoute",'ngMessages','ui.bootstrap']);
-angular.module('filiere')
-        .component('filiereList',{
-            templateUrl: 'filieretpl',
-            controller: filiereCtrl  
+angular.module("cycle",["ngRoute",'ngMessages','ui.bootstrap']);
+angular.module('cycle')
+        .component('cycleDetails',{
+            templateUrl: 'cycletpl',
+            controller: cycleCtrl  
 });
 
-angular.module('filiere')
-        .component('filiereDetails',{
-            templateUrl: 'newFil',
-            controller: filiereCtrl 
+angular.module('cycle')
+        .component('newCycle',{
+            templateUrl: 'newCycle',
+            controller: cycleCtrl 
 });
 
-angular.module('filiere')
-        .component('updateFil',{
-            templateUrl: 'updateFil',
-            controller: filiereCtrl 
+angular.module('cycle')
+        .component('updateCycle',{
+            templateUrl: 'updateCycle',
+            controller: cycleCtrl 
 });
 
-function filiereCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routeParams){
+function cycleCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routeParams){
     var $ctrl=this;
     $ctrl.cpt =1;
     $scope.faculties=null;
     $scope.faculty={name:'',id:''};
     $scope.dpt = {name:'',id:''};
-    $scope.filiere={name:'',code:'',dpt_id: $scope.dpt.id,fac_id:$scope.faculty.id,status:true};
-    $scope.filieres = [];
+    $scope.cycle={name:'',code:'',status:true};
+    $scope.cycles = [];
     $scope.dptId = null;
      /*--------------------------------------------------------------------------
      *--------------------------- create new department   ---------------------
@@ -33,13 +33,13 @@ function filiereCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routePara
     
       $ctrl.redirect= function(id){
 
-     $location.path("/newFil/"+id);
+     $location.path("/newCycle/"+id);
      $scope.dptId=id;
 
     };
     $ctrl.redirectUpdate= function(id){
 
-     $location.path("/updateFil/"+id);
+     $location.path("/updateCycle/"+id);
      $scope.filId=id;
 
     };    
@@ -58,9 +58,9 @@ function filiereCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routePara
         $scope.dpts = response.data[0];
     }),1000); 
     
-    $timeout($http.get('filiere').then(
+    $timeout($http.get('cycleFormation').then(
         function(response){
-        $scope.filieres = response.data[0];
+        $scope.cycles = response.data[0];
     }),1000);    
     
     if($routeParams.id && $routeParams.id !=-1)
@@ -69,18 +69,12 @@ function filiereCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routePara
             params: {id : $routeParams.id },
             headers : {'Accept' : 'application/json'}
         };
-        $timeout($http.get('filiere',config).then(
+        $timeout($http.get('cycleFormation',config).then(
         function(response){
-        $scope.filiere = response.data[0];
+        $scope.cycle = response.data[0];
         }),2500);
-       var config = {
-            params: {fil_id : $routeParams.id },
-            headers : {'Accept' : 'application/json'}
-        };        
-        $timeout($http.get('searchSpeByFil',config).then(
-        function(response){
-        $scope.specialites = response.data[0];
-        }),1000);        
+        
+        
         
     }
         
@@ -91,15 +85,15 @@ function filiereCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routePara
      *--------------------------- New filiere--------------------------------
      *----------------------------------------------------------------------- */ 
     
-    $ctrl.newFil = function(filiere){
+    $ctrl.newCycle = function(cycle){
        
 
         
-        $http.post('filiere',filiere).then(
+        $http.post('cycleFormation',cycle).then(
             function successCallback(response){
-                $scope.filieres.push(filiere);
+                $scope.cycles.push(response.data[0]);
                 toastr.success("Opération effectuée avec succès")
-                $scope.filiere = null;
+                $scope.cycle = null;
             },
             function errorCallback(response){
                 toastr.error("une erreur inattendue s'est produite");
@@ -110,9 +104,9 @@ function filiereCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routePara
      *--------------------------- deleting filiere------------------------------
      *----------------------------------------------------------------------- */
     
-      $ctrl.deleteFil= function(fil,ev)
+      $ctrl.deleteCycle= function(cycle,ev)
       {
-            var data = {id: fil.id}; 
+            var data = {id: cycle.id}; 
             var config = {
             params: data,
             headers : {'Accept' : 'application/json'}
@@ -129,13 +123,13 @@ function filiereCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routePara
     //open de confirm window
         $mdDialog.show(confirm).then(function() {
             //in case delete is pressee excute  the delete backend 
-            $http.delete('filiere',config).then(
+            $http.delete('cycleFormation',config).then(
               function successCallback(response){
                   //check the index of the current object in the array
                   var x;
-                  var index = $scope.filieres.findIndex(x => x.id === fil.id);
+                  var index = $scope.cycles.findIndex(x => x.id === cycle.id);
                   //remove the current object from the array
-                  $scope.filieres.splice(index,1);
+                  $scope.cycles.splice(index,1);
                   toastr.success("Opération effectuée avec succès")
              },
             function errorCallback(response){
@@ -147,13 +141,13 @@ function filiereCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routePara
 
       }; 
       
-    $ctrl.updateFil = function(fil) {
-        var data = {id: fil.id,code:fil.code,name:fil.name,status:fil.status,fac_id:fil.fac_id,dpt_id:fil.dpt_id}; 
+    $ctrl.updateCycle = function(cycle) {
+        var data = {id: cycle.id,code:cycle.code,name:cycle.name,status:cycle.status}; 
         var config = {
         params :  data,
         headers : {'Accept' : 'application/json'}
         };
-        $http.put('filiere',data,config)
+        $http.put('cycleFormation',data,config)
             .then(function succesCallback(response)
             {
                  //$ctrl.school=response.data[0];
@@ -190,98 +184,18 @@ function filiereCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routePara
         
     }
 
-     /*--------------------------------------------------------------------------
-     *--------------------------- loading all filières by faculty   ---------------------
-     *----------------------------------------------------------------------- */
-    $ctrl.searchFilByFaculty = function(id){
-      var data = {fac_id: id}; 
-      var config = {
-      params: data,
-      headers : {'Accept' : 'application/json'}
-      };
-        $http.get('searchFilByFaculty',config).then(
-            function successCallback(response){
-                $ctrl.cpt =1;
-                $scope.filieres = response.data[0];
-                
-            },
-            function errorCallback(response){
-                toastr.error("une erreur inattendue s'est produite");
-            });    
-        
-    }
-    
-      /*--------------------------------------------------------------------------
-     *--------------------------- loading all filières  by departement   ---------------------
-     *----------------------------------------------------------------------- */
-    $ctrl.searchFilByDpt = function(id){
-      var data = {dpt_id: id}; 
-      var config = {
-      params: data,
-      headers : {'Accept' : 'application/json'}
-      };
-        $http.get('searchFilByDpt',config).then(
-            function successCallback(response){
-                $ctrl.cpt =1;
-                $scope.filieres = response.data[0];
-            
-            },
-            function errorCallback(response){
-                toastr.error("une erreur inattendue s'est produite");
-            });    
-        
-    } 
-    
-     /*-------------------------------------------------------------------------
-     *--------------------------- deleting specialite------------------------------
-     *----------------------------------------------------------------------- */
-    
-      $ctrl.deleteSpe= function(spe,ev)
-      {
-            var data = {id: spe.id}; 
-            var config = {
-            params: data,
-            headers : {'Accept' : 'application/json'}
-            };
 
-// Preparing the confirm windows
-      var confirm = $mdDialog.confirm()
-            .title('Voulez vous vraiment supprimer?')
-            .textContent('Toutes les données associées à cette information seront perdues')
-             // .ariaLabel('Lucky day')
-            .targetEvent(ev)
-            .ok('Supprimer')
-            .cancel('Annuler');
-    //open de confirm window
-        $mdDialog.show(confirm).then(function() {
-            //in case delete is pressee excute  the delete backend 
-            $http.delete('specialite',config).then(
-              function successCallback(response){
-                  //check the index of the current object in the array
-                  var x;
-                  var index = $scope.specialites.findIndex(x => x.id === spe.id);
-                  //remove the current object from the array
-                  $scope.specialites.splice(index,1);
-                  toastr.success("Opération effectuée avec succès")
-             },
-            function errorCallback(response){
-                 toastr.error("une erreur inattendue s'est produite");
-                });
-        }, function() {
-         // $scope.status = 'You decided to keep your debt.';
-        });
-
-      };     
+     
     
      /*-------------------------------------------------------------------------
      *--------------------------- updating filiere------------------------------
      *----------------------------------------------------------------------- */
-            $ctrl.updateFiliere=function(fil,ev){
-                $scope.filiere= fil;
+            $ctrl.updateCycle=function(cycle,ev){
+                $scope.cycle= cycle;
 
             $mdDialog.show({
-              controller: FilController,
-              templateUrl: 'js/my_js/globalconfig/filupdateformtpl.html',
+              controller: CycleController,
+              templateUrl: 'js/my_js/globalconfig/cycleupdateformtpl.html',
               parent: angular.element(document.body),
              // parent: angular.element(document.querySelector('#component-tpl')),
               scope: $scope,
@@ -300,16 +214,16 @@ function filiereCtrl($scope,$http,$timeout,$mdDialog,$location,toastr,$routePara
     
 
   //Dialog Controller
-  function FilController($scope, $mdDialog,toastr) {
+  function CycleController($scope, $mdDialog,toastr) {
       
         
-    $scope.filUpdate = function(fil) {
-        var data = {id: fil.id,code:fil.code,name:fil.name,status:fil.status,fac_id:fil.fac_id,dpt_id:fil.dpt_id}; 
+    $scope.cyUpdate = function(cycle) {
+        var data = {id: cycle.id,code:cycle.code,name:cycle.name,status:cycle.status}; 
         var config = {
         params :  data,
         headers : {'Accept' : 'application/json'}
         };
-        $http.put('filiere',data,config)
+        $http.put('cycleFormation',data,config)
             .then(function succesCallback(response)
             {
                  //$ctrl.school=response.data[0];

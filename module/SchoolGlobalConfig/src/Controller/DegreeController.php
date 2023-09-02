@@ -14,6 +14,8 @@ use Application\Entity\Degree;
 use Application\Entity\FieldOfStudy;
 use Application\Entity\Speciality;
 use Application\Entity\SpecialityOption;
+use Application\Entity\CourseCategory;
+use Application\Entity\DegreeHasCourseCategory;
 
 class DegreeController extends AbstractRestfulController
 {
@@ -29,8 +31,10 @@ class DegreeController extends AbstractRestfulController
     
     public function get($id)
     {
+        $data["cycle_id"] = -1;
         
         $degree = $this->entityManager->getRepository(Degree::class)->findOneById($id);
+        $degreeCategory = $this->entityManager->getRepository(DegreeHasCourseCategory::class)->findOneBy(array("degree"=>$degree));
   
             $hydrator = new ReflectionHydrator();
             $data = $hydrator->extract($degree);
@@ -38,6 +42,7 @@ class DegreeController extends AbstractRestfulController
             ($degree->getFieldStudy())?$data["fil_id"]=$degree->getFieldStudy()->getId():$data["fil_id"]=-1;
             ($degree->getSpeciality())?$data["spe_id"]=$degree->getSpeciality()->getId():$data["spe_id"]=-1;
             ($degree->getSpecialityOption())?$data["opt_id"]=$degree->getSpecialityOption()->getId():$data["opt_id"]=-1;
+            $degreeCategory?$data["cycle_id"]=$degreeCategory->getCourseCategory()->getId():$data["cycle_id"]=-1;
 
         return new JsonModel([
                 $data
@@ -100,8 +105,10 @@ class DegreeController extends AbstractRestfulController
             $degree->setName($data['name']);
             $degree->setCode($data['code']);
             $degree->setStatus($data['status']);
+            
  
             $filiere = $this->entityManager->getRepository(FieldOfStudy::class)->findOneById($data['fil_id']);
+            $cycle = $this->entityManager->getRepository(CourseCategory::class)->find($data['cycle_id']);
             if(isset($data['spe_id']))
             {
                 $spe = $this->entityManager->getRepository(Speciality::class)->findOneById($data['spe_id']);
@@ -114,7 +121,15 @@ class DegreeController extends AbstractRestfulController
             }
             
             $degree->setFieldStudy($filiere);
+            
             $this->entityManager->persist($degree);
+            $degreeCategory = new DegreeHasCourseCategory();
+            $degreeCategory->setDegree($degree);
+            $degreeCategory->setFieldOfStudy($filiere);
+            $degreeCategory->setCourseCategory($cycle);
+            
+            $this->entityManager->persist($degree);
+            $this->entityManager->persist($degreeCategory);
             $this->entityManager->flush();
             
             //$degrees = $this->getList();
@@ -151,7 +166,8 @@ class DegreeController extends AbstractRestfulController
             $degree = $this->entityManager->getRepository(Degree::class)->findOneById($id);
             if($degree)
             {
-                
+                $degreeCategory = $this->entityManager->getRepository(DegreeHasCourseCategory::class)->findOneBy(array("degree"=>$degree));
+                if($degreeCategory) $this->entityManager->remove($degreeCategory);
                 $this->entityManager->remove($degree);
                 $this->entityManager->flush();
                 $this->entityManager->getConnection()->commit();
@@ -175,11 +191,29 @@ class DegreeController extends AbstractRestfulController
         try{
             $data= $data['data'];
             
-            $degree =$this->entityManager->getRepository(Degree::class)->findOneById($id);
+            $degree =$this->entityManager->getRepository(Degree::class)->find($id);
+            $filiere = $this->entityManager->getRepository(FieldOfStudy::class)->find($data['fil_id']);
+            $cycle = $this->entityManager->getRepository(CourseCategory::class)->find($data['cycle_id']);
             $degree->setName($data['name']);
             $degree->setCode($data['code']);
             $degree->setStatus($data['status']);
-            $degree->setFieldStudy($this->entityManager->getRepository(FieldOfStudy::class)->findOneById($data['fil_id']));
+            $degree->setFieldStudy($filiere);
+            
+            $degreeCategory = $this->entityManager->getRepository(DegreeHasCourseCategory::class)->findOneBy(array("degree"=>$degree));
+            if($degreeCategory)
+            {
+                $degreeCategory->setFieldOfStudy($filiere);
+                $degreeCategory->setCourseCategory($cycle);
+                
+            }
+            else
+            {
+                $degreeCategory = new DegreeHasCourseCategory();
+                $degreeCategory->setDegree($degree);
+                $degreeCategory->setFieldOfStudy($filiere);
+                $degreeCategory->setCourseCategory($cycle); 
+                $this->entityManager->persist($degreeCategory);
+            }
             if(isset($data['spe_id']))
             {
                 $spe = $this->entityManager->getRepository(Speciality::class)->findOneById($data['spe_id']);

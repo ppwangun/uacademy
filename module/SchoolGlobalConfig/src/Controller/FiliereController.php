@@ -46,7 +46,7 @@ class FiliereController extends AbstractRestfulController
         $this->entityManager->getConnection()->beginTransaction();
         try
         {      
-            $filieres = $this->entityManager->getRepository(FieldOfStudy::class)->findAll([],array("name"=>"ASC"));
+            $filieres = $this->entityManager->getRepository(FieldOfStudy::class)->findBy([],array("name"=>"ASC"));
             
             foreach($filieres as $key=>$value)
             {
@@ -97,11 +97,16 @@ class FiliereController extends AbstractRestfulController
             $filiere= new FieldOfStudy();
             $filiere->setName($data['name']);
             $filiere->setCode($data['code']);
-            $filiere->setStatus($data['status']);
-            $faculty = $this->entityManager->getRepository(Faculty::class)->find($data['fac_id']);
-            $dpt = $this->entityManager->getRepository(Department::class)->find($data['dpt_id']);
+            (isset($data['status']))?$filiere->setStatus($data['status']):$filiere->setStatus(0);
+            if(isset($data['fac_id']))
+                $faculty = $this->entityManager->getRepository(Faculty::class)->find($data['fac_id']);
+            if (isset($data['dpt_id']))
+            {
+                $dpt = $this->entityManager->getRepository(Department::class)->find($data['dpt_id']);
+                $filiere->setDepartment($dpt);
+            }
             $filiere->setFaculty($faculty);
-            $filiere->setDepartment($dpt);
+            
             $this->entityManager->persist($filiere);
             $this->entityManager->flush();
             

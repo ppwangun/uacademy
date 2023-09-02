@@ -15,7 +15,7 @@
 <div ng  ng-controller="studentCtrl as $ctrl" ng-cloak >
     <div  class="row" >
                 <div class="col-lg-12">
-                    <h4 class="page-header">Liste des étudiants admis par concous ou sur titre</h4>
+                    <h4 class="page-header">Liste des candidatures</h4>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -28,7 +28,7 @@
 
                             <div ng-show="<?=($this->access('global.system.admin', null))||($this->access('manage.student', null))?true:false?>">
                             <a href="" class="btn btn-danger" ng-disabled="true"  id='newacadyr'>Créer</a>
-                            <button  ng-click="$ctrl.loadData()" class="btn btn-primary" id='newacadyr'><i class="fa fa-upload"></i>&nbsp;Importer Liste des admis</button>
+                            <button ng-disabled="true"  ng-click="$ctrl.loadData()" class="btn btn-primary" id='newacadyr'><i class="fa fa-upload"></i>&nbsp;Importer Liste des candidatures</button>
                             </div>
                         </div>
                         
@@ -40,25 +40,25 @@
                                         <th >Nom</th>
                                         <th>Num Tel</th>
                                         <th >Classe</th>
-                                        <th>Montant</th>
-                                        <th>Date</th>
+                                        <!--<th>Montant</th> -->
+                                      <!--  <th>Date</th> -->
                                         <th >ID admission</th>
-                                        <th >Type</th>
+                                       <!-- <th >Type</th> -->
                                         <th>Statut</th>
                                    </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="std in $ctrl.students ">
-                                     <td ng-bind="std.num"></td>
+                                    <tr  ng-repeat="std in $ctrl.prospects " ng-dblclick="$ctrl.redirectProspectiveStd(std.id)" style="cursor: pointer;">
+                                     <td n>{{cpt+$index}}</td>
                                       <td ng-bind='std.nom+" "+std.prenom'></td>
                                       
                                       <td ng-bind="std.phoneNumber"></td>
                                       <td ng-bind="std.classe"></td>
-                                      <td ng-bind="std.feesPaid"></td>
-                                      <td ng-bind="$ctrl.formatDate(std.dateAdmission) | date:'dd/MM/yyyy'"></td>
+                                      <!--<td ng-bind="std.feesPaid"></td>-->
+                                      <!--<td ng-bind="$ctrl.formatDate(std.dateAdmission) | date:'dd/MM/yyyy'"></td> -->
                                       <td ng-bind="std.numDossier"></td>
-                                      <td ng-bind="std.entranceType"></td>
-                                      <td ng-bind="(std.status===0)?'En cours':(std.status===1)?'Rejeté':'Accepté'" ng-class="{'zf-bg-warn': std.status===1,'zf-bg-green': std.status===2, 'zf-bg-red': std.status===0 }"></td>
+                                     <!-- <td ng-bind="std.entranceType"></td>-->
+                                      <td ng-bind="(std.status===0)?'En cours de traitement':(std.status===1)?'Candidature Accepté':'Candidature Rejetée'" ng-class="{'zf-bg-green': std.status===1,'zf-bg-red': std.status===2, 'zf-bg-warn': std.status===0 }"></td>
                                       
                                     </tr>
                                 </tbody>

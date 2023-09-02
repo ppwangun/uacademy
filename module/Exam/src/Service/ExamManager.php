@@ -23,6 +23,7 @@ use Application\Entity\SubjectRegistrationView;
 use Application\Entity\GradeValueRange;
 
 use Patrickmaken\Web2Sms\Client as W2SClient;
+use Patrickmaken\AvlyText\Client as AVTClient;
 
 use Laminas\Http\Request;
 use Laminas\Http\Client;
@@ -473,7 +474,7 @@ $ueExams = $this->entityManager->getRepository(CurrentYearUeExamsView::class)->f
 
         $telephone = $phoneNumber;
         $text = $message;
-        $senderID = 'UdM';
+        $senderID = 'WTECH';
 
         try {
             $response = W2SClient::sendSMS($telephone, $text, $senderID);
@@ -481,7 +482,38 @@ $ueExams = $this->entityManager->getRepository(CurrentYearUeExamsView::class)->f
         } catch (Exception $e) {
             echo 'Exception when calling W2SClient::sendSMS( ', $e->getMessage(), PHP_EOL;
         }
-    }        
+    }  
+    
+   public function sendAvylTextSMS($phoneNumber,$msge)
+   {
+            $msgeStatus=0;
+            $config = array(
+                'adapter'      => 'Laminas\Http\Client\Adapter\Socket',
+                'ssltransport' => 'tls',
+                // 'sslcapath' => $currentDirectory.'\data\ssl\certs',
+                //'sslcafile'=> $currentDirectory.'\data\ssl\certs',
+                'sslverifypeer' => false,
+            );
+            //check firs if internet connextion is active or not
+            $host_name = 'www.google.com';
+            $port_no = '80';
+
+            $st = (bool)@fsockopen($host_name, $port_no, $err_no, $err_str, 10);
+            if ($st)
+            {
+
+                $senderID = 'UdM';
+                $api_key = "cnZTHTWhO0HHsivMJMWqIXSqdKt8ifH8kP5IRHbqYTquHqjux5ehSLxpWY4lWkkwNlw8";
+                $response = AVTClient::sendSMS($phoneNumber, $msge, $senderID, $api_key);
+                          
+                if ($response["status"]=="delivered") {
+                    // the POST was successful
+                    $msgeStatus=1;
+                }
+            } 
+            
+            return $msgeStatus;
+   }
 
 
    private function computeGradeSur100($classe,$moyenne)

@@ -26,6 +26,9 @@ use Application\Entity\SubjectRegistrationView;
 use Application\Entity\TeachingUnit;
 use Application\Entity\ProfileAcademic;
 use Application\Entity\User;
+use Application\Entity\CursusAcademique;
+use Application\Entity\ProspectiveStudent;
+use Application\Entity\ProspetiveRegistration;
 use Application\Entity\UserManagesClassOfStudy;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -58,6 +61,70 @@ class IndexController extends AbstractActionController
     {
 
           $view = new ViewModel([
+             
+         ]);
+        // Disable layouts; `MvcEvent` will use this View Model instead
+        $view->setTerminal(true);
+
+        return $view;            
+
+    }
+     public function prospectsAction()
+    {
+
+          $view = new ViewModel([
+             
+         ]);
+        // Disable layouts; `MvcEvent` will use this View Model instead
+        $view->setTerminal(true);
+
+        return $view;            
+
+    } 
+    
+     public function prospectAction()
+    {
+
+          $view = new ViewModel([
+             
+         ]);
+        // Disable layouts; `MvcEvent` will use this View Model instead
+        $view->setTerminal(true);
+
+        return $view;            
+
+    } 
+    public function getProspectCursusAction()
+    {
+            $data = $this->params()->fromQuery(); 
+            $prospect = $this->entityManager->getRepository(ProspectiveStudent::class)->find($data["id"]);
+            $cursus = $this->entityManager->getRepository(CursusAcademique::class)->findByProspectiveStudent($prospect);
+            foreach($cursus as $key=>$value)
+            {
+                $hydrator = new ReflectionHydrator();
+                $data = $hydrator->extract($value);
+                $cursus[$key] = $data;
+            }
+
+        
+          $view = new JsonModel([
+            $cursus 
+         ]);
+        // Disable layouts; `MvcEvent` will use this View Model instead
+        $view->setTerminal(true);
+
+        return $view;            
+
+    } 
+    
+    public function showpaymentproofAction()
+    {
+        $data = $this->params()->fromRoute(); 
+        $prospect = $this->entityManager->getRepository(ProspetiveRegistration::class)->findOneByNumDossier($data['id']);
+        $paymentProofPath = $prospect->getPaymentProofPath();
+
+          $view = new ViewModel([
+              "paymentProofPath"=>$paymentProofPath
              
          ]);
         // Disable layouts; `MvcEvent` will use this View Model instead

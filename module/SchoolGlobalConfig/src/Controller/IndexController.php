@@ -280,7 +280,7 @@ class IndexController extends AbstractActionController
       {
             $data = $this->params()->fromQuery();            
             $faculty = $this->entityManager->getRepository(Faculty::class)->find($data['fac_id']);
-            $dpts = $this->entityManager->getRepository(Department::class)->findBy(array('faculty'=>$faculty),array("name"=>"ASC"));
+            $dpts = $this->entityManager->getRepository(Department::class)->findBy(array('faculty'=>$faculty,'status'=>1),array("name"=>"ASC"));
             foreach($dpts as $key=>$value)
             {
                 $hydrator = new ReflectionHydrator();
@@ -307,7 +307,7 @@ class IndexController extends AbstractActionController
       {
             $data = $this->params()->fromQuery();            
             $dpt= $this->entityManager->getRepository(Department::class)->find($data['dpt_id']);
-            $filieres = $this->entityManager->getRepository(FieldOfStudy::class)->findBy(array('department'=>$dpt),array("name"=>"ASC"));
+            $filieres = $this->entityManager->getRepository(FieldOfStudy::class)->findBy(array('department'=>$dpt,'status'=>1),array("name"=>"ASC"));
             foreach($filieres as $key=>$value)
             {
                 $hydrator = new ReflectionHydrator();
@@ -335,7 +335,7 @@ class IndexController extends AbstractActionController
             $data = $this->params()->fromQuery(); 
             (isset($data['fil_id']))?"":$data["fil_id"]=-1;
             $fil= $this->entityManager->getRepository(FieldOfStudy::class)->find($data['fil_id']);
-            $spes = $this->entityManager->getRepository(Speciality::class)->findBy(array('fieldOfStudy'=>$fil),array("name"=>"ASC"));
+            $spes = $this->entityManager->getRepository(Speciality::class)->findBy(array('fieldOfStudy'=>$fil,'status'=>1),array("name"=>"ASC"));
             foreach($spes as $key=>$value)
             {
                 $hydrator = new ReflectionHydrator();
@@ -366,7 +366,7 @@ class IndexController extends AbstractActionController
       {
             $data = $this->params()->fromQuery();            
             $fac= $this->entityManager->getRepository(Faculty::class)->find($data['fac_id']);
-            $filieres = $this->entityManager->getRepository(FieldOfStudy::class)->findBy(array('faculty'=>$fac),array("name"=>"ASC"));
+            $filieres = $this->entityManager->getRepository(FieldOfStudy::class)->findBy(array('faculty'=>$fac,'status'=>1),array("name"=>"ASC"));
             foreach($filieres as $key=>$value)
             {
                 $hydrator = new ReflectionHydrator();
@@ -513,6 +513,33 @@ class IndexController extends AbstractActionController
         $view->setTerminal(true);
 
         return $view;            
+    }   
+    public function cycletplAction()
+    {
+        $view = new ViewModel([
+         ]);
+        // Disable layouts; `MvcEvent` will use this View Model instead
+        $view->setTerminal(true);
+
+        return $view;            
+    }  
+    public function newCycleAction()
+    {
+        $view = new ViewModel([
+         ]);
+        // Disable layouts; `MvcEvent` will use this View Model instead
+        $view->setTerminal(true);
+
+        return $view;            
+    } 
+    public function updateCycleAction()
+    {
+        $view = new ViewModel([
+         ]);
+        // Disable layouts; `MvcEvent` will use this View Model instead
+        $view->setTerminal(true);
+
+        return $view;            
     }    
     public function degreetplAction()
     {
@@ -523,6 +550,7 @@ class IndexController extends AbstractActionController
 
         return $view;            
     }
+    
     public function newdegreetplAction()
     {
         $view = new ViewModel([

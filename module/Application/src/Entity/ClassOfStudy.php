@@ -423,7 +423,7 @@ class ClassOfStudy
      *
      * @return ClassOfStudy
      */
-    public function addAcademicYear(\AcademicYear $academicYear)
+    public function addAcademicYear(AcademicYear $academicYear)
     {
         $this->academicYear[] = $academicYear;
     
