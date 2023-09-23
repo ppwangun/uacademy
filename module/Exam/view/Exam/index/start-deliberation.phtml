@@ -25,7 +25,7 @@ z-index: 120000}
       <div class="md-dialog-content" >
       <md-content layout-padding >
   
-          <div layout-gt-sm='row' ng-init="ueID=<?=$this->ueID?>;semID=<?=$this->semID?>;classeID=<?=$this->classeID?>">
+          <div layout-gt-sm='row' ng-init="ueID=<?=$this->ueID?>;semID=<?=$this->semID?>;classeID=<?=$this->classeID?>;subjectID=<?=$this->subjectID?>;">
                 Vous êtes sur le point de démarrer la délibération de l'UE: <span style=" font-weight: bold;"><?=$this->ue?></span>
             </div>
                 <br />
@@ -42,7 +42,7 @@ Les conditions de délibération suivantes seront appliquées:
     <md-dialog-actions layout="row">
       <span flex></span>
       <md-button ng-click="cancel()"> Annuler</md-button>
-      <md-button class="md-warn" ng-click="saveDelib(ueID,semID,classeID)" >
+      <md-button class="md-warn" ng-click="saveDelib(ueID,subjectID,semID,classeID)" >
           <span class="fa fa-check">  Appliquer </span>
       </md-button>
 

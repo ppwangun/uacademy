@@ -107,13 +107,23 @@ z-index: 120000}
                 </div> 
           </md-input-container>
         </div>
+        <md-input-container class="md-block" flex-gt-sm">
+                
+                    <md-checkbox ng-model="$ctrl.degree.isCoreCurriculum"   class="md-primary"            
+                    aria-label="Tronc commun?"
+                    ng-true-value="true"
+                    ng-false-value="false"> 
+                </md-checkbox>
+            <span>Tronc commun?</span>
+          </md-input-container>
             <md-input-container class="md-block" flex-gt-sm">
-                <span>Actif?</spanl>
+                
                 <md-checkbox ng-model="$ctrl.degree.status"   class="md-primary"            
                     aria-label="Actif?"
                     ng-true-value="1"
                     ng-false-value="0"> 
                 </md-checkbox>
+                <span>Actif?</span>
           </md-input-container>
 
 

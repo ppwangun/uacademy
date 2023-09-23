@@ -111,13 +111,15 @@ class IndexController extends AbstractActionController
     
     public function startDeliberationAction()
     {
-         $data = $this->params()->fromRoute();         
+         $data = $this->params()->fromRoute();            
+         $subjectID = -1;
+         $subject= null;
          if(isset($data['subjectId']))
          {
-             $ueID = $data['subjectId'];
-             $ue = $this->entityManager->getRepository(Subject::class)->find($data["subjectId"])->getSubjectCode();
+             $subjectID = $data['subjectId'];
+             $subject = $this->entityManager->getRepository(Subject::class)->find($data["subjectId"])->getSubjectCode();
          }
-         else 
+         if(isset($data['ueId'])) 
          {
              $ueID = $data["ueId"];
              $ue = $this->entityManager->getRepository(TeachingUnit::class)->find($data["ueId"])->getCode();
@@ -132,12 +134,13 @@ class IndexController extends AbstractActionController
          $delibCondition = str_replace("IF", "SI", $delibCondition);
          $delibCondition = str_replace("&&", "ET", $delibCondition);
          $delibCondition = str_replace("||", "OU", $delibCondition);
-        
+      
           $view = new ViewModel([
             'delibCondition'=>$delibCondition, 
             'ue'=>$ue,
             'ueID'=>$ueID ,
-        
+            'subject'=>$subject,
+            'subjectID'=>$subjectID,
             'semID'=>$data["semId"],
             'classeID'=>$data["classeId"]
          ]);
@@ -149,22 +152,23 @@ class IndexController extends AbstractActionController
     } 
     public function applyDelibConditionAction()
     {
-        $data = $this->params()->fromQuery();     
+        $data = $this->params()->fromQuery();   
         $this->entityManager->getConnection()->beginTransaction();
         try
         {         
          $class= $this->entityManager->getRepository(ClassOfStudy::class)->find($data["classeID"]);
          $teachingUnit = $this->entityManager->getRepository(TeachingUnit::class)->find($data["ueID"]);
-         $subjectID = NULL;
-         if(isset($data["subjectId"]))
+         $subjectID = NULL; 
+         if(isset($data["subjectId"])&& ($data["subjectId"]!=-1))
          {
             $subject = $this->entityManager->getRepository(Subject::class)->find($data["subjectId"]);
             $subjectID = $data["subjectId"];
          }
          else $subject= NULL;
-        
+     
          $semester = $this->entityManager->getRepository(Semester::class)->find($data["semID"]);
          $students =  $this->entityManager->getRepository(UnitRegistration::class)->findBy(array("semester"=>$semester,"teachingUnit"=>$teachingUnit,"subject"=>$subject));
+    
          if(!is_null($class->getDeliberation()))
             $delibCondition = $class->getDeliberation()->getDelibCondition();
          else $delibCondition="RAS";     
@@ -173,52 +177,61 @@ class IndexController extends AbstractActionController
        
          foreach($students as $std)
          {
-          $note = $std->getNoteFinal();
+          $note = $std->getNoteFinal();  
           $noteBeforeDelib = $std->getNoteFinal();
        
           
           eval($delibCondition);
         
-          
-          if($noteBeforeDelib<$note)
+          if($data["subjectId"]!=-1)
           {
-            $noteGap = $note - $noteBeforeDelib;
+                if($noteBeforeDelib<$note)
+                {
+                  $noteGap = $note - $noteBeforeDelib;
 
 
-              
-            $ueExams = $this->entityManager->getRepository(CurrentYearOnlyUeExamsView::class)->findBy(array("subjectId"=>$data["ueID"],"classe"=>$class->getCode(),"status"=>1));
-            $subjects = $this->examManager->getSubjectFromUe($data["ueID"],$data["semID"],$data["classeID"]);
-           
-            foreach($subjects as $sub)
-            {
-                $subjectExams = $this->entityManager->getRepository(CurrentYearSubjectExamsView::class)->findBy(array("subjectId"=>$sub["id"],"classe"=>$class->getCode(),"status"=>1));
-                $ueExams = array_merge($ueExams,$subjectExams);
-                
-            }
-            $totalExamsDone = sizeof($ueExams);
-            
-            
-            $sharedValued = round($noteGap/5,2,PHP_ROUND_HALF_UP);
-            
-            $std->setNoteFinal($note);
-            $std->setGrade("D");
-            $std->setPoints(1);
-            $std->setIsFromDeliberation(1);
-           
-            foreach ($ueExams as $ueExam)
-            {               
-                $exam = $this->entityManager->getRepository(Exam::class)->find($ueExam->getId());
 
-                $stdRegisteredToSubject = $this->entityManager->getRepository(ExamRegistration::class)->findOneBy(array("exam"=>$exam,"student"=>$std->getStudent()));
-                if($stdRegisteredToSubject)    
-                    if($exam->getIsMarkConfirmed()==1)
-                        $stdRegisteredToSubject->setConfirmedMark(round($stdRegisteredToSubject->getConfirmedMark()+$sharedValued,2,PHP_ROUND_HALF_UP));
-                    if($exam->getIsMarkValidated()==1)
-                        $stdRegisteredToSubject->setValidatedMark(round($stdRegisteredToSubject->getValidatedMark()+$sharedValued,2,PHP_ROUND_HALF_UP));
-                    if($exam->getIsMarkRegistered()==1)
-                        $stdRegisteredToSubject->setRegisteredMark(round($stdRegisteredToSubject->getRegisteredMark()+$sharedValued,2,PHP_ROUND_HALF_UP));      
-            }
+                  $ueExams = $this->entityManager->getRepository(CurrentYearOnlyUeExamsView::class)->findBy(array("subjectId"=>$data["ueID"],"classe"=>$class->getCode(),"status"=>1));
+                  $subjects = $this->examManager->getSubjectFromUe($data["ueID"],$data["semID"],$data["classeID"]);
+
+                  foreach($subjects as $sub)
+                  {
+                      $subjectExams = $this->entityManager->getRepository(CurrentYearSubjectExamsView::class)->findBy(array("subjectId"=>$sub["id"],"classe"=>$class->getCode(),"status"=>1));
+                      $ueExams = array_merge($ueExams,$subjectExams);
+
+                  }
+                  $totalExamsDone = sizeof($ueExams);
+
+
+                  $sharedValued = round($noteGap/5,2,PHP_ROUND_HALF_UP);
+
+                  $std->setNoteFinal($note);
+                  if( $class->getCycle()->getCycleLevel()==1)
+                      $std->setGrade("D");
+                  if( $class->getCycle()->getCycleLevel()==2)
+                     $std->setGrade("C");
+                  $std->setPoints(1);
+                  $std->setIsFromDeliberation(1);
+
+                  foreach ($ueExams as $ueExam)
+                  {               
+                      $exam = $this->entityManager->getRepository(Exam::class)->find($ueExam->getId());
+
+                      $stdRegisteredToSubject = $this->entityManager->getRepository(ExamRegistration::class)->findOneBy(array("exam"=>$exam,"student"=>$std->getStudent()));
+                      if($stdRegisteredToSubject)
+                      {
+                          if($exam->getIsMarkConfirmed()==1)
+                              $stdRegisteredToSubject->setConfirmedMark(round($stdRegisteredToSubject->getConfirmedMark()+$sharedValued,2,PHP_ROUND_HALF_UP));
+                          if($exam->getIsMarkValidated()==1)
+                              $stdRegisteredToSubject->setValidatedMark(round($stdRegisteredToSubject->getValidatedMark()+$sharedValued,2,PHP_ROUND_HALF_UP));
+                          if($exam->getIsMarkRegistered()==1)
+                              $stdRegisteredToSubject->setRegisteredMark(round($stdRegisteredToSubject->getRegisteredMark()+$sharedValued,2,PHP_ROUND_HALF_UP));  
+                      }
+                  }
+                }
           }
+          
+          
          }
 
          $this->entityManager->flush();
@@ -749,8 +762,8 @@ class IndexController extends AbstractActionController
                         elseif($std->getDecision()=="AJR") $decision = "Redouble";
                         //$msge.= "Crédits validés:".$pourcentageValide."%  MPC:".$mpc." Mention:".$mention." Décision: ".$decision.". Bien vouloir veiller à votre inscription académique et au paiement de vos frais de scolarité dans les delais. https://bit.ly/3yAU3P3";
                         //$msge_1 .= "Crédits validés:".$pourcentageValide."%  MPC:".$mpc." Mention:".$mention." Décision ".$decision.". Bien vouloir veiller à son inscription académique et au paiement de ses frais de scolarité dans les delais. https://bit.ly/3yAU3P3 ";
-                        $msge_fr_std.= "MPC:".$mpc."\n Mention:".$mention."\n Décision: ".$decision.".\n Bien vouloir veiller à votre inscription académique et au paiement de vos frais de scolarité dans les delais. http://bit.ly/3KGCHIF";
-                        $msge_fr_parent .= " MPC:".$mpc."\n Mention:".$mention."\n Décision ".$decision.".\n Bien vouloir veiller à son inscription académique et au paiement de ses frais de scolarité dans les delais. http://bit.ly/3KGCHIF ";
+                        $msge_fr_std.= "MPC:".$mpc."\n Mention:".$mention."\n Décision: ".$decision.".\n Bien vouloir veiller à votre inscription académique et au paiement de vos frais de scolarité avant le 18/09/2023. http://bit.ly/3KGCHIF";
+                        $msge_fr_parent .= " MPC:".$mpc."\n Mention:".$mention."\n Décision ".$decision.".\n Bien vouloir veiller à son inscription académique et au paiement de ses frais de scolarité avant le 18/09/2023. http://bit.ly/3KGCHIF ";
                                             
                         if($studentSemRegistration->getAcademicProfile()=="AB")  $mention ="Fairly.Good";
                         elseif($studentSemRegistration->getAcademicProfile()=="P") $mention="Fair";
@@ -763,8 +776,8 @@ class IndexController extends AbstractActionController
                         //$msge_english .= "Credits validated:".$pourcentageValide."%  GPA:".$mpc." Classification:".$mention." Decision: ".$decision.". Kindly ensure your registration and payment of your tuition  fee is done on time. https://bit.ly/3yAU3P3";
                         //$msge_to_parent .= "Credits validated:".$pourcentageValide."%  GPA:".$mpc." Classification:".$mention." Decision: ".$decision.". Please ensure that they register and pay their tuition fees on time. https://bit.ly/3yAU3P3 ";
                         
-                        $msge_en_std .= "GPA: ".$mpc."\n Classification: ".$mention."\n Decision: ".$decision."\n Please proceed to your academic year registration and payment of your tuition fees within deadline. http://bit.ly/3KGCHIF";
-                        $msge_en_parent .= "GPA: ".$mpc."\n Classification: ".$mention."\n Decision: ".$decision."\n Please proceed to his(her) academic registration and the payment of the tuition fees within deadline. http://bit.ly/3KGCHIF ";
+                        $msge_en_std .= "GPA: ".$mpc."\n Classification: ".$mention."\n Decision: ".$decision."\n Please proceed to your academic year registration and payment of your tuition fees before the 18/09/2023. http://bit.ly/3KGCHIF";
+                        $msge_en_parent .= "GPA: ".$mpc."\n Classification: ".$mention."\n Decision: ".$decision."\n Please proceed to his(her) academic registration and the payment of the tuition fees before the 18/09/2023. http://bit.ly/3KGCHIF ";
                         /*$msge_encoded = urlencode($msge);
                         $msge_1_encoded = urlencode($msge_1);
                         $msge_english_encoded = urlencode($msge_english);

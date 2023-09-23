@@ -404,6 +404,16 @@ return [
                         'action'        => 'searchSpeByFil',
                     ],
                 ],
+            ],  
+            'searchCommonCoreTraining' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/searchCommonCoreTraining',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'searchCommonCoreTraining',
+                    ],
+                ],
             ],             
             'school' => [
                 'type'    => Segment::class,
@@ -577,6 +587,8 @@ return [
             'school-global-config/index/newdegreetpl' => __DIR__.'/../view/schoolglobalconfig/Index/newdegreetpl.phtml',
             'school-global-config/index/classetpl' => __DIR__.'/../view/schoolglobalconfig/Index/classetpl.phtml',
             'school-global-config/index/newclassetpl' => __DIR__.'/../view/schoolglobalconfig/Index/newclassetpl.phtml',
+            'school-global-config/index/teachingunitpl' => __DIR__.'/../view/schoolglobalconfig/Index/teachingunitpl.phtml',
+            'school-global-config/index/newteachingunitpl' => __DIR__.'/../view/schoolglobalconfig/Index/newteachingunitpl.phtml',
             'school-global-config/index/dashboard' => __DIR__ .'/../view/schoolglobalconfig/Index/dashboard.phtml',
         ],
         'template_path_stack' => [

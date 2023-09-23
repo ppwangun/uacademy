@@ -5,7 +5,7 @@ angular.module('classes')
             templateUrl: 'newclassetpl',
             controller: newclassesCtrl 
 });
-function newclassesCtrl($timeout,$http,$location,$mdDialog,$routeParams,toastr){
+function newclassesCtrl($timeout,$http,$scope,$location,$mdDialog,$routeParams,toastr){
     var id;
     var $ctrl= this;
    // $scope.cycles = [];
@@ -15,15 +15,17 @@ function newclassesCtrl($timeout,$http,$location,$mdDialog,$routeParams,toastr){
 
     // list of `state` value/display objects
     $ctrl.selectedItem= null;
+    $ctrl.selectedDegrees = [];
     $ctrl.selectedSem= null;
     $ctrl.isUpdate = false;
-    $ctrl.classe = {code:'',name:'',studyLevel: '',degreeId:'',cycleId: null,isEndCycle:0,isEndDegreeTraining:0};
+    $ctrl.classe = {code:'',name:'',studyLevel: '',degreeId:'',cycleId: null,isCommnCore:false,isEndCycle:0,isEndDegreeTraining:0,isEndCommonCOre:0};
     $ctrl.cycle = null;
     $ctrl.level = null;
     $ctrl.isCycleRequired= false;
     $ctrl.classes = []; 
     $ctrl.trainingCycles = [];
     $ctrl.degrees = [];
+    $ctrl.troncCommuns = [];
     $ctrl.semesters = [];
     $ctrl.querySearch   = querySearch;
     $ctrl.selectedItemChange = selectedItemChange;
@@ -41,6 +43,12 @@ function newclassesCtrl($timeout,$http,$location,$mdDialog,$routeParams,toastr){
 
         });
      }),500); 
+     
+    $timeout($http.get('searchCommonCoreTraining').then(
+        function(response){
+        $ctrl.troncCommuns = response.data[0];
+    }),1000);  
+            
      var id = $routeParams.id;
      if(id)
      {
@@ -160,7 +168,7 @@ function newclassesCtrl($timeout,$http,$location,$mdDialog,$routeParams,toastr){
      function selectedItemChange(item) {
          if(item)
          {
-         
+             if(!$ctrl.commonCore) $ctrl.selectedDegrees[0]  = item;
         var data={id:item.id}
         var config = {
         params: data,
@@ -176,13 +184,32 @@ function newclassesCtrl($timeout,$http,$location,$mdDialog,$routeParams,toastr){
     };
     }
 
+  $ctrl.addCommonCoreDegree = function(degree){
+      var index = $ctrl.selectedDegrees.findIndex(x => x.id === degree.id); console.log(index);
+      if(index===-1)       $ctrl.selectedDegrees.push(degree);
+  }
+  
+  $ctrl.removeDegreeFromCommnCore = function(degree){
+ 
+    var index = $ctrl.selectedDegrees.findIndex(x => x.id === degree.id);
+    //remove the current object from the array
+    $ctrl.selectedDegrees.splice(index,1);      
+  }
+  
+  $ctrl.resetCommonCoreDegree = function(){ 
+      $ctrl.selectedDegrees = [];
+  }
+  
   $ctrl.addClasse = function(){
-      
-      $ctrl.classe.degreeId = $ctrl.selectedItem.id; 
+      $ctrl.classe.degrees = [];
+      angular.forEach($ctrl.selectedDegrees, function(value,key){
+       $ctrl.classe.degrees.push(value.id);   
+      })
+     // $ctrl.classe.degreeId = $ctrl.selectedDegrees; 
      
       $timeout(
               $http.post('classes',$ctrl.classe).then(function(){
-               $location.path("/classes") ;  
+              // $location.path("/classes") ;  
               }),500);
       
   };  

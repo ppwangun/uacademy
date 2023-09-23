@@ -232,7 +232,19 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
           }).when('/newgroup/:group_id', {
               template: '<new-group></new-group>'
               
-          }).otherwise({redirectTo: '/dashboard'});
+          }).when("/new-teacher", {
+            template: "<new-teacher></new-teacher>",
+            
+        }).when("/academicRankConfig", {
+            template: "<acad-rank-config></acad-rank-config>",
+            
+        }).when("/newAcademicRank/", {
+            template: "<new-acad-rank></new-acad-rank>",
+            
+        }).when("/newAcademicRank/:id", {
+            template: "<new-acad-rank></new-acad-rank>",
+            
+        }).otherwise({redirectTo: '/dashboard'});
           
 }]).factory('accessFac',function($http){
     var obj = {}

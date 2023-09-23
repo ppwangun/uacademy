@@ -18,6 +18,8 @@
         ->prependStylesheet($this->basePath('css/angular-toastr.min.css'))
         ->prependStylesheet($this->basePath('css/loading-bar.css'))
         ->prependStylesheet($this->basePath('css/sb-admin-2.css'))
+        ->prependStylesheet($this->basePath('assets/css/styles.css'))
+     
        // ->prependStylesheet($this->basePath('css/buttons.datables.min.css'))
         //->prependStylesheet($this->basePath('css/jquery.dataTables.min.css'))
         
@@ -28,6 +30,7 @@
        // ->prependStylesheet($this->basePath('js/angular-dataTable/plugins/bootstrap/datatables.bootstrap.min.css'))
         ->prependStylesheet($this->basePath('js/metisMenu/metisMenu.min.css'))
         //->prependStylesheet($this->basePath('css/bootstrap-theme.min.css'))
+       // ->prependStylesheet($this->basePath('css/bootstrap5/bootstrap.min.css'))
         ->prependStylesheet($this->basePath('css/bootstrap.min.css'))
         ->prependStylesheet($this->basePath('bower_components/angular-animate/angular-animate.min.css'))
         ->prependStylesheet($this->basePath('bower_components/angular-material/angular-material.min.css'))
@@ -37,6 +40,10 @@
         //->prependStylesheet($this->basePath('js/morris.js-0.5.1/morris.css'))
         ->prependStylesheet($this->basePath('css/font-awesome/css/font-awesome.css'))
         ?>
+     <link rel="stylesheet" href="assets/css/new-teacher/new-teacher.css"/>
+    <link rel="stylesheet" href="assets/teachers-list/teachers-list.css"/>
+    <link rel="stylesheet" href="assets/affect-teaching-unit/affect-teaching-unit.css"/>
+    <link rel="stylesheet" href="assets/progressions-timeline/progressions-timeline.css"/>       
 
         <!-- Scripts -->
         <?= $this->headScript()
@@ -76,6 +83,7 @@
         ->prependFile($this->basePath('js/angular-animate.js'))
         ->prependFile($this->basePath('js/angular-route.js'))
            ->prependFile($this->basePath('js/angular-1.6.7/angular.js'))
+       // ->prependFile($this->basePath('js/boostrap5/bootstrap.min.js'))
         ->prependFile($this->basePath('js/bootstrap.min.js'))
         ->prependFile($this->basePath('js/jquery-3.1.0.min.js'))
         
@@ -119,9 +127,11 @@
     <script src="js/app/classes/classes.module.js"></script>
     <script src="js/app/classes/classes.component.js"></script>
     <script src="js/app/classes/new.classe.component.js"></script>
+    
     <script src="js/app/teachingunit/teachingunit.module.js"></script>
     <script src="js/app/teachingunit/teachingunit.component.js"></script>
     <script src="js/app/teachingunit/new.teachingunit.component.js"></script> 
+    
     <script src="js/app/student/student.module.js"></script>
     <script src="js/app/student/student.component.js"></script>
     <script src="js/app/student/studentDetails.component.js"></script>
@@ -139,6 +149,7 @@
   <script src="js/app/components/version/version.js"></script>
   <script src="js/app/components/version/version-directive.js"></script>
   <script src="js/app/components/version/interpolate-filter.js"></script>
+  <script src="js/app/teachingunit/teacher.component.js"></script> 
     </head>
 <body ng-app="myApp" ng-cloak>
 <div id="wrapper">
@@ -447,13 +458,16 @@
                             <a href="#"><i class="fa fa-pencil-square-o fa-fw"></i> Enseignants <span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="">Gérer les enseignants</a>
+                                    <a href="#!/new-teacher"">Gérer les enseignants</a>
                                 </li>
                                 <li>
                                     <a href="#!/calculnotes">Suivi des cours</a>
                                 </li>
                                 <li>
                                     <a href="">Factuation des frais de vacation</a>
+                                </li>
+                                                                <li>
+                                    <a href="#!/academicRankConfig">Barème de règlement des frais de vacation</a>
                                 </li>
                                
 
@@ -516,7 +530,7 @@
                                         <!-- /.nav-second-level -->
                                 </li>
                                 <li>
-                                    <a href="#!/faculty">Facultés</a>
+                                    <a href="#!/faculty">Ecoles</a>
                                 </li>
                                 <li>
                                     <a href="#!/department">Départements</a>
@@ -533,7 +547,7 @@
                                 </li>                                
                                 
                                 <li>
-                                    <a href="#!/degree">Diplômes</a>
+                                    <a href="#!/degree">Offres de formation</a>
                                 </li>
                                 <li>
                                     <a href="#!/classes">Niveaux d'etudes</a>

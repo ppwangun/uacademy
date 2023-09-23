@@ -613,7 +613,7 @@ $ctrl.deliberation = function(ev){
          //Dialog Controller
         function DialogController($scope, $mdDialog,readFileData) {
          
-            $scope.saveDelib = function(ueID,semID,classeID,subjectID)
+            $scope.saveDelib = function(ueID,subjectID,semID,classeID)
             {
                 var  dataString = {ueID: ueID,subjectId:subjectID,semID:semID,classeID:classeID},
                 config = {

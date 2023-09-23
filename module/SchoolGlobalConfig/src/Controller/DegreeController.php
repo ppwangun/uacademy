@@ -105,6 +105,7 @@ class DegreeController extends AbstractRestfulController
             $degree->setName($data['name']);
             $degree->setCode($data['code']);
             $degree->setStatus($data['status']);
+            $degree->setIsCoreCurriculum($data['isCoreCurriculum']);
             
  
             $filiere = $this->entityManager->getRepository(FieldOfStudy::class)->findOneById($data['fil_id']);
@@ -197,6 +198,7 @@ class DegreeController extends AbstractRestfulController
             $degree->setName($data['name']);
             $degree->setCode($data['code']);
             $degree->setStatus($data['status']);
+            $degree->setIsCoreCurriculum($data['isCoreCurriculum']);
             $degree->setFieldStudy($filiere);
             
             $degreeCategory = $this->entityManager->getRepository(DegreeHasCourseCategory::class)->findOneBy(array("degree"=>$degree));

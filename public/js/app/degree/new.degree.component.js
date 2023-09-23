@@ -16,7 +16,7 @@ function degreeCtrl($http,$q,$timeout,$routeParams,$mdDialog,$location,$scope,to
     $ctrl.selectedItem= null;
     $ctrl.selectedItem2= null;
     $ctrl.isUpdate = false;
-    $ctrl.degree = {code:'',name:'',status: 1,filiere_id:''};
+    $ctrl.degree = {code:'',name:'',status: 1,isCoreCurriculum: false,filiere_id:''};
     $ctrl.degrees = []; 
     $ctrl.filieres = [];
     $ctrl.querySearch   = querySearch;
@@ -46,10 +46,14 @@ function degreeCtrl($http,$q,$timeout,$routeParams,$mdDialog,$location,$scope,to
 
                 });
             });  
+            
+            
             $timeout($http.get('cycleFormation').then(
                 function(response){
                 $scope.cyclesFormation = response.data[0];
-            }),1000);            
+            }),1000);  
+
+       
             
             id = $routeParams.id; 
             if(id)

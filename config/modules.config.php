@@ -27,5 +27,6 @@ return [
     'Registration',
     'Payment',
     'Exam',
+    'Teacher',
     
 ];

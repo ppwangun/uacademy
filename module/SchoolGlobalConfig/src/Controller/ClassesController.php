@@ -16,6 +16,7 @@ use Zend\View\Model\JsonModel;
 use Zend\Hydrator\Reflection as ReflectionHydrator;
 use Application\Entity\Degree;
 use Application\Entity\TrainingCurriculum;
+use Application\Entity\DegreeHasClassOfStudy;
 use Application\Entity\User;
 use Application\Entity\ClassOfStudy;
 use Application\Entity\ClassListView;
@@ -37,7 +38,7 @@ class ClassesController extends AbstractRestfulController
  
     
     public function get($id)
-    {
+    {        
         
         if(is_numeric($id))
         {
@@ -52,7 +53,7 @@ class ClassesController extends AbstractRestfulController
             ]);
         }
         //Showing only classes managed by the current logged in user
-        
+
             $userId = $this->sessionContainer->userId;
             $user = $this->entityManager->getRepository(User::class)->find($userId );
            
@@ -83,7 +84,7 @@ class ClassesController extends AbstractRestfulController
         //return $faculties;
     }
     public function getList()
-    {
+    {       
         $this->entityManager->getConnection()->beginTransaction();
         try
         {   
@@ -131,24 +132,40 @@ class ClassesController extends AbstractRestfulController
         try
         {
             $message = false;
-       
+            $degrees = $data["degrees"];
             $classe= new ClassOfStudy();
             $classe->setName($data['name']);
             $classe->setCode($data['code']);
+            $classe->setIsCoreCurriculum($data["isEndCommonCore"]);
+            $classe->setIsEndOfCoreCurriculum($data["isEndCommonCore"]);
             $classe->setIsEndCycle($data['isEndCycle']);
             $classe->setIsEndDegreeTraining($data['isEndDegreeTraining']);
             $classe->setStudyLevel($data['studyLevel']);
+            $this->entityManager->persist($classe);
             
             if(!is_null($data['cycleId']))
             {
                 $cycle = $this->entityManager->getRepository(TrainingCurriculum::class)->findOneById($data['cycleId']);
                 $classe->setCycle($cycle);
+            }            
+            foreach ($degrees as $key=>$value) 
+            {
+                $degree =$this->entityManager->getRepository(Degree::class)->find($value); 
+                $cycle = $this->entityManager->getRepository(TrainingCurriculum::class)->findOneBy(["degree"=>$degree,"cycleLevel"=>$cycle->getCycleLevel()]);
+                
+                $dhcosh = new DegreeHasClassOfStudy();
+                $dhcosh->setClassOfStudy($classe);
+                $dhcosh->setDegree($degree);
+                $dhcosh->setTrainingCurriculum($cycle);
+                $this->entityManager->persist($dhcosh); 
+                
             }
-            $degree =$this->entityManager->getRepository(Degree::class)->findOneById($data['degreeId']);
+
+            //$degree =$this->entityManager->getRepository(Degree::class)->findOneById($data['degreeId']);
             
             
-            $classe->setDegree($degree);  
-            $this->entityManager->persist($classe);
+            //$classe->setDegree($degree);  
+            
             $this->entityManager->flush();
             $message = true;
             $this->entityManager->getConnection()->commit();

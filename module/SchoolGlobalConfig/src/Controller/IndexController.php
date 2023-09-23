@@ -387,6 +387,32 @@ class IndexController extends AbstractActionController
         
     }    
     
+    public function searchCommonCoreTrainingAction()
+    {
+      $this->entityManager->getConnection()->beginTransaction();
+      try
+      {
+            $data = $this->params()->fromQuery();            
+    
+            $troncCommuns = $this->entityManager->getRepository(Degree::class)->findBy(array('status'=>1,'isCoreCurriculum'=>true),array("name"=>"ASC"));
+            foreach($troncCommuns as $key=>$value)
+            {
+                $hydrator = new ReflectionHydrator();
+                $data = $hydrator->extract($value);
+                $troncCommuns[$key] = $data;
+            }
+        $this->entityManager->getConnection()->commit();
+        return new JsonModel([
+                $troncCommuns
+        ]);          
+      }
+      catch(Exception $e){
+            $this->entityManager->getConnection()->rollBack();
+            throw $e; 
+      }
+        
+    }     
+    
     public function newacadyrAction()
     {
         //$form = new AnneeAcadForm();

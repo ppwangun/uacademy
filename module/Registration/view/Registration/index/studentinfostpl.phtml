@@ -848,8 +848,8 @@
                                                   <td ng-bind="subject.semester"></td>
                                                   <td>
                                                       
-                                                      <i ng-show="subject.isRepeated!=1" style="cursor: pointer; color: red;" ng-click="$ctrl.deleteSubject(subject)" class="fa fa-trash-o"></i>   
-                                                      <i ng-show="subject.isRepeated==1" style="cursor: pointer; color: grey;"  class="fa fa-trash-o"></i>
+                                                      <i ng-show="subject.isRepeated!=1 || <?=($this->access('global.system.admin', null)?true:false)?>" style="cursor: pointer; color: red;" ng-click="$ctrl.deleteSubject(subject)" class="fa fa-trash-o"></i>   
+                                                      <i ng-show="subject.isRepeated==1 &&  !<?=($this->access('global.system.admin', null)?true:false)?>" style="cursor: pointer; color: grey;"  class="fa fa-trash-o"></i>
                                                     
                                                   </td>
                                                 </tr>
