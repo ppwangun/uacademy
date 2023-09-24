@@ -7,13 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Contract
  *
- * @ORM\Table(name="contract", indexes={@ORM\Index(name="fk_contract_subject1_idx", columns={"subject_id"}), @ORM\Index(name="fk_contract_teacher1_idx", columns={"teacher_id"}), @ORM\Index(name="fk_contract_academic_year1_idx", columns={"academic_year_id"})})
+ * @ORM\Table(name="contract", indexes={@ORM\Index(name="fk_contract_teacher1_idx", columns={"teacher_id"}), @ORM\Index(name="fk_contract_academic_year1_idx", columns={"academic_year_id"})})
  * @ORM\Entity
  */
 class Contract
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -24,9 +24,30 @@ class Contract
     /**
      * @var string
      *
+     * @ORM\Column(name="ref_number", type="string", length=45, nullable=false)
+     */
+    private $refNumber;
+
+    /**
+     * @var string|null
+     *
      * @ORM\Column(name="status", type="string", length=45, nullable=true)
      */
     private $status;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="volume_hrs", type="string", length=45, nullable=true)
+     */
+    private $volumeHrs;
+
+    /**
+     * @var float|null
+     *
+     * @ORM\Column(name="amount", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $amount;
 
     /**
      * @var \AcademicYear
@@ -37,16 +58,6 @@ class Contract
      * })
      */
     private $academicYear;
-
-    /**
-     * @var \Subject
-     *
-     * @ORM\ManyToOne(targetEntity="Subject")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="subject_id", referencedColumnName="id")
-     * })
-     */
-    private $subject;
 
     /**
      * @var \Teacher
@@ -61,9 +72,9 @@ class Contract
 
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -71,23 +82,47 @@ class Contract
     }
 
     /**
-     * Set status
+     * Set refNumber.
      *
-     * @param string $status
+     * @param string $refNumber
      *
      * @return Contract
      */
-    public function setStatus($status)
+    public function setRefNumber($refNumber)
     {
-        $this->status = $status;
-
+        $this->refNumber = $refNumber;
+    
         return $this;
     }
 
     /**
-     * Get status
+     * Get refNumber.
      *
      * @return string
+     */
+    public function getRefNumber()
+    {
+        return $this->refNumber;
+    }
+
+    /**
+     * Set status.
+     *
+     * @param string|null $status
+     *
+     * @return Contract
+     */
+    public function setStatus($status = null)
+    {
+        $this->status = $status;
+    
+        return $this;
+    }
+
+    /**
+     * Get status.
+     *
+     * @return string|null
      */
     public function getStatus()
     {
@@ -95,23 +130,71 @@ class Contract
     }
 
     /**
-     * Set academicYear
+     * Set volumeHrs.
      *
-     * @param \AcademicYear $academicYear
+     * @param string|null $volumeHrs
+     *
+     * @return Contract
+     */
+    public function setVolumeHrs($volumeHrs = null)
+    {
+        $this->volumeHrs = $volumeHrs;
+    
+        return $this;
+    }
+
+    /**
+     * Get volumeHrs.
+     *
+     * @return string|null
+     */
+    public function getVolumeHrs()
+    {
+        return $this->volumeHrs;
+    }
+
+    /**
+     * Set amount.
+     *
+     * @param float|null $amount
+     *
+     * @return Contract
+     */
+    public function setAmount($amount = null)
+    {
+        $this->amount = $amount;
+    
+        return $this;
+    }
+
+    /**
+     * Get amount.
+     *
+     * @return float|null
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
+     * Set academicYear.
+     *
+     * @param \AcademicYear|null $academicYear
      *
      * @return Contract
      */
     public function setAcademicYear(\AcademicYear $academicYear = null)
     {
         $this->academicYear = $academicYear;
-
+    
         return $this;
     }
 
     /**
-     * Get academicYear
+     * Get academicYear.
      *
-     * @return \AcademicYear
+     * @return \AcademicYear|null
      */
     public function getAcademicYear()
     {
@@ -119,47 +202,23 @@ class Contract
     }
 
     /**
-     * Set subject
+     * Set teacher.
      *
-     * @param \Subject $subject
-     *
-     * @return Contract
-     */
-    public function setSubject(\Subject $subject = null)
-    {
-        $this->subject = $subject;
-
-        return $this;
-    }
-
-    /**
-     * Get subject
-     *
-     * @return \Subject
-     */
-    public function getSubject()
-    {
-        return $this->subject;
-    }
-
-    /**
-     * Set teacher
-     *
-     * @param \Teacher $teacher
+     * @param \Teacher|null $teacher
      *
      * @return Contract
      */
     public function setTeacher(\Teacher $teacher = null)
     {
         $this->teacher = $teacher;
-
+    
         return $this;
     }
 
     /**
-     * Get teacher
+     * Get teacher.
      *
-     * @return \Teacher
+     * @return \Teacher|null
      */
     public function getTeacher()
     {

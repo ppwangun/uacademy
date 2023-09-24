@@ -41,9 +41,9 @@
         ->prependStylesheet($this->basePath('css/font-awesome/css/font-awesome.css'))
         ?>
      <link rel="stylesheet" href="assets/css/new-teacher/new-teacher.css"/>
-    <link rel="stylesheet" href="assets/teachers-list/teachers-list.css"/>
-    <link rel="stylesheet" href="assets/affect-teaching-unit/affect-teaching-unit.css"/>
-    <link rel="stylesheet" href="assets/progressions-timeline/progressions-timeline.css"/>       
+    <link rel="stylesheet" href="assets/css/teachers-list/teachers-list.css"/>
+    <link rel="stylesheet" href="assets/css/affect-teaching-unit/affect-teaching-unit.css"/>
+    <link rel="stylesheet" href="assets/css/progressions-timeline/progressions-timeline.css"/>       
 
         <!-- Scripts -->
         <?= $this->headScript()
@@ -150,6 +150,7 @@
   <script src="js/app/components/version/version-directive.js"></script>
   <script src="js/app/components/version/interpolate-filter.js"></script>
   <script src="js/app/teachingunit/teacher.component.js"></script> 
+  <script src="js/app/teachingunit/teacher.details.component.js"></script>
     </head>
 <body ng-app="myApp" ng-cloak>
 <div id="wrapper">
@@ -461,7 +462,7 @@
                                     <a href="#!/new-teacher"">Gérer les enseignants</a>
                                 </li>
                                 <li>
-                                    <a href="#!/calculnotes">Suivi des cours</a>
+                                    <a href="#!/teacher-list">Suivi des cours</a>
                                 </li>
                                 <li>
                                     <a href="">Factuation des frais de vacation</a>

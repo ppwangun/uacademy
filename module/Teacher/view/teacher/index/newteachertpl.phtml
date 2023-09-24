@@ -58,7 +58,7 @@
                     <md-input-container class="md-block" flex-gt-sm>
                         <label for="country_id">Pays de résidence</label>
                         <md-select ng-model="teacher.living_country_id" id="living_country_id" name="living_country_id" required>
-                            <md-option ng-repeat="country in countries" value="{{country.id}}">
+                            <md-option ng-repeat="country in countries" value="{{country.name}}">
                                 {{country.name}}
                             </md-option>
                         </md-select>
@@ -69,7 +69,7 @@
                     <md-input-container class="md-block" flex-gt-sm>
                         <label for="country_id">Ville  de résidence</label>
                         <md-select ng-model="teacher.living_city_id" id="living_city_id" name="living_city_id" md-on-open="getCities(teacher.living_country_id)" required>
-                            <md-option ng-repeat="city in cities" value="{{city.id}}">
+                            <md-option ng-repeat="city in cities" value="{{city.name}}">
                                 {{city.name}}
                             </md-option>
                         </md-select>
@@ -82,7 +82,7 @@
                     <md-input-container class="md-block" flex-gt-sm>
                         <label for="country_id">Nationalite</label>
                         <md-select ng-model="teacher.country_id" id="country_id" name="country_id" required>
-                            <md-option ng-repeat="country in countries" value="{{country.id}}">
+                            <md-option ng-repeat="country in countries" value="{{country.name}}">
                                 {{country.name}}
                             </md-option>
                         </md-select>

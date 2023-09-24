@@ -41,7 +41,7 @@ class IndexController extends AbstractActionController
 
     }
     
-    public function acadranktplAction()
+    public function teacherDetailsAction()
     {
         
         $view =  new ViewModel([
@@ -54,6 +54,19 @@ class IndexController extends AbstractActionController
         return $view;  
 
     }
+    public function acadranktplAction()
+    {
+        
+        $view =  new ViewModel([
+
+            'userName' => $this->sessionContainer->userName
+        ]);
+        
+        $view->setTerminal(true);
+
+        return $view;  
+
+    }    
     public function newAcadRankAction()
     {
         

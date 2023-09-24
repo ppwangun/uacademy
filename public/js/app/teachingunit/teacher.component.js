@@ -209,13 +209,14 @@ function newTeacherController($scope, $http, $location,$routeParams,$timeout,toa
     }
 
     $scope.onUploadFile = function ($target, callback, mimeTypes = [$scope.pdfMimeType], maxSize = $scope.maxFileSize,) {
-        const file = $target.files[0];
+        const file = $target.files[0]; 
+     
         if (!file) {
             alert("Aucun fichier selectionne");
             return ;
         }
 
-        if (file.size > maxSize) {
+        if (file.size > maxSize) { 
             alert($scope.maxFileSizeErrorMessage);
             return;
         }
@@ -230,6 +231,8 @@ function newTeacherController($scope, $http, $location,$routeParams,$timeout,toa
 
     $scope.handleIdentityDocumentUploadedFile = function ($file) {
         $scope.identityDocumentFile = $file;
+        
+        
     }
     $scope.removeIdentityDocumentFile = function () {
         $scope.identityDocumentFile = null;
@@ -346,17 +349,17 @@ function newTeacherController($scope, $http, $location,$routeParams,$timeout,toa
 
         const formData = parseObjectToFormData(data);
 
-        $http.post(`${API_URL}teachers`, formData, {
+        $http.post(`teachers`, formData, {
             transformRequest: angular.identity,
             headers: { 'Content-Type': undefined }
         })
             .then(function (response) {
                 alert('L\'enseignant a ete enregistre avec succes !');
                 $scope.isProcessing = false;
-                $scope.teacher = {
+               /* $scope.teacher = {
                     identity_document_type: 'nic',
-                }
-                $location.path('/');
+                }*/
+                //$location.path('/');
             }, function (error){
                 console.error(error);
                 alert('Une erreur est survenue lors de l\'enregistrement de l\'enseignant !');

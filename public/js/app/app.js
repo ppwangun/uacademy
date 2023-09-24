@@ -235,6 +235,9 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
           }).when("/new-teacher", {
             template: "<new-teacher></new-teacher>",
             
+        }).when("/teacher-list", {
+            template: "<teacher-details></teacher-details>",
+            
         }).when("/academicRankConfig", {
             template: "<acad-rank-config></acad-rank-config>",
             
@@ -269,4 +272,4 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
     $scope.getAccess = function(){
         accessFac.getPermission();       //call the method in acccessFac to allow the user permission.
     }
-});
+});;

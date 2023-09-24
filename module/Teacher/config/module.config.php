@@ -35,7 +35,16 @@ return [
                     ],
                 ],
             ],            
-            
+            'teacherDetails' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/teacherDetails',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'teacherDetails',
+                    ],
+                ],
+            ],            
 
             'new-teacher-form-assets' => [
                 'type'    => Literal::class,
@@ -76,6 +85,15 @@ return [
                         'controller' => Controller\GradeController::class,
                     ],
                 ],
+            ],  
+            'teachers' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/teachers[/:id]',
+                    'defaults' => [
+                        'controller' => Controller\TeacherController::class,
+                    ],
+                ],
             ],            
              /*  'home' => [
                 'type' => Literal::class,
@@ -94,6 +112,7 @@ return [
         'factories' => [
             Controller\IndexController::class => Controller\Factory\IndexControllerFactory::class,
             Controller\GradeController::class => Controller\Factory\GradeControllerFactory::class,
+             Controller\TeacherController::class => Controller\Factory\TeacherControllerFactory::class,
         ],
     ],
     'view_manager' => [
