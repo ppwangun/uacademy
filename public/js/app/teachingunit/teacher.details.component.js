@@ -196,13 +196,13 @@ function teacherListController($scope, $mdDialog, $http, $timeout){
     $scope.openAffectTeachingUnitDialog = function (ev) {
         $mdDialog.show({
             controller: AffectTeachingUnitController,
-            templateUrl: '/app/components/affect-teaching-unit/affect-teaching-unit.html',
+            templateUrl: 'js/app/teachingunit/affect-teaching-unit.html',
             parent: angular.element(document.body),
             targetEvent: ev,
             clickOutsideToClose: false,
             fullscreen: false, // Only for -xs, -sm breakpoints.
             locals: {teacherId: $scope.currentTeacher.id, teacherName: $scope.currentTeacher.names}
-        }).then(function (newTeachingUnits) {
+        }).then(function (newTeachingUnits) { console.log(newTeachingUnits)
             $scope.currentTeacher.teaching_units = newTeachingUnits.concat($scope.currentTeacher.teaching_units);
         }, function () {
             // $scope.status = 'You cancelled the dialog.';
@@ -220,4 +220,6 @@ function teacherListController($scope, $mdDialog, $http, $timeout){
             locals: {teachingUnitId: $scope.currentTeachingUnit.id, teachingUnitCode: $scope.currentTeachingUnit.code, teacherId: $scope.currentTeacher.id}
         });
     };
+    
+    
 };

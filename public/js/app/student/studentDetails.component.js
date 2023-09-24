@@ -549,12 +549,12 @@ function DialogController($scope, $mdDialog, $q,toastr) {
         var data = {id: std_id,
             subjects : $scope.subjects
         };
-       /* var config = {
-        params: data,
-        headers : {'Accept' : 'application/json'}
-        };*/
+        var config = {
+        //params: data,
+        headers : {'Content-Type' : 'application/json'}
+        };
          $timeout(
-         $http.post('subjectregistration',data).then(
+         $http.post('subjectregistration',JSON.stringfy(data)).then(
          function successCallback(response){
             
             response.data[0]?toastr.success('Informations sauvegardées avec succès'):toastr.error('Erreur lors de la sauvegarde des information', 'Erreur');

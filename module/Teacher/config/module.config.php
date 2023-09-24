@@ -44,6 +44,16 @@ return [
                         'action'        => 'teacherDetails',
                     ],
                 ],
+            ],  
+            'assignSubjectToTeacher' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/assignSubjectToTeacher[/:teacherID][/:subjectIDs]',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'assignSubjectToTeacher',
+                    ],
+                ],
             ],            
 
             'new-teacher-form-assets' => [

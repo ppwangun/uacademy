@@ -24,7 +24,7 @@
         <div layout="row" id="container" ng-if="hasSucceededLoadingTeachers()">
             <div class="panel " flex="30"  flex-gt-sm>
                 <div class="panel-body">
-                    <table class="table table-bordered bordered table-striped table-condensed datatable" ui-jq="dataTable" ui-options="dataTableOpt">
+                    <table class="table table-bordered bordered table-striped table-condensed datatable" style="font-size:0.8em; background-color: #dfe4ea; color: #0c2461;" ui-jq="dataTable" ui-options="dataTableOpt">
                         <thead>
                         <tr>
                             <th>#</th>
@@ -63,64 +63,21 @@
                     <div class="panel-body gap-1" layout="column">
                         <div layout="row" class="gap-1">
                             <div class="flex-gt-sm gap-0-5" flex="50" layout="column">
-                                <div class="details-item">
-                                    <label class="details-item-label">Noms & Prenoms</label>
-                                    <span class="details-item-value">{{currentTeacher.name}}</span>
-                                </div>
-                                <div layout="row" class="gap-0-5">
-                                    <div class="details-item" flex-gt-sm flex="50">
-                                        <label class="details-item-label">Date de naissance</label>
-                                        <span class="details-item-value">{{currentTeacher.birthDate.date | date}}</span>
-                                    </div>
-                                    <div class="details-item" flex-gt-sm flex="50">
-                                        <label class="details-item-label">Lieu de naissance</label>
-                                        <span class="details-item-value">{{currentTeacher.birthplace}}</span>
-                                    </div>
-                                </div>
-                                <div layout="row" class="gap-0-5">
-                                    <div class="details-item" flex-gt-sm flex="50">
-                                        <label class="details-item-label">Nationalite</label>
-                                        <span class="details-item-value">{{currentTeacher.country.name.fr}}</span>
-                                    </div>
-                                    <div class="details-item" flex-gt-sm flex="50">
-                                        <label class="details-item-label">Etat civil</label>
-                                        <span class="details-item-value">{{currentTeacher.maritalSStatus === 'single' ? 'Celibataire' : 'Marie(e)'}}</span>
-                                    </div>
-                                </div>
-                                <div layout="row" class="gap-0-5">
-                                    <div class="details-item" flex-gt-sm flex="50">
-                                        <label class="details-item-label">Telephone</label>
-                                        <span class="details-item-value">{{currentTeacher.phone}}</span>
-                                    </div>
-                                    <div class="details-item" flex-gt-sm flex="50">
-                                        <label class="details-item-label">Email</label>
-                                        <span class="details-item-value">{{currentTeacher.email}}</span>
-                                    </div>
-                                </div>
-                                <div layout="row" class="gap-0-5">
-                                    <div class="details-item" flex-gt-sm flex="50">
-                                        <label class="details-item-label">Diplome le plus eleve</label>
-                                        <span class="details-item-value">{{currentTeacher.highest_degree.name}}</span>
-                                    </div>
-                                    <div class="details-item" flex-gt-sm flex="50">
-                                        <label class="details-item-label">Specialite</label>
-                                        <span class="details-item-value">{{currentTeacher.speciality.name}}</span>
-                                    </div>
-                                </div>
-                                <div layout="row" class="gap-0-5">
-                                    <div class="details-item" flex-gt-sm flex="50">
-                                        <label class="details-item-label">Grade</label>
-                                        <span class="details-item-value">{{currentTeacher.grade.name}}</span>
-                                    </div>
-                                    <div class="details-item" flex-gt-sm flex="50">
-                                        <label class="details-item-label">Employeur Actuel</label>
-                                        <span class="details-item-value">{{currentTeacher.actual_employer}}</span>
-                                    </div>
-                                </div>
-                                <div class="details-item">
-                                    <label class="details-item-label">Etablissement sollicite</label>
-                                    <span class="details-item-value">{{currentTeacher.requested_establishement.name}}</span>
-                                </div>
+                                <table class="table table-bordered bordered table-striped table-condensed" style="font-size:0.8em;  color: #0c2461;">
+                                    <tr><td>Noms & Prenoms</td><td>{{currentTeacher.name}}</td></tr>
+                                    <tr><td>Date de naissance</td><td>{{currentTeacher.birthDate.date | date}}</td></tr>
+                                    <tr><td>Lieu de naissance</td><td>{{currentTeacher.birthplace}}</td></tr>
+                                    <tr><td>Nationalite</td><td>{{currentTeacher.country.name.fr}}</td></tr>
+                                    <tr><td>Etat civil</td><td>{{currentTeacher.maritalSStatus === 'single' ? 'Celibataire' : 'Marie(e)'}}</td></tr>
+                                    <tr><td>Telephone</td><td>{{currentTeacher.phone}}</td></tr>
+                                    <tr><td>Email</td><td>{{currentTeacher.email}}</td></tr>
+                                    <tr><td>Diplome le plus eleve</td><td>{{currentTeacher.highest_degree.name}}</td></tr>
+                                    <tr><td>Specialite</td><td>{{currentTeacher.speciality.name}}</td></tr>
+                                    <tr><td>Grade</td><td>{{currentTeacher.grade.name}}</td></tr>
+                                    <tr><td>Employeur Actuel</td><td>{{currentTeacher.actual_employer}}</td></tr>
+                                    <tr><td>Etablissement sollicité</td><td>{{currentTeacher.requested_establishement.name}}</td></tr>
+                                </table>
+
                                 <div>
                                     <a href="{{'#!edit/'+selectedTeacherId}}" class="md-button md-raised md-primary md-hue-4 no-margin-left">
                                         <img src="assets/images/edit_4414703.png" alt="" width="16px" height="16px"/>
@@ -204,7 +161,7 @@
                         <br/>
                         <div layout="row" class="gap-1">
                             <div flex-gt-sm flex="50">
-                                <table class="table table-bordered bordered table-striped table-condensed datatable" ui-jq="dataTable" ui-options="dataTableOpt">
+                                <table class="table table-bordered bordered table-striped table-condensed datatable" style="font-size:0.8em; background-color: #dfe4ea; color: #0c2461;" ui-jq="dataTable" ui-options="dataTableOpt">
                                     <thead>
                                     <tr>
                                         <th>#</th>
@@ -218,9 +175,9 @@
                                         ng-style="{'background-color': teachingUnit.id === selectedTeachingUnitId ? 'lightblue' : 'initial'}"
                                         ng-click="onSelectTeachingUnit(teachingUnit.id)">
                                         <td>{{$index+1}}</td>
-                                        <td>{{teachingUnit.code}}</td>
+                                        <td>{{teachingUnit.codeUe}}</td>
                                         <td>{{teachingUnit.semester}}</td>
-                                        <td>{{teachingUnit.classe.code}}</td>
+                                        <td>{{teachingUnit.classe}}</td>
                                     </tr>
                                     </tbody>
                                 </table>

@@ -1,8 +1,11 @@
 <?php
 
-
+namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
+use Application\Entity\Teacher;
+use Application\Entity\AcademicYear;
 
 /**
  * Contract
@@ -50,7 +53,7 @@ class Contract
     private $amount;
 
     /**
-     * @var \AcademicYear
+     * @var AcademicYear
      *
      * @ORM\ManyToOne(targetEntity="AcademicYear")
      * @ORM\JoinColumns({
@@ -60,7 +63,7 @@ class Contract
     private $academicYear;
 
     /**
-     * @var \Teacher
+     * @var Teacher
      *
      * @ORM\ManyToOne(targetEntity="Teacher")
      * @ORM\JoinColumns({
@@ -180,11 +183,11 @@ class Contract
     /**
      * Set academicYear.
      *
-     * @param \AcademicYear|null $academicYear
+     * @param AcademicYear|null $academicYear
      *
      * @return Contract
      */
-    public function setAcademicYear(\AcademicYear $academicYear = null)
+    public function setAcademicYear(AcademicYear $academicYear = null)
     {
         $this->academicYear = $academicYear;
     
@@ -194,7 +197,7 @@ class Contract
     /**
      * Get academicYear.
      *
-     * @return \AcademicYear|null
+     * @return AcademicYear|null
      */
     public function getAcademicYear()
     {
@@ -204,11 +207,11 @@ class Contract
     /**
      * Set teacher.
      *
-     * @param \Teacher|null $teacher
+     * @param Teacher|null $teacher
      *
      * @return Contract
      */
-    public function setTeacher(\Teacher $teacher = null)
+    public function setTeacher(Teacher $teacher = null)
     {
         $this->teacher = $teacher;
     
@@ -218,7 +221,7 @@ class Contract
     /**
      * Get teacher.
      *
-     * @return \Teacher|null
+     * @return Teacher|null
      */
     public function getTeacher()
     {
