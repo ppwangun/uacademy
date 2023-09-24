@@ -10,6 +10,7 @@ function AffectTeachingUnitController($scope, $mdDialog, $http, teacherId, teach
     $scope.lastSearchedTime = 0;
     $scope.currentTeachingUnit = null;
     $scope.canAddCurrentTeachingUnit = false;
+    $scope.showforceToProceeButton =false
     $scope.isProcessing = false;
     $scope.isProcessing = false;
     $scope.subjects = [];
@@ -24,7 +25,7 @@ function AffectTeachingUnitController($scope, $mdDialog, $http, teacherId, teach
             headers : {'Accept' : 'application/json; charset=utf-8'}
             };
     
-            return  $http.get('subjectsearch',config).then(function(response){
+            return  $http.get('searchAllSubjects',config).then(function(response){
                    return response.data[0];
                 });
      };
@@ -107,11 +108,11 @@ function AffectTeachingUnitController($scope, $mdDialog, $http, teacherId, teach
             });
     }
 
-    $scope.saveChoices = () => {
-        var data = $scope.teachingUnitsToSave().map(elt => elt.id);
+    $scope.saveChoices = (proceedByForce) => {
+        var data = $scope.teachingUnitsToSave().map(elt => elt.coshs);
         if (data.length === 0 || $scope.isProcessing) return;
         
-        data = {teacherid: $scope.teacherId,subjects : $scope.teachingUnitsToSave().map(elt => elt.id)}
+        data = {teacherid: $scope.teacherId,subjects : $scope.teachingUnitsToSave().map(elt => elt.coshs),proceedByForce:proceedByForce}
         data = $.param(data)
         var config = {
             //params: {id: $scope.teacherId,subjects : JSON.stringify(data)},
@@ -120,8 +121,12 @@ function AffectTeachingUnitController($scope, $mdDialog, $http, teacherId, teach
         $scope.isProcessing = true;
         $http.post(`assignSubjectToTeacher`,data,config)
             .then(function (response) {
-                $mdDialog.hide($scope.teachingUnitsToSave());
-                alert('L\'enseignant a ete mis a jour avec succes !');
+                if(response.data[0])
+                    $mdDialog.hide($scope.teachingUnitsToSave());
+                else{
+                    $scope.showforceToProceeButton = true;
+                }
+               // alert('L\'enseignant a ete mis a jour avec succes !');
                 $scope.isProcessing = false;
             }, function (error) {
                 console.error(error);

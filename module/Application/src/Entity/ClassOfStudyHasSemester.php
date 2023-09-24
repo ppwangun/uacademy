@@ -1,5 +1,7 @@
 <?php
 
+
+
 namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -9,11 +11,12 @@ use Application\Entity\Subject;
 use Application\Entity\ClassOfStudy;
 use Application\Entity\Semester;
 use Application\Entity\Contract;
+use Application\Entity\Teacher;
 
 /**
  * ClassOfStudyHasSemester
  *
- * @ORM\Table(name="class_of_study_has_semester", indexes={@ORM\Index(name="fk_class_of_study_has_semester_teaching_unit1_idx", columns={"teaching_unit_id"}), @ORM\Index(name="fk_class_of_study_has_semester_subject1_idx", columns={"subject_id"}), @ORM\Index(name="fk_class_of_study_has_semester_semester1_idx", columns={"semester_id"}), @ORM\Index(name="fk_class_of_study_has_semester_contract1_idx", columns={"contract_id"}), @ORM\Index(name="fk_class_of_study_has_semester_class_of_study1_idx", columns={"class_of_study_id"})})
+ * @ORM\Table(name="class_of_study_has_semester", indexes={@ORM\Index(name="fk_class_of_study_has_semester_subject1_idx", columns={"subject_id"}), @ORM\Index(name="fk_class_of_study_has_semester_semester1_idx", columns={"semester_id"}), @ORM\Index(name="fk_class_of_study_has_semester_contract1_idx", columns={"contract_id"}), @ORM\Index(name="fk_class_of_study_has_semester_class_of_study1_idx", columns={"class_of_study_id"}), @ORM\Index(name="fk_class_of_study_has_semester_teacher1_idx", columns={"teacher_id"}), @ORM\Index(name="fk_class_of_study_has_semester_teaching_unit1_idx", columns={"teaching_unit_id"})})
  * @ORM\Entity
  */
 class ClassOfStudyHasSemester
@@ -178,6 +181,16 @@ class ClassOfStudyHasSemester
      * })
      */
     private $subject;
+
+    /**
+     * @var Teacher
+     *
+     * @ORM\ManyToOne(targetEntity="Teacher")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="teacher_id", referencedColumnName="id")
+     * })
+     */
+    private $teacher;
 
     /**
      * @var TeachingUnit
@@ -679,6 +692,30 @@ class ClassOfStudyHasSemester
     public function getSubject()
     {
         return $this->subject;
+    }
+
+    /**
+     * Set teacher.
+     *
+     * @param Teacher|null $teacher
+     *
+     * @return ClassOfStudyHasSemester
+     */
+    public function setTeacher(Teacher $teacher = null)
+    {
+        $this->teacher = $teacher;
+    
+        return $this;
+    }
+
+    /**
+     * Get teacher.
+     *
+     * @return Teacher|null
+     */
+    public function getTeacher()
+    {
+        return $this->teacher;
     }
 
     /**

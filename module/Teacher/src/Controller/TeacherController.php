@@ -57,7 +57,13 @@ class TeacherController extends AbstractRestfulController
                 $teacher = $data;
                 $data["documents"] = $documents;
                 
+            $query = $this->entityManager->createQuery('SELECT c.id,c.codeUe,c.nomUe,c.classe,c.semester,c.semId,c.totalHrs  FROM Application\Entity\CurrentYearUesAndSubjectsView c'
+                    .' WHERE c.teacher = :teacher');
+            $query->setParameter('teacher',$id);
 
+            $subjects_1 = $query->getResult();
+            $data["teaching_units"] = $subjects_1;
+            
             return new JsonModel([
                 $data
             ]);

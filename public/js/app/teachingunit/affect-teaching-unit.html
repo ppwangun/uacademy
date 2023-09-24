@@ -91,13 +91,16 @@ z-index: 120000}
                 </tr>
             
         </table>
-            
+                <div class='alert alert-danger' ng-show='showforceToProceeButton'> Une ou plusieures Unités d'ensiegnement sélectionnées sont déja attribués! Voulez vous néanmoins forcer l'attribution?'</div>    
     <md-dialog-actions layout="row">
       <span flex></span>
       <md-button ng-click="cancel()"> Annuler</md-button>
-      <md-button class="md-warn" ng-click="saveChoices()" >
+      <md-button ng-hide ="showforceToProceeButton" class="md-warn" ng-click="saveChoices(0)" >
           <span class="fa fa-check">  Valider </span>
       </md-button>
+      <md-button ng-show ="showforceToProceeButton" class="md-warn" ng-click="saveChoices(1)" >
+          <span class="fa fa-check">  Forcer l'attribution </span>
+      </md-button>      
 
     </md-dialog-actions>
         </form>    

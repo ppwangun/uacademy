@@ -168,6 +168,7 @@
                                         <th>UE</th>
                                         <th>Sem</th>
                                         <th>Classe</th>
+                                        <th>Volume</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -178,7 +179,9 @@
                                         <td>{{teachingUnit.codeUe}}</td>
                                         <td>{{teachingUnit.semester}}</td>
                                         <td>{{teachingUnit.classe}}</td>
+                                        <td>{{teachingUnit.totalHrs}}H</td>
                                     </tr>
+                                    <tr style="text-align:center;font-weight : bold; color: #fff; background-color:#708090;"><td  colspan="4">Total Volume Horaire</td><td align="left">{{currentTeacher.teaching_units|sumByKey:'totalHrs'}}H</td></tr>
                                     </tbody>
                                 </table>
                             </div>

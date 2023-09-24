@@ -15,6 +15,16 @@ use Laminas\ServiceManager\Factory\InvokableFactory;
 return [
     'router' => [
         'routes' => [
+            'searchAllSubjects' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/searchAllSubjects',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'searchAllSubjects',
+                    ],
+                ],
+            ],             
             'acadranktpl' => [
                 'type'    => Literal::class,
                 'options' => [

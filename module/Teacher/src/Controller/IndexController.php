@@ -21,6 +21,8 @@ use Application\Entity\AcademicYear;
 use Application\Entity\Teacher;
 use Application\Entity\Contract;
 use Application\Entity\ClassOfStudyHasSemester;
+use Application\Entity\User;
+use Application\Entity\CurrentYearUesAndSubjectsView;
 
 
 class IndexController extends AbstractActionController
@@ -197,7 +199,8 @@ class IndexController extends AbstractActionController
         try
         {
             $cities = [];
-            $data= $this->params()->fromPost();                 
+            $data= $this->params()->fromPost();            
+            $proceeByForce =(int) $data["proceedByForce"];           
             //$data = json_decode($data,true);
            
             $teacher = $this->entityManager->getRepository(Teacher::class)->find($data['teacherid']);
@@ -234,9 +237,16 @@ class IndexController extends AbstractActionController
             {
                 $coshs = $this->entityManager->getRepository(ClassOfStudyHasSemester::class)->find($value);
                 
+                
                 if($coshs)
                 {
+                    if($coshs->getContract() && !$proceeByForce) {
+                        return  new JsonModel([
+                                 false
+                         ]);                         
+                    }
                     $coshs->setContract($contract);
+                    $coshs->setTeacher($teacher);
                 }
             }
 
@@ -266,7 +276,7 @@ class IndexController extends AbstractActionController
             
             //$output = json_encode($output,$depth=1000000); 
             $output = new JsonModel([
-                    $cities
+                    true
             ]); 
             
             return $output;
@@ -274,5 +284,68 @@ class IndexController extends AbstractActionController
         catch (Exception $ex) {
 
         }    
+    }
+    
+    public function searchAllSubjectsAction()
+    {
+        $this->entityManager->getConnection()->beginTransaction();
+        try
+        { 
+            $data= $this->params()->fromQuery();  
+            $id = $data["id"];
+            $subjects=[];
+            //retrive the current loggedIn User
+            $userId = $this->sessionContainer->userId; 
+            $user = $this->entityManager->getRepository(User::class)->find($userId );
+           
+            //check first the user has global permission or specific permission to access exams informations
+            if($this->access('all.classes.view',['user'=>$user])||$this->access('global.system.admin',['user'=>$user])) 
+            {            
+                // retrieve subjects based on subject code
+
+                //$rsm = new ResultSetMapping();
+                // build rsm here
+
+                $query = $this->entityManager->createQuery('SELECT c.id,c.coshs,c.codeUe,c.nomUe,c.classe,c.semester,c.semId,c.totalHrs FROM Application\Entity\CurrentYearUesAndSubjectsView c'
+                        .' WHERE c.codeUe LIKE :code');
+                $query->setParameter('code', '%'.$id.'%');
+
+                $subjects = $query->getResult();
+            }
+            else
+            {
+                //Find clases mananged by the current user
+                $userClasses = $this->entityManager->getRepository(UserManagesClassOfStudy::class)->findBy(Array("user"=>$user));  
+                if($userClasses)
+                {
+
+                    foreach($userClasses as $classe)
+                    {
+                        $query = $this->entityManager->createQuery('SELECT c.id,c.codeUe,c.nomUe,c.classe,c.semester,c.semId  FROM Application\Entity\Application\Entity\CurrentUesAndSubjectsView c'
+                                .' WHERE c.classe = :classe AND c.codeUe LIKE :code');
+                        $query->setParameter('code', '%'.$id.'%')
+                                ->setParameter('classe',$classe->getClassOfStudy()->getCode());
+
+                        $subjects_1 = $query->getResult();
+                        $subjects= array_merge($subjects , $subjects_1);
+                    }
+                }                
+            }
+
+            $this->entityManager->getConnection()->commit();
+            
+           
+            $output = new JsonModel([
+                    $subjects
+            ]);
+
+            return $output;       }
+        catch(Exception $e)
+        {
+           $this->entityManager->getConnection()->rollBack();
+            throw $e;
+            
+        }        
+        
     }
 }

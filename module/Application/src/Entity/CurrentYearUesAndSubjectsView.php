@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CurrentYearTeachingUnitView
  *
- * @ORM\Table(name="current_year_teaching_unit_view", uniqueConstraints={@ORM\UniqueConstraint(name="matricule_UNIQUE", columns={"matricule"})})
+ * @ORM\Table(name="current_year_ues_and_subjects_view", uniqueConstraints={@ORM\UniqueConstraint(name="matricule_UNIQUE", columns={"matricule"})})
  * @ORM\Entity
  */
-class CurrentYearTeachingUnitView
+class CurrentYearUesAndSubjectsView
 {
     /**
     * @var integer
@@ -20,6 +20,12 @@ class CurrentYearTeachingUnitView
     * @ORM\GeneratedValue(strategy="IDENTITY")
     */
     private $id;
+    /**
+    * @var integer
+    *
+    * @ORM\Column(name="coshs", type="string", length=45, nullable=true)
+    */
+    private $coshs;    
     
     /**
     * @var string
@@ -49,7 +55,30 @@ class CurrentYearTeachingUnitView
     * @ORM\Column(name="credits", type="float",  nullable=true)
     */
     private $credits;
-    
+    /**
+    * @var integer
+    *
+    * @ORM\Column(name="total_hrs", type="float",  nullable=true)
+    */
+    private $totalHrs;  
+    /**
+    * @var integer
+    *
+    * @ORM\Column(name="cm_hrs", type="float",  nullable=true)
+    */
+    private $cmHrs;     
+    /**
+    * @var integer
+    *
+    * @ORM\Column(name="td_hrs", type="float",  nullable=true)
+    */
+    private $tdHrs;
+    /**
+    * @var integer
+    *
+    * @ORM\Column(name="tp_hrs", type="float",  nullable=true)
+    */
+    private $tpHrs;     
     /**
     * @var string
     *
@@ -90,20 +119,29 @@ class CurrentYearTeachingUnitView
     * @ORM\Column(name="sem_ranking", type="integer", nullable=true)
     */
     private $semRanking;
-     /**
-     * Get id
-     *
-     * @return integer
-     */
     /**
     * @var integer
     *
     * @ORM\Column(name="teacher", type="integer", nullable=true)
     */
     private $teacher;    
+     /**
+     * Get id
+     *
+     * @return integer
+     */
     public function getId()
     {
         return $this->id;
+    } 
+     /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getCoshs()
+    {
+        return $this->coshs;
     }    
     
      /**
@@ -167,7 +205,42 @@ class CurrentYearTeachingUnitView
     {
         return $this->credits;
     }
-    
+     /**
+     * Get integer
+     *
+     * @return integer
+     */
+    public function getTotalHrs()
+    {
+        return $this->totalHrs;
+    } 
+     /**
+     * Get integer
+     *
+     * @return integer
+     */
+    public function getCmHrs()
+    {
+        return $this->cmHrs;
+    } 
+     /**
+     * Get integer
+     *
+     * @return integer
+     */
+    public function getTdHrs()
+    {
+        return $this->tdHrs;
+    } 
+     /**
+     * Get integer
+     *
+     * @return integer
+     */
+    public function getTpHrs()
+    {
+        return $this->tpHrs;
+    }    
      /**
      * Get integer
      *
@@ -195,7 +268,7 @@ class CurrentYearTeachingUnitView
     public function getSemRanking()
     {
         return $this->semRanking;
-    }
+    } 
     /**
      * Get integer
      *
