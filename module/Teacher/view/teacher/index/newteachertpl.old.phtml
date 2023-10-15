@@ -1,6 +1,16 @@
 
-
+<style>
+    .md-block{margin-top: 20px;}
+</style>
 <div layout="column" ng-cloak>
+
+    <md-toolbar ng-if="true"  class="md-shadow-bottom-z-2" layout-padding>
+        <div>
+            <h3 class="md-title">
+                Nouvel enseignant
+            </h3>
+        </div>
+    </md-toolbar>
 
    
 <style> 
@@ -14,15 +24,14 @@ z-index: 120000}
 
 </style>
     
-    <form   novalidate id="new-teacher-form" class="md-shadow-bottom-z-1" ng-if="canDisplayForm()"
-                  ng-submit="onSubmit(teacherForm)" name="teacherForm">
+    <form  ng-submit=""  name="classForm" novalidate>
         <div class="well" style="margin-left: -30px; margin-right: -30px;" ng-init="$ctrl.init()">
 
             <div class="row">
                 <div class='col-lg-2'>
                     <button  type="button" class="btn btn-danger" ng-click="$ctrl.updateClasse()" ng-show="$ctrl.isUpdate" ng-disabled="classForm.$invalid">Modifier</button>
                     <button  type="button" ng-click="$ctrl.addClasse()" class="btn btn-danger" ng-show="!$ctrl.isUpdate" ng-disabled="classForm.$invalid">Enrégistrer</button>
-                    <span> <a href="#!/teacher-list">Retour</a></span>
+                    <span> <a href="#!/classes">Retour</a></span>
                 </div>
                 <div class="col-lg-4">
                     
@@ -56,37 +65,8 @@ z-index: 120000}
                     <md-progress-circular md-mode="indeterminate"></md-progress-circular>
                 </div>
             </div>
-  
-                
-                <div layout-gt-sm="row">
-
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label for="teacher_civilitys">Civilité</label>
-                        <md-select ng-model="teacher.civility" id="teacher_civility" name="teacher_civility" required>
-                            <md-option value="Pr">
-                                Pr
-                            </md-option>
-                            <md-option value="Dr">
-                                Dr
-                            </md-option>
-                            <md-option value="Ing">
-                                Ing
-                            </md-option>  
-                            <md-option value="Mr">
-                                Mr
-                            </md-option>  
-                            <md-option value="Mme">
-                                Mme
-                            </md-option>                            
-                        </md-select>
-                        <div ng-messages="teacherForm.teacher_civility.$error" multiple md-auto-hide="true">
-                            <div ng-message="required">Préciser la vivilité de l'enseignant !</div>
-                        </div>
-                    </md-input-container>
-                    <md-input-container class="md-block" flex-gt-sm>
-
-                    </md-input-container>                    
-                </div>                 
+            <form novalidate id="new-teacher-form" class="md-shadow-bottom-z-1" ng-if="canDisplayForm()"
+                  ng-submit="onSubmit(teacherForm)" name="teacherForm">
                 <md-input-container class="md-block">
                     <label for="names">Noms & Prenoms</label>
                     <input id="names" name="names" ng-model="teacher.names" required maxlength="60">
@@ -118,36 +98,36 @@ z-index: 120000}
                 <div layout-gt-sm="row">
                     <md-input-container class="md-block" flex-gt-sm>
                         <label for="country_id">Pays de résidence</label>
-                        <md-select ng-model="teacher.living_country" ng-model-options="{trackBy: '$value.id'}" id="living_country"  name="living_country" required>
-                            <md-option ng-repeat="country in countries" ng-value="{{country}}">
+                        <md-select ng-model="teacher.living_country_id" id="living_country_id" name="living_country_id" required>
+                            <md-option ng-repeat="country in countries" value="{{country.name}}">
                                 {{country.name}}
                             </md-option>
                         </md-select>
-                        <div ng-messages="teacherForm.living_country.$error" multiple md-auto-hide="true">
-                            <div ng-message="required">Pays de residence  requis !</div>
+                        <div ng-messages="teacherForm.country_id.$error" multiple md-auto-hide="true">
+                            <div ng-message="required">La nationalite est requise !</div>
                         </div>
                     </md-input-container>
                     <md-input-container class="md-block" flex-gt-sm>
-                        <label for="city_id">Ville  de résidence</label>
-                        <md-select ng-model="teacher.living_city" ng-model-options="{trackBy: '$value.id'}"  id="living_city" name="living_city" md-on-open="getCities(teacher.living_country.id)" required>
-                            <md-option ng-repeat="city in cities"  ng-value="city ">
+                        <label for="country_id">Ville  de résidence</label>
+                        <md-select ng-model="teacher.living_city_id" id="living_city_id" name="living_city_id" md-on-open="getCities(teacher.living_country_id)" required>
+                            <md-option ng-repeat="city in cities" value="{{city.name}}">
                                 {{city.name}}
                             </md-option>
                         </md-select>
-                        <div ng-messages="teacherForm.living_city.$error" multiple md-auto-hide="true">
-                            <div ng-message="required">La ville de résidence est requise !</div>
+                        <div ng-messages="teacherForm.country_id.$error" multiple md-auto-hide="true">
+                            <div ng-message="required">La nationalite est requise !</div>
                         </div>
                     </md-input-container>
                 </div>
                 <div layout-gt-sm="row">
                     <md-input-container class="md-block" flex-gt-sm>
-                        <label for="nationality">Nationalite</label>
-                        <md-select ng-model="teacher.nationality" id="nationality" name="nationality" required>
+                        <label for="country_id">Nationalite</label>
+                        <md-select ng-model="teacher.country_id" id="country_id" name="country_id" required>
                             <md-option ng-repeat="country in countries" value="{{country.name}}">
                                 {{country.name}}
                             </md-option>
                         </md-select>
-                        <div ng-messages="teacherForm.nationality.$error" multiple md-auto-hide="true">
+                        <div ng-messages="teacherForm.country_id.$error" multiple md-auto-hide="true">
                             <div ng-message="required">La nationalite est requise !</div>
                         </div>
                     </md-input-container>
@@ -180,15 +160,6 @@ z-index: 120000}
                             <div ng-message="md-maxlength">Le numero de telephone doit avoir au plus 25 caracteres</div>
                         </div>
                     </md-input-container>
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label for="contactInEmergency">Contact en cas d'urgence</label>
-                        <input ng-model="teacher.contactInEmergency" id="phone" name="contactInEmergency" type="tel" minlength="9" maxlength="25" required/>
-                        <div ng-messages="teacherForm.contactInEmergency.$error" multiple md-auto-hide="true">
-                            <div ng-message="required">Le numero de telephone est requis !</div>
-                            <div ng-message="md-minlength">Le numero de telephone doit avoir au moins 9 caracteres</div>
-                            <div ng-message="md-maxlength">Le numero de telephone doit avoir au plus 25 caracteres</div>
-                        </div>
-                    </md-input-container>                    
                     <md-input-container class="md-block" flex-gt-sm>
                         <label for="email">Email</label>
                         <input ng-model="teacher.email" id="email" name="email" type="email" maxlength="100" required/>
@@ -254,35 +225,7 @@ z-index: 120000}
                             <div ng-message="required">L'etablissement sollicite est requis !</div>
                         </div>
                     </md-input-container>
-
                 </div>
-                <div layout-gt-sm="row">
-
-                    <md-input-container class="md-block" flex-gt-sm>
-                        <label for="teacher_type">Type d'enseignant</label>
-                        <md-select ng-model="teacher.type" id="teacher_type" name="teacher_type" required>
-                            <md-option value="PERMANENT">
-                                PERMANANT
-                            </md-option>
-                            <md-option value="VISITING">
-                                VACATAIRE
-                            </md-option>
-                            <md-option value="MISSIONARY">
-                                MISSIONNAIRE
-                            </md-option>  
-                           
-                        </md-select>
-                        <div ng-messages="teacherForm.marital_status.$error" multiple md-auto-hide="true">
-                            <div ng-message="required">L'etat civil est requis !</div>
-                        </div>
-                    </md-input-container>
-                    <md-input-container class="md-block" flex-gt-sm>
-
-                    </md-input-container>                    
-                </div>                
-                <md-input-container class="md-block" flex-gt-sm>
-                    <md-checkbox class='md-primary' ng-model="teacher.status"  name='teacher_status' ng-checked="(teacher.status)"aria-label="Actif ?" md-no-ink > En veille?</md-checkbox>
-                </md-input-container>                
 
                 <div layout-gt-sm="row">
                     <div class="identity-documents-container" flex-gt-sm>
@@ -292,7 +235,7 @@ z-index: 120000}
                             <md-radio-button value="passport">Passeport</md-radio-button>
                         </md-radio-group>
                         <div class="identity-document">
-                            <div class="result-preview"  ng-if="identityDocumentFile">
+                            <div class="result-preview" ng-if="!!identityDocumentFile">
                                 <div class="file-preview">
                                     <img src="assets/images/pdf.png" alt=""/>
                                 </div>
@@ -307,7 +250,7 @@ z-index: 120000}
                                 <label for="identity_document_input">
                                     <img src="assets/images/id_783886.png" alt=""/>
                                 </label>
-                                <input ng-model="showIdentityDocumentFile" onchange="angular.element(this).scope().onUploadFile(
+                                <input onchange="angular.element(this).scope().onUploadFile(
                                     this, angular.element(this).scope().handleIdentityDocumentUploadedFile)"
                                        id="identity_document_input" type="file"
                                        ng-attr-accept="{{pdfMimeType}}"/>

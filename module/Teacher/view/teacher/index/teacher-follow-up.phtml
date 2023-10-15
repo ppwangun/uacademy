@@ -202,14 +202,25 @@
                                     </div>
                                 </div>
                                 <div id="teaching_unit_details" ng-if="selectedTeachingUnitId && hasSucceededLoadingCurrentProgressionStats()">
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordered" style="font-size:0.8em; background-color: #dfe4ea; color: #0c2461;">
                                         <tr>
                                             <th colspan="6" scope="row" class="text-align-center uppercase">Cours magistraux</th>
                                         </tr>
                                         <tr>
-                                            <th scope="col">Prevu</th>
-                                            <th scope="col">Passe</th>
-                                            <th colspan="4" scope="col">Progression</th>
+                                            <th colspan="2">CM</th>
+                                            <th colspan="2">TD</th>
+                                            <th colspan="2">TP</th>
+                                            <th rowspan="2" colspan="4" scope="col">Progression</th>
+
+                                        </tr>                                        
+                                        <tr>
+                                            <th scope="col">Prév</th>
+                                            <th scope="col">Réal</th>
+                                            <th scope="col">Prév</th>
+                                            <th scope="col">Réal</th>
+                                            <th scope="col">Prév</th>
+                                            <th scope="col">Réal</th>                                            
+                                            
                                         </tr>
                                         <tr>
                                             <td>{{currentProgressionStats.cm.total}}h</td>
@@ -222,47 +233,9 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="progression-divider" colspan="6"></td>
+                                            <td class="progression-divider" colspan="8"></td>
                                         </tr>
-                                        <tr>
-                                            <th colspan="6" scope="row" class="text-align-center uppercase">Trauvaux diriges</th>
-                                        </tr>
-                                        <tr>
-                                            <th scope="col">Prevu</th>
-                                            <th scope="col">Passe</th>
-                                            <th colspan="4" scope="col">Progression</th>
-                                        </tr>
-                                        <tr>
-                                            <td>{{currentProgressionStats.td.total}}h</td>
-                                            <td>{{currentProgressionStats.td.progress}}h</td>
-                                            <td colspan="4">
-                                                <div class="teaching-unit-progression">
-                                                    <div class="teaching-unit-progression-bar" ng-style="{'width': (getRoundedPercentage(currentProgressionStats.td.percentage))+'%'}"></div>
-                                                </div>
-                                                <span class="teaching-unit-progression-value">{{getRoundedPercentage(currentProgressionStats.td.percentage)}}%</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="progression-divider" colspan="6"></td>
-                                        </tr>
-                                        <tr>
-                                            <th colspan="6" scope="row" class="text-align-center uppercase">Travaux pratiques</th>
-                                        </tr>
-                                        <tr>
-                                            <th scope="col">Prevu</th>
-                                            <th scope="col">Passe</th>
-                                            <th colspan="4" scope="col">Progression</th>
-                                        </tr>
-                                        <tr>
-                                            <td>{{currentProgressionStats.tp.total}}h</td>
-                                            <td>{{currentProgressionStats.tp.progress}}h</td>
-                                            <td colspan="4">
-                                                <div class="teaching-unit-progression">
-                                                    <div class="teaching-unit-progression-bar" ng-style="{'width': getRoundedPercentage(currentProgressionStats.tp.percentage)+'%'}"></div>
-                                                </div>
-                                                <span class="teaching-unit-progression-value">{{getRoundedPercentage(currentProgressionStats.tp.percentage)}}%</span>
-                                            </td>
-                                        </tr>
+
                                     </table>
                                     <div class="text-align-center">
                                         <md-button style="width: -webkit-fill-available"

@@ -66,10 +66,10 @@ class Teacher extends \Application\Entity\Teacher implements \Doctrine\ORM\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'name', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'surname', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'birthDate', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'maritalStatus', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'phoneNumber', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'email', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'highDegree', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'speciality', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'currentEmployer', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'livingCity', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'livingCountry', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'nationality', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'academicRanck', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'faculty'];
+            return ['__isInitialized__', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'civility', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'name', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'surname', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'birthDate', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'maritalStatus', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'phoneNumber', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'email', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'highDegree', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'speciality', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'currentEmployer', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'livingCity', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'livingCountry', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'nationality', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'contactInEmergency', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'status', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'idendityDocument', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'coverLetter', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'resume', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'highestDegree', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'actOfAppointment', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'academicRanck', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'faculty'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'name', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'surname', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'birthDate', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'maritalStatus', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'phoneNumber', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'email', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'highDegree', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'speciality', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'currentEmployer', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'livingCity', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'livingCountry', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'nationality', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'academicRanck', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'faculty'];
+        return ['__isInitialized__', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'civility', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'name', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'surname', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'birthDate', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'maritalStatus', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'phoneNumber', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'email', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'highDegree', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'speciality', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'currentEmployer', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'livingCity', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'livingCountry', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'nationality', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'contactInEmergency', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'type', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'status', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'idendityDocument', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'coverLetter', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'resume', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'highestDegree', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'actOfAppointment', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'academicRanck', '' . "\0" . 'Application\\Entity\\Teacher' . "\0" . 'faculty'];
     }
 
     /**
@@ -189,6 +189,28 @@ class Teacher extends \Application\Entity\Teacher implements \Doctrine\ORM\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', []);
 
         return parent::getId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCivility($civility = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCivility', [$civility]);
+
+        return parent::setCivility($civility);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCivility()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCivility', []);
+
+        return parent::getCivility();
     }
 
     /**
@@ -453,6 +475,182 @@ class Teacher extends \Application\Entity\Teacher implements \Doctrine\ORM\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getNationality', []);
 
         return parent::getNationality();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setContactInEmergency($contactInEmergency = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setContactInEmergency', [$contactInEmergency]);
+
+        return parent::setContactInEmergency($contactInEmergency);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getContactInEmergency()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getContactInEmergency', []);
+
+        return parent::getContactInEmergency();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setType($type = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setType', [$type]);
+
+        return parent::setType($type);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getType()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getType', []);
+
+        return parent::getType();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setStatus($status = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setStatus', [$status]);
+
+        return parent::setStatus($status);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getStatus()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStatus', []);
+
+        return parent::getStatus();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setIdendityDocument($idendityDocument = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIdendityDocument', [$idendityDocument]);
+
+        return parent::setIdendityDocument($idendityDocument);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIdendityDocument()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIdendityDocument', []);
+
+        return parent::getIdendityDocument();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setCoverLetter($coverLetter = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCoverLetter', [$coverLetter]);
+
+        return parent::setCoverLetter($coverLetter);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCoverLetter()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getCoverLetter', []);
+
+        return parent::getCoverLetter();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setResume($resume = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setResume', [$resume]);
+
+        return parent::setResume($resume);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getResume()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getResume', []);
+
+        return parent::getResume();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setHighestDegree($highestDegree = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setHighestDegree', [$highestDegree]);
+
+        return parent::setHighestDegree($highestDegree);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getHighestDegree()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getHighestDegree', []);
+
+        return parent::getHighestDegree();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setActOfAppointment($actOfAppointment = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setActOfAppointment', [$actOfAppointment]);
+
+        return parent::setActOfAppointment($actOfAppointment);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getActOfAppointment()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getActOfAppointment', []);
+
+        return parent::getActOfAppointment();
     }
 
     /**

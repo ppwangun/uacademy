@@ -232,11 +232,14 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
           }).when('/newgroup/:group_id', {
               template: '<new-group></new-group>'
               
-          }).when("/new-teacher", {
+          }).when("/teacher-list", {
+            template: "<manage-teacher></manage-teacher>",
+            
+        }).when("/new-teacher/:id", {
             template: "<new-teacher></new-teacher>",
             
-        }).when("/teacher-list", {
-            template: "<teacher-details></teacher-details>",
+        }).when("/teacher-follow-up", {
+            template: "<teacher-follow-up></teacher-follow-up>",
             
         }).when("/academicRankConfig", {
             template: "<acad-rank-config></acad-rank-config>",
@@ -285,4 +288,4 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
 
             return sum;
         };
-    });;;
+    });

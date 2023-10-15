@@ -615,7 +615,7 @@ $ctrl.deliberation = function(ev){
          
             $scope.saveDelib = function(ueID,subjectID,semID,classeID)
             {
-                var  dataString = {ueID: ueID,subjectId:subjectID,semID:semID,classeID:classeID},
+                var  dataString = {ueID: ueID,subjectId:subjectID,semID:semID,classeID:classeID,isModularComputation:$ctrl.isModularComputation},
                 config = {
                 params: dataString,
                 headers : {'Accept' : 'application/json; charset=utf-8'}

@@ -1,6 +1,6 @@
 angular.module('teachingunit')
-        .component('teacherDetails',{
-            templateUrl: 'teacherDetails',
+        .component('teacherFollowUp',{
+            templateUrl: 'teacherFollowUp',
             controller: teacherListController 
 });
 
@@ -113,7 +113,13 @@ function teacherListController($scope, $mdDialog, $http, $timeout){
 
     $scope.loadCurrentProgressionStats = function () {
         $scope.hasLoadedCurrentProgressionStats = null;
-        $http.get(`teaching-units/${$scope.selectedTeachingUnitId}/progression-stats`).then(function (response) {
+        data = {teachingUnitId: $scope.selectedTeachingUnitId}
+        data = $.param(data)
+        var config = {
+            //params: {id: $scope.teacherId,subjects : JSON.stringify(data)},
+            headers : {'Content-Type' : "application/x-www-form-urlencoded;charset=utf-8;"}
+        };        
+        $http.post(`teacherFollowUp`,data,config).then(function (response) {
             console.log(response)
             $scope.currentProgressionStats = response.data;
             $scope.hasLoadedCurrentProgressionStats = true;
@@ -164,7 +170,7 @@ function teacherListController($scope, $mdDialog, $http, $timeout){
     $scope.openNewProgressionDialog = function (ev) {
         $mdDialog.show({
             controller: NewTeachingUnitProgressionController,
-            templateUrl: '/app/components/new-teaching-unit-progression/new-teaching-unit-progression.html',
+            templateUrl: 'js/app/teachingunit/new-teaching-unit-progression.html',
             parent: angular.element(document.body),
             targetEvent: ev,
             clickOutsideToClose: true,
@@ -212,7 +218,7 @@ function teacherListController($scope, $mdDialog, $http, $timeout){
     $scope.openProgressionsTimelineDialog = function (ev, teachingUnit) {
         $mdDialog.show({
             controller: ProgressionsTimelineController,
-            templateUrl: '/app/components/progressions-timeline/progressions-timeline.html',
+            templateUrl: 'js/app/teachingunit/progressions-timeline.html',
             parent: angular.element(document.body),
             targetEvent: ev,
             clickOutsideToClose: false,

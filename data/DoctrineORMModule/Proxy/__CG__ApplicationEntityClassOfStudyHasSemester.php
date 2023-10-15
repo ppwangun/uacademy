@@ -66,10 +66,10 @@ class ClassOfStudyHasSemester extends \Application\Entity\ClassOfStudyHasSemeste
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'credits', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'hoursVolume', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectCredits', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectWeight', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'cmHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'tpHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'tdHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectCmHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectTdHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectTpHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'status', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'isReapeatedYearSubject', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'isPreviousYearSubject', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'markCalculationStatus', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'moduleConsolidationStatus', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'classOfStudy', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'semester', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subject', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'teachingUnit'];
+            return ['__isInitialized__', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'credits', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'hoursVolume', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectWeight', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'cmHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'tpHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'tdHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectCmHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectTdHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectTpHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'status', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'markCalculationStatus', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'isPreviousYearSubject', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'isRepeatedSubject', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'moduleConsolidationStatus', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectCredits', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'classOfStudy', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'contract', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'semester', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subject', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'teacher', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'teachingUnit'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'credits', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'hoursVolume', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectCredits', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectWeight', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'cmHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'tpHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'tdHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectCmHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectTdHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectTpHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'status', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'isReapeatedYearSubject', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'isPreviousYearSubject', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'markCalculationStatus', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'moduleConsolidationStatus', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'classOfStudy', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'semester', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subject', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'teachingUnit'];
+        return ['__isInitialized__', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'credits', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'hoursVolume', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectWeight', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'cmHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'tpHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'tdHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectCmHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectTdHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectTpHours', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'status', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'markCalculationStatus', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'isPreviousYearSubject', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'isRepeatedSubject', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'moduleConsolidationStatus', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subjectCredits', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'classOfStudy', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'contract', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'semester', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'subject', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'teacher', '' . "\0" . 'Application\\Entity\\ClassOfStudyHasSemester' . "\0" . 'teachingUnit'];
     }
 
     /**
@@ -194,7 +194,7 @@ class ClassOfStudyHasSemester extends \Application\Entity\ClassOfStudyHasSemeste
     /**
      * {@inheritDoc}
      */
-    public function setCredits($credits)
+    public function setCredits($credits = NULL)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCredits', [$credits]);
@@ -216,7 +216,7 @@ class ClassOfStudyHasSemester extends \Application\Entity\ClassOfStudyHasSemeste
     /**
      * {@inheritDoc}
      */
-    public function setHoursVolume($hoursVolume)
+    public function setHoursVolume($hoursVolume = NULL)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setHoursVolume', [$hoursVolume]);
@@ -238,34 +238,12 @@ class ClassOfStudyHasSemester extends \Application\Entity\ClassOfStudyHasSemeste
     /**
      * {@inheritDoc}
      */
-    public function setSubjectCredits($subjectCredits)
+    public function setSubjectWeight($subjectWeight = NULL)
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSubjectCredits', [$subjectCredits]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSubjectWeight', [$subjectWeight]);
 
-        return parent::setSubjectCredits($subjectCredits);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getSubjectCredits()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSubjectCredits', []);
-
-        return parent::getSubjectCredits();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setSubjectWeight($weight)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSubjectWeight', [$weight]);
-
-        return parent::setSubjectWeight($weight);
+        return parent::setSubjectWeight($subjectWeight);
     }
 
     /**
@@ -282,7 +260,7 @@ class ClassOfStudyHasSemester extends \Application\Entity\ClassOfStudyHasSemeste
     /**
      * {@inheritDoc}
      */
-    public function setSubjectHours($subjectHours)
+    public function setSubjectHours($subjectHours = NULL)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSubjectHours', [$subjectHours]);
@@ -304,7 +282,7 @@ class ClassOfStudyHasSemester extends \Application\Entity\ClassOfStudyHasSemeste
     /**
      * {@inheritDoc}
      */
-    public function setCmHours($cmHours)
+    public function setCmHours($cmHours = NULL)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setCmHours', [$cmHours]);
@@ -326,7 +304,7 @@ class ClassOfStudyHasSemester extends \Application\Entity\ClassOfStudyHasSemeste
     /**
      * {@inheritDoc}
      */
-    public function setTpHours($tpHours)
+    public function setTpHours($tpHours = NULL)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTpHours', [$tpHours]);
@@ -348,7 +326,7 @@ class ClassOfStudyHasSemester extends \Application\Entity\ClassOfStudyHasSemeste
     /**
      * {@inheritDoc}
      */
-    public function setTdHours($tdHours)
+    public function setTdHours($tdHours = NULL)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTdHours', [$tdHours]);
@@ -370,7 +348,7 @@ class ClassOfStudyHasSemester extends \Application\Entity\ClassOfStudyHasSemeste
     /**
      * {@inheritDoc}
      */
-    public function setSubjectCmHours($subjectCmHours)
+    public function setSubjectCmHours($subjectCmHours = NULL)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSubjectCmHours', [$subjectCmHours]);
@@ -392,7 +370,7 @@ class ClassOfStudyHasSemester extends \Application\Entity\ClassOfStudyHasSemeste
     /**
      * {@inheritDoc}
      */
-    public function setSubjectTdHours($subjectTdHours)
+    public function setSubjectTdHours($subjectTdHours = NULL)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSubjectTdHours', [$subjectTdHours]);
@@ -414,7 +392,7 @@ class ClassOfStudyHasSemester extends \Application\Entity\ClassOfStudyHasSemeste
     /**
      * {@inheritDoc}
      */
-    public function setSubjectTpHours($subjectTpHours)
+    public function setSubjectTpHours($subjectTpHours = NULL)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSubjectTpHours', [$subjectTpHours]);
@@ -436,7 +414,7 @@ class ClassOfStudyHasSemester extends \Application\Entity\ClassOfStudyHasSemeste
     /**
      * {@inheritDoc}
      */
-    public function setStatus($status)
+    public function setStatus($status = NULL)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setStatus', [$status]);
@@ -453,50 +431,6 @@ class ClassOfStudyHasSemester extends \Application\Entity\ClassOfStudyHasSemeste
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getStatus', []);
 
         return parent::getStatus();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setIsPreviousYearSubject($isPreviousYearSubject)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIsPreviousYearSubject', [$isPreviousYearSubject]);
-
-        return parent::setIsPreviousYearSubject($isPreviousYearSubject);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getisPreviousYearSubject()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getisPreviousYearSubject', []);
-
-        return parent::getisPreviousYearSubject();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setIsRepeatedSubject($isRepeatedSubject)
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIsRepeatedSubject', [$isRepeatedSubject]);
-
-        return parent::setIsRepeatedSubject($isRepeatedSubject);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getisRepeatedSubject()
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getisRepeatedSubject', []);
-
-        return parent::getisRepeatedSubject();
     }
 
     /**
@@ -524,7 +458,51 @@ class ClassOfStudyHasSemester extends \Application\Entity\ClassOfStudyHasSemeste
     /**
      * {@inheritDoc}
      */
-    public function setModuleConsolidationStatus($moduleConsolidationStatus)
+    public function setIsPreviousYearSubject($isPreviousYearSubject = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIsPreviousYearSubject', [$isPreviousYearSubject]);
+
+        return parent::setIsPreviousYearSubject($isPreviousYearSubject);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIsPreviousYearSubject()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIsPreviousYearSubject', []);
+
+        return parent::getIsPreviousYearSubject();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setIsRepeatedSubject($isRepeatedSubject = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIsRepeatedSubject', [$isRepeatedSubject]);
+
+        return parent::setIsRepeatedSubject($isRepeatedSubject);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getIsRepeatedSubject()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getIsRepeatedSubject', []);
+
+        return parent::getIsRepeatedSubject();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setModuleConsolidationStatus($moduleConsolidationStatus = NULL)
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setModuleConsolidationStatus', [$moduleConsolidationStatus]);
@@ -541,6 +519,28 @@ class ClassOfStudyHasSemester extends \Application\Entity\ClassOfStudyHasSemeste
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getModuleConsolidationStatus', []);
 
         return parent::getModuleConsolidationStatus();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setSubjectCredits($subjectCredits = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setSubjectCredits', [$subjectCredits]);
+
+        return parent::setSubjectCredits($subjectCredits);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getSubjectCredits()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSubjectCredits', []);
+
+        return parent::getSubjectCredits();
     }
 
     /**
@@ -563,6 +563,28 @@ class ClassOfStudyHasSemester extends \Application\Entity\ClassOfStudyHasSemeste
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getClassOfStudy', []);
 
         return parent::getClassOfStudy();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setContract(\Application\Entity\Contract $contract = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setContract', [$contract]);
+
+        return parent::setContract($contract);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getContract()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getContract', []);
+
+        return parent::getContract();
     }
 
     /**
@@ -607,6 +629,28 @@ class ClassOfStudyHasSemester extends \Application\Entity\ClassOfStudyHasSemeste
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getSubject', []);
 
         return parent::getSubject();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTeacher(\Application\Entity\Teacher $teacher = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTeacher', [$teacher]);
+
+        return parent::setTeacher($teacher);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTeacher()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTeacher', []);
+
+        return parent::getTeacher();
     }
 
     /**

@@ -1,13 +1,16 @@
 <?php
+namespace Application\Entity;
 
-
+use Application\Entity\ClassOfStudyHasSemester;
+use Application\Entity\Contract;
+use Application\Entity\TeacherPaymentBill;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ContractFollowUp
  *
- * @ORM\Table(name="contract_follow_up", indexes={@ORM\Index(name="fk_contract_follow_up_contract1_idx", columns={"contract_id"}), @ORM\Index(name="fk_contract_follow_up_teacher_payment_bill1_idx", columns={"teacher_payment_bill_id"})})
+ * @ORM\Table(name="contract_follow_up", indexes={@ORM\Index(name="fk_contract_follow_up_class_of_study_has_semester1_idx", columns={"class_of_study_has_semester_id"}), @ORM\Index(name="fk_contract_follow_up_contract1_idx", columns={"contract_id"}), @ORM\Index(name="fk_contract_follow_up_teacher_payment_bill1_idx", columns={"teacher_payment_bill_id"})})
  * @ORM\Entity
  */
 class ContractFollowUp
@@ -31,27 +34,6 @@ class ContractFollowUp
     /**
      * @var float|null
      *
-     * @ORM\Column(name="cm_hours", type="float", precision=10, scale=0, nullable=true)
-     */
-    private $cmHours;
-
-    /**
-     * @var float|null
-     *
-     * @ORM\Column(name="td_hours", type="float", precision=10, scale=0, nullable=true)
-     */
-    private $tdHours;
-
-    /**
-     * @var float|null
-     *
-     * @ORM\Column(name="tp_hours", type="float", precision=10, scale=0, nullable=true)
-     */
-    private $tpHours;
-
-    /**
-     * @var float|null
-     *
      * @ORM\Column(name="hr_volume", type="float", precision=10, scale=0, nullable=true)
      */
     private $hrVolume;
@@ -71,7 +53,52 @@ class ContractFollowUp
     private $paymentStatus = '0';
 
     /**
-     * @var \Contract
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="start_time", type="time", nullable=true)
+     */
+    private $startTime;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="end_time", type="time", nullable=true)
+     */
+    private $endTime;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="description", type="string", length=500, nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="lecture_type", type="string", length=45, nullable=true)
+     */
+    private $lectureType;
+
+    /**
+     * @var float|null
+     *
+     * @ORM\Column(name="toal_time", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $toalTime;
+
+    /**
+     * @var ClassOfStudyHasSemester
+     *
+     * @ORM\ManyToOne(targetEntity="ClassOfStudyHasSemester")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="class_of_study_has_semester_id", referencedColumnName="id")
+     * })
+     */
+    private $classOfStudyHasSemester;
+
+    /**
+     * @var Contract
      *
      * @ORM\ManyToOne(targetEntity="Contract")
      * @ORM\JoinColumns({
@@ -81,7 +108,7 @@ class ContractFollowUp
     private $contract;
 
     /**
-     * @var \TeacherPaymentBill
+     * @var TeacherPaymentBill
      *
      * @ORM\ManyToOne(targetEntity="TeacherPaymentBill")
      * @ORM\JoinColumns({
@@ -124,78 +151,6 @@ class ContractFollowUp
     public function getDate()
     {
         return $this->date;
-    }
-
-    /**
-     * Set cmHours.
-     *
-     * @param float|null $cmHours
-     *
-     * @return ContractFollowUp
-     */
-    public function setCmHours($cmHours = null)
-    {
-        $this->cmHours = $cmHours;
-    
-        return $this;
-    }
-
-    /**
-     * Get cmHours.
-     *
-     * @return float|null
-     */
-    public function getCmHours()
-    {
-        return $this->cmHours;
-    }
-
-    /**
-     * Set tdHours.
-     *
-     * @param float|null $tdHours
-     *
-     * @return ContractFollowUp
-     */
-    public function setTdHours($tdHours = null)
-    {
-        $this->tdHours = $tdHours;
-    
-        return $this;
-    }
-
-    /**
-     * Get tdHours.
-     *
-     * @return float|null
-     */
-    public function getTdHours()
-    {
-        return $this->tdHours;
-    }
-
-    /**
-     * Set tpHours.
-     *
-     * @param float|null $tpHours
-     *
-     * @return ContractFollowUp
-     */
-    public function setTpHours($tpHours = null)
-    {
-        $this->tpHours = $tpHours;
-    
-        return $this;
-    }
-
-    /**
-     * Get tpHours.
-     *
-     * @return float|null
-     */
-    public function getTpHours()
-    {
-        return $this->tpHours;
     }
 
     /**
@@ -271,13 +226,157 @@ class ContractFollowUp
     }
 
     /**
-     * Set contract.
+     * Set startTime.
      *
-     * @param \Contract|null $contract
+     * @param \DateTime|null $startTime
      *
      * @return ContractFollowUp
      */
-    public function setContract(\Contract $contract = null)
+    public function setStartTime($startTime = null)
+    {
+        $this->startTime = $startTime;
+    
+        return $this;
+    }
+
+    /**
+     * Get startTime.
+     *
+     * @return \DateTime|null
+     */
+    public function getStartTime()
+    {
+        return $this->startTime;
+    }
+
+    /**
+     * Set endTime.
+     *
+     * @param \DateTime|null $endTime
+     *
+     * @return ContractFollowUp
+     */
+    public function setEndTime($endTime = null)
+    {
+        $this->endTime = $endTime;
+    
+        return $this;
+    }
+
+    /**
+     * Get endTime.
+     *
+     * @return \DateTime|null
+     */
+    public function getEndTime()
+    {
+        return $this->endTime;
+    }
+
+    /**
+     * Set description.
+     *
+     * @param string|null $description
+     *
+     * @return ContractFollowUp
+     */
+    public function setDescription($description = null)
+    {
+        $this->description = $description;
+    
+        return $this;
+    }
+
+    /**
+     * Get description.
+     *
+     * @return string|null
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set lectureType.
+     *
+     * @param string|null $lectureType
+     *
+     * @return ContractFollowUp
+     */
+    public function setLectureType($lectureType = null)
+    {
+        $this->lectureType = $lectureType;
+    
+        return $this;
+    }
+
+    /**
+     * Get lectureType.
+     *
+     * @return string|null
+     */
+    public function getLectureType()
+    {
+        return $this->lectureType;
+    }
+
+    /**
+     * Set toalTime.
+     *
+     * @param float|null $toalTime
+     *
+     * @return ContractFollowUp
+     */
+    public function setToalTime($toalTime = null)
+    {
+        $this->toalTime = $toalTime;
+    
+        return $this;
+    }
+
+    /**
+     * Get toalTime.
+     *
+     * @return float|null
+     */
+    public function getToalTime()
+    {
+        return $this->toalTime;
+    }
+
+    /**
+     * Set classOfStudyHasSemester.
+     *
+     * @param ClassOfStudyHasSemester|null $classOfStudyHasSemester
+     *
+     * @return ContractFollowUp
+     */
+    public function setClassOfStudyHasSemester(ClassOfStudyHasSemester $classOfStudyHasSemester = null)
+    {
+        $this->classOfStudyHasSemester = $classOfStudyHasSemester;
+    
+        return $this;
+    }
+
+    /**
+     * Get classOfStudyHasSemester.
+     *
+     * @return ClassOfStudyHasSemester|null
+     */
+    public function getClassOfStudyHasSemester()
+    {
+        return $this->classOfStudyHasSemester;
+    }
+
+    /**
+     * Set contract.
+     *
+     * @param Contract|null $contract
+     *
+     * @return ContractFollowUp
+     */
+    public function setContract(Contract $contract = null)
     {
         $this->contract = $contract;
     
@@ -287,7 +386,7 @@ class ContractFollowUp
     /**
      * Get contract.
      *
-     * @return \Contract|null
+     * @return Contract|null
      */
     public function getContract()
     {
@@ -297,11 +396,11 @@ class ContractFollowUp
     /**
      * Set teacherPaymentBill.
      *
-     * @param \TeacherPaymentBill|null $teacherPaymentBill
+     * @param TeacherPaymentBill|null $teacherPaymentBill
      *
      * @return ContractFollowUp
      */
-    public function setTeacherPaymentBill(\TeacherPaymentBill $teacherPaymentBill = null)
+    public function setTeacherPaymentBill(TeacherPaymentBill $teacherPaymentBill = null)
     {
         $this->teacherPaymentBill = $teacherPaymentBill;
     
@@ -311,7 +410,7 @@ class ContractFollowUp
     /**
      * Get teacherPaymentBill.
      *
-     * @return \TeacherPaymentBill|null
+     * @return TeacherPaymentBill|null
      */
     public function getTeacherPaymentBill()
     {

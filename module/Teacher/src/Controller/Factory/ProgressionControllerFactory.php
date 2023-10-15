@@ -10,13 +10,13 @@ namespace Teacher\Controller\Factory;
 
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Teacher\Controller\TeacherController;
+use Teacher\Controller\ProgressionController;
 
 /**
  * This is the factory for IndexController. Its purpose is to instantiate the
  * controller.
  */
-class TeacherControllerFactory implements FactoryInterface
+class ProgressionControllerFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, 
                      $requestedName, array $options = null)
@@ -25,7 +25,7 @@ class TeacherControllerFactory implements FactoryInterface
         $sessionContainer = $container->get('LoggedInUser');
         
         // Instantiate the controller and inject dependencies
-        return new TeacherController($entityManager,$sessionContainer);
+        return new ProgressionController($entityManager,$sessionContainer);
     }
 
 }

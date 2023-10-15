@@ -132,26 +132,40 @@ class ClassesController extends AbstractRestfulController
         try
         {
             $message = false;
-            $degrees = $data["degrees"];
+            $degrees = [];
+           //var_dump($data); exit;
+            if(isset($data["degrees"]))
+                $degrees = $data["degrees"];
             $classe= new ClassOfStudy();
             $classe->setName($data['name']);
             $classe->setCode($data['code']);
-            $classe->setIsCoreCurriculum($data["isEndCommonCore"]);
-            $classe->setIsEndOfCoreCurriculum($data["isEndCommonCore"]);
+            if(isset($data["isCommonCore"]))
+                $classe->setIsCoreCurriculum($data["isCommonCore"]);
+            if(isset($data["isEndCommonCore"]))
+                $classe->setIsEndOfCoreCurriculum($data["isEndCommonCore"]);
             $classe->setIsEndCycle($data['isEndCycle']);
             $classe->setIsEndDegreeTraining($data['isEndDegreeTraining']);
             $classe->setStudyLevel($data['studyLevel']);
-            $this->entityManager->persist($classe);
             
-            if(!is_null($data['cycleId']))
+            
+            if(isset($data['cycleId']))
             {
                 $cycle = $this->entityManager->getRepository(TrainingCurriculum::class)->findOneById($data['cycleId']);
                 $classe->setCycle($cycle);
-            }            
-            foreach ($degrees as $key=>$value) 
+            } 
+            if(isset($data['coreDegree']))
+            {
+                $degree =$this->entityManager->getRepository(Degree::class)->find($data['coreDegree']);
+                $classe->setDegree($degree);
+                
+            }
+            $this->entityManager->persist($classe);
+            
+            
+            /*foreach ($degrees as $key=>$value) 
             {
                 $degree =$this->entityManager->getRepository(Degree::class)->find($value); 
-                $cycle = $this->entityManager->getRepository(TrainingCurriculum::class)->findOneBy(["degree"=>$degree,"cycleLevel"=>$cycle->getCycleLevel()]);
+
                 
                 $dhcosh = new DegreeHasClassOfStudy();
                 $dhcosh->setClassOfStudy($classe);
@@ -159,7 +173,7 @@ class ClassesController extends AbstractRestfulController
                 $dhcosh->setTrainingCurriculum($cycle);
                 $this->entityManager->persist($dhcosh); 
                 
-            }
+            }*/
 
             //$degree =$this->entityManager->getRepository(Degree::class)->findOneById($data['degreeId']);
             

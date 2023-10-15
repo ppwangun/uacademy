@@ -1,5 +1,8 @@
 <?php
 
+namespace Application\Entity;
+
+use Application\Entity\Teacher;
 
 
 use Doctrine\ORM\Mapping as ORM;
@@ -50,7 +53,7 @@ class TeacherPaymentBill
     private $paymentStatus;
 
     /**
-     * @var \Teacher
+     * @var Teacher
      *
      * @ORM\ManyToOne(targetEntity="Teacher")
      * @ORM\JoinColumns({
@@ -170,11 +173,11 @@ class TeacherPaymentBill
     /**
      * Set teacher.
      *
-     * @param \Teacher|null $teacher
+     * @param Teacher|null $teacher
      *
      * @return TeacherPaymentBill
      */
-    public function setTeacher(\Teacher $teacher = null)
+    public function setTeacher(Teacher $teacher = null)
     {
         $this->teacher = $teacher;
     
@@ -184,7 +187,7 @@ class TeacherPaymentBill
     /**
      * Get teacher.
      *
-     * @return \Teacher|null
+     * @return Teacher|null
      */
     public function getTeacher()
     {

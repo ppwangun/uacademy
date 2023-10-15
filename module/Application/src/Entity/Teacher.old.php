@@ -5,6 +5,7 @@ use Application\Entity\AcademicRanck;
 use Application\Entity\Faculty;
 
 
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -118,13 +119,6 @@ class Teacher
     /**
      * @var string|null
      *
-     * @ORM\Column(name="contact_in_emergency", type="string", length=45, nullable=true)
-     */
-    private $contactInEmergency;
-
-    /**
-     * @var string|null
-     *
      * @ORM\Column(name="type", type="string", length=45, nullable=true)
      */
     private $type;
@@ -135,41 +129,6 @@ class Teacher
      * @ORM\Column(name="status", type="boolean", nullable=true)
      */
     private $status;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="idendity_document", type="string", length=45, nullable=true)
-     */
-    private $idendityDocument;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="cover_letter", type="string", length=45, nullable=true)
-     */
-    private $coverLetter;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="resume", type="string", length=45, nullable=true)
-     */
-    private $resume;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="highest_degree", type="string", length=45, nullable=true)
-     */
-    private $highestDegree;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="act_of_appointment", type="string", length=45, nullable=true)
-     */
-    private $actOfAppointment;
 
     /**
      * @var AcademicRanck
@@ -516,30 +475,6 @@ class Teacher
     }
 
     /**
-     * Set contactInEmergency.
-     *
-     * @param string|null $contactInEmergency
-     *
-     * @return Teacher
-     */
-    public function setContactInEmergency($contactInEmergency = null)
-    {
-        $this->contactInEmergency = $contactInEmergency;
-    
-        return $this;
-    }
-
-    /**
-     * Get contactInEmergency.
-     *
-     * @return string|null
-     */
-    public function getContactInEmergency()
-    {
-        return $this->contactInEmergency;
-    }
-
-    /**
      * Set type.
      *
      * @param string|null $type
@@ -585,126 +520,6 @@ class Teacher
     public function getStatus()
     {
         return $this->status;
-    }
-
-    /**
-     * Set idendityDocument.
-     *
-     * @param string|null $idendityDocument
-     *
-     * @return Teacher
-     */
-    public function setIdendityDocument($idendityDocument = null)
-    {
-        $this->idendityDocument = $idendityDocument;
-    
-        return $this;
-    }
-
-    /**
-     * Get idendityDocument.
-     *
-     * @return string|null
-     */
-    public function getIdendityDocument()
-    {
-        return $this->idendityDocument;
-    }
-
-    /**
-     * Set coverLetter.
-     *
-     * @param string|null $coverLetter
-     *
-     * @return Teacher
-     */
-    public function setCoverLetter($coverLetter = null)
-    {
-        $this->coverLetter = $coverLetter;
-    
-        return $this;
-    }
-
-    /**
-     * Get coverLetter.
-     *
-     * @return string|null
-     */
-    public function getCoverLetter()
-    {
-        return $this->coverLetter;
-    }
-
-    /**
-     * Set resume.
-     *
-     * @param string|null $resume
-     *
-     * @return Teacher
-     */
-    public function setResume($resume = null)
-    {
-        $this->resume = $resume;
-    
-        return $this;
-    }
-
-    /**
-     * Get resume.
-     *
-     * @return string|null
-     */
-    public function getResume()
-    {
-        return $this->resume;
-    }
-
-    /**
-     * Set highestDegree.
-     *
-     * @param string|null $highestDegree
-     *
-     * @return Teacher
-     */
-    public function setHighestDegree($highestDegree = null)
-    {
-        $this->highestDegree = $highestDegree;
-    
-        return $this;
-    }
-
-    /**
-     * Get highestDegree.
-     *
-     * @return string|null
-     */
-    public function getHighestDegree()
-    {
-        return $this->highestDegree;
-    }
-
-    /**
-     * Set actOfAppointment.
-     *
-     * @param string|null $actOfAppointment
-     *
-     * @return Teacher
-     */
-    public function setActOfAppointment($actOfAppointment = null)
-    {
-        $this->actOfAppointment = $actOfAppointment;
-    
-        return $this;
-    }
-
-    /**
-     * Get actOfAppointment.
-     *
-     * @return string|null
-     */
-    public function getActOfAppointment()
-    {
-        return $this->actOfAppointment;
     }
 
     /**

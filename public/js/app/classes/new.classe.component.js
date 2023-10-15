@@ -18,7 +18,7 @@ function newclassesCtrl($timeout,$http,$scope,$location,$mdDialog,$routeParams,t
     $ctrl.selectedDegrees = [];
     $ctrl.selectedSem= null;
     $ctrl.isUpdate = false;
-    $ctrl.classe = {code:'',name:'',studyLevel: '',degreeId:'',cycleId: null,isCommnCore:false,isEndCycle:0,isEndDegreeTraining:0,isEndCommonCOre:0};
+    $ctrl.classe = {code:'',name:'',studyLevel: '',degreeId:'',cycleId: null,isCommonCore:false,isEndCycle:0,isEndDegreeTraining:0,isEndCommonCOre:0};
     $ctrl.cycle = null;
     $ctrl.level = null;
     $ctrl.isCycleRequired= false;
@@ -168,7 +168,7 @@ function newclassesCtrl($timeout,$http,$scope,$location,$mdDialog,$routeParams,t
      function selectedItemChange(item) {
          if(item)
          {
-             if(!$ctrl.commonCore) $ctrl.selectedDegrees[0]  = item;
+             if(!$ctrl.classe.isCommonCore){ $ctrl.selectedDegrees[0]  = item; $ctrl.classe.coreDegree = item.id;}
         var data={id:item.id}
         var config = {
         params: data,
@@ -209,7 +209,7 @@ function newclassesCtrl($timeout,$http,$scope,$location,$mdDialog,$routeParams,t
      
       $timeout(
               $http.post('classes',$ctrl.classe).then(function(){
-              // $location.path("/classes") ;  
+               $location.path("/classes") ;  
               }),500);
       
   };  

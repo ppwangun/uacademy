@@ -42,8 +42,8 @@ z-index: 120000}
     <div layout='row' style="padding-top: 25px;" ng-show="$ctrl.classe.isCommonCore">
         <md-input-container class="md-block" flex='100' >
         <label>Choisir une formation de tronc commun:</label>          
-            <md-select  name="cycle" placeholder="Choisir le cycle de formation" ng-model="$ctrl.classe.cycleId"  md-no-asterisk  ng-required='$ctrl.isCycleRequired'>
-                <md-option ng-value="cycle.id" ng-repeat="cycle in $ctrl.troncCommuns">{{cycle.name}}</md-option>
+            <md-select  name="cycle" placeholder="Choisir le cycle de formation" ng-model="$ctrl.classe.coreDegree"  md-no-asterisk  ng-required='$ctrl.classe.isCommonCore'>
+                <md-option ng-value="degree.id" ng-repeat="degree in $ctrl.troncCommuns">{{degree.name}}</md-option>
             </md-select>
                   <div ng-messages="classForm.cycle.$error">
                       <div ng-message="required">Ce champ est obligatoire</div>

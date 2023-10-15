@@ -17,10 +17,13 @@ use Zend\Hydrator\Reflection as ReflectionHydrator;
 use Application\Entity\AcademicRanck;
 use Application\Entity\Faculty;
 use Application\Entity\Teacher;
+
 use Application\Entity\FileDocument;
+use Application\Entity\ContractFollowUp;
+use Application\Entity\ClassOfStudyHasSemester;
 
 
-class TeacherController extends AbstractRestfulController
+class ProgressionController extends AbstractRestfulController
 {
     private $entityManager;
     private $sessionContainer;
@@ -35,41 +38,32 @@ class TeacherController extends AbstractRestfulController
  
     
     public function get($id)
-    {        
-        
-        if(is_numeric($id))
-        {
+    {   
+  
+             $coshs= $this->entityManager->getRepository(ClassOfStudyHasSemester::class)->find($id);
             
-            $teacher = $this->entityManager->getRepository(Teacher::class)->find($id);
-            $documents = $this->entityManager->getRepository(FileDocument::class)->findOneByTeacher($id);
-            if($documents)
-                foreach($documents as $key=>$value)
+            $progressions = $this->entityManager->getRepository(ContractFollowUp::class)->findByClassOfStudyHasSemester($coshs);
+            $dataOutPut = []; 
+          
+                foreach($progressions as $key=>$value)
                 {
 
                     $hydrator = new ReflectionHydrator();
-                    $data = $hydrator->extract($value);
-                    $documents[$key] = $data;
+                    $data = $hydrator->extract($value); 
+                    $dataOutPut["date"]= $data["date"]->format('Y-m-d H:i:s');
+                    $dataOutPut["start_time"] = $data["startTime"]->format('H:i:s');
+                    $dataOutPut["end_time"] = $data["endTime"]->format('H:i:s');
+                    $dataOutPut["lectureType"] = $data["lectureType"];
+                    $dataOutPut["description"] = $data["description"];
+                    $progressions[$key] = $dataOutPut;
                 }   
-            else $documents = [];
 
-                $hydrator = new ReflectionHydrator();
-                $data = $hydrator->extract($teacher);
-                $teacher = $data;
-                $data["documents"] = $documents;
-                
-            $query = $this->entityManager->createQuery('SELECT c.id,c.codeUe,c.nomUe,c.classe,c.semester,c.semId,c.totalHrs  FROM Application\Entity\CurrentYearUesAndSubjectsView c'
-                    .' WHERE c.teacher = :teacher');
-            $query->setParameter('teacher',$id);
 
-            $subjects_1 = $query->getResult();
-            $data["teaching_units"] = $subjects_1;
             
             return new JsonModel([
-                $data
+                $progressions
             ]);
-        }
-
-
+        
         
         //return $faculties;
     }
@@ -122,81 +116,29 @@ class TeacherController extends AbstractRestfulController
         $this->entityManager->getConnection()->beginTransaction();
         try
         {
-            
-            $message = false;
-
-            $teacher= new Teacher();
-            $teacher->setCivility($data['civility']);
-            $teacher->setName($data['names']);
-            $teacher->setBirthDate(new \DateTime($data['birthdate']));
-            $teacher->setLivingCountry($data["living_country"]["name"]);
-            $teacher->setLivingCity($data["living_city"]["name"]);
-            $teacher->setNationality($data["nationality"]);
-            $teacher->setMaritalStatus($data["marital_status"]);
-            $teacher->setPhoneNumber($data["phone"]);
-            $teacher->setContactInEmergency($data["contactInEmergency"]);
-            $teacher->setEmail($data["email"]);
-            $teacher->setSpeciality($data["speciality"]);
-            $teacher->setCurrentEmployer($data["actual_employer"]);
-            $teacher->setHighDegree($data["highest_degree"]); 
-            $teacher->setType($data["type"]);
-            
-            $grade =$this->entityManager->getRepository(AcademicRanck::class)->find($data['grade_id']); 
-            $teacher->setAcademicRanck($grade);
-            $faculty =$this->entityManager->getRepository(Faculty::class)->find($data['requested_establishment_id']);  
-            
-            $teacher->setFaculty($faculty);
-           
-            
-           
-
-            $this->entityManager->persist($teacher);
-            if(isset($data["documents"]))
-            {
-       
-                $documents = $data["documents"];
-                //var_dump($data);
-                
-                foreach($documents as $key=>$value)
-                {
-                  if($value["type"] == "identity_document") 
-                  {
-                      $filename = $_FILES["documents"]["name"][$key]["file"];
-                      $file = $_FILES["documents"]["tmp_name"][$key]["file"];
-             
-                      $destination = $_SERVER['DOCUMENT_ROOT'] .'/teacherDocs/'.$filename;
-                      move_uploaded_file($file,$destination);
-                      
-                     
-                  }
-                }
-             
-exit;
-               foreach ($_FILES["documents"]["name"] as $key=>$file)
-               {  echo $key." YES MAN ".$file["file"];
-                /*   if($key="img_file")
-                   {
-                   $filename = $file["name"][0];  
-                   $destination = $_SERVER['DOCUMENT_ROOT'] .'/paymentsproof/'.$filename;
-                   move_uploaded_file($file['tmp_name'][0],$destination);
-                   $pdf->addPDF($destination,'all');
-                   }*/
-               }
-            }
-           
-
-              exit;     
+           // var_dump($data); 
+            $progression = new ContractFollowUp();
+                    $progression->setDate(new \DateTime($data["date"]));
+                    $progression->setStartTime(new \DateTime ($data["start_time"]));
+                    $progression->setEndTime(new \DateTime ($data["end_time"]));
+                    $progression->setDescription($data["description"]);
+                    $startTime = new \DateTime ($data["start_time"]);
+                    $progression->setLectureType($data["target"]);
+                    $endTime = new \DateTime ($data["end_time"]);
+                    $timeDiff = $startTime->diff($endTime); 
+                    $progression->setToalTime($timeDiff->h);
 
 
+            
+            $coshs =$this->entityManager->getRepository(ClassOfStudyHasSemester::class)->find($data['teaching_unit_id']); 
+            $progression->setClassOfStudyHasSemester($coshs );
 
-            //$degree =$this->entityManager->getRepository(Degree::class)->findOneById($data['degreeId']);
-            
-            
-            //$classe->setDegree($degree);  
+            $this->entityManager->persist($progression);
+ 
             
             $this->entityManager->flush();
             $message = true;
-            $this->entityManager->getConnection()->commit(); exit;
+            $this->entityManager->getConnection()->commit(); 
             
             return new JsonModel([
                  $message

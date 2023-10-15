@@ -155,26 +155,26 @@ class IndexController extends AbstractActionController
         $data = $this->params()->fromQuery();   
         $this->entityManager->getConnection()->beginTransaction();
         try
-        {         
+        {        
          $class= $this->entityManager->getRepository(ClassOfStudy::class)->find($data["classeID"]);
          $teachingUnit = $this->entityManager->getRepository(TeachingUnit::class)->find($data["ueID"]);
          $subjectID = NULL; 
-         if(isset($data["subjectId"])&& ($data["subjectId"]!=-1))
+         if(isset($data["subjectId"]) && $data["subjectId"]!=-1 )
          {
             $subject = $this->entityManager->getRepository(Subject::class)->find($data["subjectId"]);
             $subjectID = $data["subjectId"];
          }
-         else $subject= NULL;
-     
+         else {$subject= NULL;  }
+  
          $semester = $this->entityManager->getRepository(Semester::class)->find($data["semID"]);
          $students =  $this->entityManager->getRepository(UnitRegistration::class)->findBy(array("semester"=>$semester,"teachingUnit"=>$teachingUnit,"subject"=>$subject));
-    
-         if(!is_null($class->getDeliberation()))
+  
+         if($class->getDeliberation())
             $delibCondition = $class->getDeliberation()->getDelibCondition();
          else $delibCondition="RAS";     
          //$delibCondition ="'".$delibCondition.";';";
          
-       
+     
          foreach($students as $std)
          {
           $note = $std->getNoteFinal();  
@@ -182,10 +182,8 @@ class IndexController extends AbstractActionController
        
           
           eval($delibCondition);
-        
-          if($data["subjectId"]!=-1)
-          {
-                if($noteBeforeDelib<$note)
+
+                   if($noteBeforeDelib<$note)
                 {
                   $noteGap = $note - $noteBeforeDelib;
 
@@ -212,7 +210,7 @@ class IndexController extends AbstractActionController
                      $std->setGrade("C");
                   $std->setPoints(1);
                   $std->setIsFromDeliberation(1);
-
+                  if(!$data["isModularComputation"])
                   foreach ($ueExams as $ueExam)
                   {               
                       $exam = $this->entityManager->getRepository(Exam::class)->find($ueExam->getId());
@@ -228,7 +226,6 @@ class IndexController extends AbstractActionController
                               $stdRegisteredToSubject->setRegisteredMark(round($stdRegisteredToSubject->getRegisteredMark()+$sharedValued,2,PHP_ROUND_HALF_UP));  
                       }
                   }
-                }
           }
           
           

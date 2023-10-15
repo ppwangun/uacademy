@@ -614,6 +614,7 @@ class IndexController extends AbstractActionController
                         $stdAdminRegistration = $this->entityManager->getRepository(AdminRegistration::class)->findOneBy(array("student"=>$std,"academicYear"=>$acadYr));
                      
                         $stdAdminRegistration->setDecision("ADM");
+                        
                        
                         switch ($studyLevel)
                         {
@@ -694,6 +695,9 @@ class IndexController extends AbstractActionController
                                 break;                                
                                 
                         }
+                        //Allowing special delib to all classes
+                        if(($datastring["isSpecialDelibAllow"]==1)&&($this->isSpecialDelibAllow($std,$classe,$datastring["nbreUeDelibSpecial"])))
+                            $stdAdminRegistration->setDecision("ADM");                        
                         
                     } 
                 $this->entityManager->flush();    

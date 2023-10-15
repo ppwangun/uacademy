@@ -1,5 +1,8 @@
-angular.module('teachingunit')
-        .component('newTeacher',{
+angular.module('teachingunit').component('manageTeacher',{
+            templateUrl: 'teacherList',
+            controller: newTeacherController 
+});
+angular.module('teachingunit').component('newTeacher',{
             templateUrl: 'newteachertpl',
             controller: newTeacherController 
 });
@@ -60,17 +63,18 @@ function newTeacherController($scope, $http, $location,$routeParams,$timeout,toa
         birthdate: null,
         birthplace: null,
         country_id: null,
-        living_country_id: null,
-        living_city_id: null,
+        living_country: null,
+        living_city: null,
         marital_status: null,
         phone: null,
         email: null,
-        highest_degree_id: null,
-        speciality_id: null,
+        highest_degree: null,
+        speciality: null,
         grade_id: null,
         actual_employer: null,
         requested_establishment_id: null,
-        identity_document_type: 'nic'
+        identity_document_type: 'nic',
+        status: false
     }
 
     $scope.maxFileSize = 1024 * 1024 * 5;
@@ -80,6 +84,7 @@ function newTeacherController($scope, $http, $location,$routeParams,$timeout,toa
     $scope.isProcessing = false;
 
     $scope.identityDocumentFile = null;
+    $scope.teachers = [];
     $scope.coverLetterFile = null;
     $scope.resumeFile = null;
     $scope.highestDegreeFile = null;
@@ -100,7 +105,20 @@ function newTeacherController($scope, $http, $location,$routeParams,$timeout,toa
      $location.path("/newAcademicRank/"+id)
     };
     
+    $scope.redirect= function(id){
+
+     $location.path("/new-teacher/"+id);
+     $scope.dptId=id;
+
+    };
+    
     $scope.init = function(){
+        
+        $http.get(`teachers`).then(function (response) {
+            console.log(response)
+            $scope.teachers = response.data[0];
+            $scope.hasLoadedTeachers = true;
+        });       
 
             id = $routeParams.id; 
             if(id)
@@ -230,9 +248,8 @@ function newTeacherController($scope, $http, $location,$routeParams,$timeout,toa
     }
 
     $scope.handleIdentityDocumentUploadedFile = function ($file) {
-        $scope.identityDocumentFile = $file;
-        
-        
+        $scope.identityDocumentFile = $file; 
+
     }
     $scope.removeIdentityDocumentFile = function () {
         $scope.identityDocumentFile = null;

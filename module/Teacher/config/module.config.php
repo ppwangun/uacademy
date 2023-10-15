@@ -24,6 +24,26 @@ return [
                         'action'        => 'searchAllSubjects',
                     ],
                 ],
+            ],
+            'teacherList' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/teacherList',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'teacherList',
+                    ],
+                ],
+            ],            
+            'teacherUnitFollowUp' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/teacherUnitFollowUp',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'teacherUnitFollowUp',
+                    ],
+                ],
             ],             
             'acadranktpl' => [
                 'type'    => Literal::class,
@@ -45,13 +65,13 @@ return [
                     ],
                 ],
             ],            
-            'teacherDetails' => [
+            'teacherFollowUp' => [
                 'type'    => Literal::class,
                 'options' => [
-                    'route'    => '/teacherDetails',
+                    'route'    => '/teacherFollowUp',
                     'defaults' => [
                         'controller' => Controller\IndexController::class,
-                        'action'        => 'teacherDetails',
+                        'action'        => 'teacherFollowUp',
                     ],
                 ],
             ],  
@@ -114,6 +134,15 @@ return [
                         'controller' => Controller\TeacherController::class,
                     ],
                 ],
+            ], 
+            'unitProgression' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/unitProgression[/:id]',
+                    'defaults' => [
+                        'controller' => Controller\ProgressionController::class,
+                    ],
+                ],
             ],            
              /*  'home' => [
                 'type' => Literal::class,
@@ -132,7 +161,8 @@ return [
         'factories' => [
             Controller\IndexController::class => Controller\Factory\IndexControllerFactory::class,
             Controller\GradeController::class => Controller\Factory\GradeControllerFactory::class,
-             Controller\TeacherController::class => Controller\Factory\TeacherControllerFactory::class,
+            Controller\TeacherController::class => Controller\Factory\TeacherControllerFactory::class,
+            Controller\ProgressionController::class => Controller\Factory\ProgressionControllerFactory::class,
         ],
     ],
     'view_manager' => [
