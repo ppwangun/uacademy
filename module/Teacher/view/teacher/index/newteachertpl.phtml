@@ -16,7 +16,7 @@ z-index: 120000}
     
     <form   novalidate id="new-teacher-form" class="md-shadow-bottom-z-1" ng-if="canDisplayForm()"
                   ng-submit="onSubmit(teacherForm)" name="teacherForm">
-        <div class="well" style="margin-left: -30px; margin-right: -30px;" ng-init="$ctrl.init()">
+        <div class="well" style="margin-left: -30px; margin-right: -30px;" ng-init="init()">
 
             <div class="row">
                 <div class='col-lg-2'>
@@ -99,7 +99,7 @@ z-index: 120000}
                 <div layout-gt-sm="row">
                     <md-input-container class="md-block" flex-gt-sm>
                         <label for="birthdate">Date de naissance</label>
-                        <input id="birthdate" ng-model="teacher.birthdate" name="birthdate" type="date" required>
+                        <input id="birthdate" ng-model="teacher.birthdate" value={{teacher.birthdate}} name="birthdate" type="date" required>
 <!--                        <md-datepicker style="width: 100%" ng-model="teacher.birthdate" required aria-label="Enter date"></md-datepicker>-->
                         <div ng-messages="teacherForm.birthdate.$error" multiple md-auto-hide="true">
                             <div ng-message="required">La date de naissance est requise !</div>
@@ -506,7 +506,7 @@ z-index: 120000}
 <!--                </div>-->
 
                 <div layout-gt-sm="row" style="margin-top: 2rem">
-                    <md-button ng-if="!isProcessing" style="width: 100%" type="submit" class="md-raised md-primary">Creer l'enseignant</md-button>
+                    <md-button ng-if="!isProcessing" style="width: 100%" type="submit" class="md-raised md-primary">Enregistrer</md-button>
                     <md-button ng-if="isProcessing" layout="row" layout-align="center" style="width: 100%; align-items: center" type="button" class="md-raised md-primary" disabled="">
                         <md-progress-circular class="md-accent md-hue-1" md-diameter="20"></md-progress-circular>
                     </md-button>

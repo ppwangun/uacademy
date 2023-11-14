@@ -55,7 +55,7 @@ function printReadableDate(date, lang, printMonth = false, printHours = false){
 
     return printMonth ? (days[date.getDay()] + ', ' + date.getDate() + ' '+ months[date.getMonth()] + ' '+ date.getFullYear() + (printHours ? hours : '')) : (days[date.getDay()] + ', '+ date.toLocaleDateString());
 }
-function newTeacherController($scope, $http, $location,$routeParams,$timeout,toastr,$mdDialog) {
+function newTeacherController($scope, $http, $location,$routeParams,$timeout,toastr,$mdDialog,DTOptionsBuilder,DTColumnDefBuilder) {
     $scope.hasLoadedAssets = null;
 
     $scope.teacher = {
@@ -101,6 +101,8 @@ function newTeacherController($scope, $http, $location,$routeParams,$timeout,toa
     $scope.isUpdate = false;
     $scope.cpt = 1;
     
+    $scope.isFormUpdate =false;
+    
     $scope.redirect= function(id){
      $location.path("/newAcademicRank/"+id)
     };
@@ -115,12 +117,13 @@ function newTeacherController($scope, $http, $location,$routeParams,$timeout,toa
     $scope.init = function(){
         
         $http.get(`teachers`).then(function (response) {
-            console.log(response)
+
             $scope.teachers = response.data[0];
             $scope.hasLoadedTeachers = true;
         });       
 
-            id = $routeParams.id; 
+            var id = $routeParams.id; 
+            var teachId = $routeParams.teachId;
             if(id)
             {
                 $scope.isUpdate = true;
@@ -135,6 +138,19 @@ function newTeacherController($scope, $http, $location,$routeParams,$timeout,toa
                     $http.get('teacherGrade',config).then(function(response){
                      $scope.grade = response.data[0];
                     })
+           }
+           if(teachId && teachId >0)
+           {
+               $scope.isFormUpdate =true;
+                var data = {id: teachId};
+                var config = {
+                params: data,
+                headers : {'Accept' : 'application/json'}
+                };
+                $http.get('teachers',config).then(function(response){
+                     $scope.teacher = response.data[0];
+                     console.log($scope.teacher);
+                    })               
            }
 //
     };    
@@ -162,7 +178,6 @@ function newTeacherController($scope, $http, $location,$routeParams,$timeout,toa
             .then(function succesCallback(response)
             {
                 $scope.grades.push(grd);
-                console.log($scope.grades);
                 $scope.grade = null;
                 toastr.success("Opération effectuée avec succès")
                 
@@ -365,12 +380,13 @@ function newTeacherController($scope, $http, $location,$routeParams,$timeout,toa
         }
 
         const formData = parseObjectToFormData(data);
+        if(!$scope.isFormUpdate)
+        {
 
         $http.post(`teachers`, formData, {
             transformRequest: angular.identity,
             headers: { 'Content-Type': undefined }
-        })
-            .then(function (response) {
+        }).then(function (response) {
                 alert('L\'enseignant a ete enregistre avec succes !');
                 $scope.isProcessing = false;
                /* $scope.teacher = {
@@ -382,8 +398,50 @@ function newTeacherController($scope, $http, $location,$routeParams,$timeout,toa
                 alert('Une erreur est survenue lors de l\'enregistrement de l\'enseignant !');
                 $scope.isProcessing = false;
             });
+        }
+        else{
+            
+        var data1 = {id: $scope.teacher.id,data}; 
+        var config = {
+        params: data,
+        headers : {'Accept' : 'application/json'}
+      };            
+            $http.put(`teachers`, data1,config).then(function (response) {
+                    alert('L\'enseignant a ete enregistre avec succes !');
+                    $scope.isProcessing = false;
+                   /* $scope.teacher = {
+                        identity_document_type: 'nic',
+                    }*/
+                    //$location.path('/');
+                    $location.path('/teacher-list');
+                }, function (error){
+                    console.error(error);
+                    alert('Une erreur est survenue lors de l\'enregistrement de l\'enseignant !');
+                    $scope.isProcessing = false;
+                });
+            }            
     }
-    
+     $scope.dtOptions = DTOptionsBuilder.newOptions()
+     .withButtons([
+            //'columnsToggle',
+            //'colvis',
+            'copy',
+            'print'
+
+        ])
+        .withPaginationType('full_numbers')
+        .withDisplayLength(100)
+         /*.withFixedHeader({
+    top: true
+  })*/;
+  
+    $scope.dtColumnDefs = [
+    DTColumnDefBuilder.newColumnDef(0),
+    DTColumnDefBuilder.newColumnDef(1),
+    DTColumnDefBuilder.newColumnDef(2),
+    DTColumnDefBuilder.newColumnDef(3),
+
+  ];    
     
   /*----------------------------------------------------------------------------
    * fonction for deleting faculty

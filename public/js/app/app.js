@@ -235,7 +235,7 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
           }).when("/teacher-list", {
             template: "<manage-teacher></manage-teacher>",
             
-        }).when("/new-teacher/:id", {
+        }).when("/new-teacher/:teachId", {
             template: "<new-teacher></new-teacher>",
             
         }).when("/teacher-follow-up", {

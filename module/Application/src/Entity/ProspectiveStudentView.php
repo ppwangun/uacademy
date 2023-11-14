@@ -79,37 +79,7 @@ class ProspectiveStudentView
      * @ORM\Column(name="choix_formation_3", type="string", length=45, nullable=true)
      */
     private $choixFormation3;
-    
-   
-    
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="code", type="string", length=255, nullable=true)
-     */
-    private $classe;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="diplome", type="string", length=255, nullable=true)
-     */
-    private $diplome;
-    
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="filiere", type="string", length=255, nullable=true)
-     */
-    private $filiere; 
-    
-    
-        /**
-     * @var string
-     *
-     * @ORM\Column(name="faculte", type="string", length=255, nullable=true)
-     */
-    private $faculte;
 
 
 
@@ -182,15 +152,7 @@ class ProspectiveStudentView
         return $this->phoneNumber;
     }
 
-    /**
-     * Get classe
-     *
-     * @return string
-     */
-    public function getClasse()
-    {
-        return $this->classe;
-    }
+
     
 
 

@@ -16,7 +16,7 @@ z-index: 120000}
         
             <div class="row">
                 <div class='col-md-4'>
-                    <button  ng-show=" <?=($this->access('global.system.admin', null))||($this->access('exam.cancel', null))?true:false;?>&&$ctrl.markCalculationStatus===0"  type="button" ng-click="$ctrl.cancelExam()" class="btn btn-danger"  ng-disabled="examForm.$invalid">Annuler l'examen</button>
+                    <button  ng-show=" <?=($this->access('global.system.admin', null))||($this->access('exam.cancel', null))?true:false;?>&&$ctrl.markCalculationStatus===false"  type="button" ng-click="$ctrl.cancelExam()" class="btn btn-danger"  ng-disabled="examForm.$invalid">Annuler l'examen</button>
                     <button  ng-show=" <?=($this->access('global.system.admin', null))||($this->access('exam.create', null))?true:false?> && !$ctrl.isUpdate" type="button" ng-click="$ctrl.newExam()" class="btn btn-danger" ng-disabled="examForm.$invalid" >Enrégistrer</button>
                     <span> <a href="#!/examlist">Retour</a></span>
                 </div>
@@ -161,7 +161,7 @@ z-index: 120000}
   </md-content>
 </div>
         
-<div layout='row' style="padding-top: 25px" ng-show="showButtonGroup===true&&$ctrl.markCalculationStatus===0">
+<div layout='row' style="padding-top: 25px" ng-show="showButtonGroup===true&&$ctrl.markCalculationStatus===false">
     <div style='justifyContent: space-between;'><a class="btn btn-success"  ng-click="$ctrl.showPrintList()"><span class="fa fa-print"></span>&nbsp;Imprimer la liste d'étudiants</a></div>&nbsp;&nbsp;
     <div style='justifyContent: space-between;'><a ng-show="<?=($this->access('global.system.admin', null))||($this->access('exam.attendance.validation', null))?true:false?>" class="btn btn-primary" ng-click="!isAttendanceButtonActive || $ctrl.showUpdateAttendance()" ng-disabled="!isAttendanceButtonActive"><span class="fa fa-save"></span>&nbsp;Valider Présence effective à l'examen</a></div>&nbsp;&nbsp;
     <div style='justifyContent: space-between;'><a ng-show="<?=($this->access('global.system.admin', null))||($this->access('exam.anonymat.reporting', null))?true:false?>" class="btn btn-primary" ng-click="!isAnonymatButtonActive || $ctrl.showUpdateAttendance()" ng-disabled="!isAnonymatButtonActive"><span class="fa fa-eye-slash"></span>&nbsp;Anonymats</a></div>&nbsp;&nbsp;

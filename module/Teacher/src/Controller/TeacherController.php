@@ -15,6 +15,8 @@ use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\View\Model\JsonModel;
 use Zend\Hydrator\Reflection as ReflectionHydrator;
 use Application\Entity\AcademicRanck;
+use Application\Entity\Countries;
+use Application\Entity\Cities;
 use Application\Entity\Faculty;
 use Application\Entity\Teacher;
 use Application\Entity\FileDocument;
@@ -39,7 +41,7 @@ class TeacherController extends AbstractRestfulController
         
         if(is_numeric($id))
         {
-            
+         
             $teacher = $this->entityManager->getRepository(Teacher::class)->find($id);
             $documents = $this->entityManager->getRepository(FileDocument::class)->findOneByTeacher($id);
             if($documents)
@@ -53,19 +55,40 @@ class TeacherController extends AbstractRestfulController
             else $documents = [];
 
                 $hydrator = new ReflectionHydrator();
+                $academic_rank_id = $teacher->getAcademicRanck()->getId();
+                $requested_establishment_id = $teacher->getFaculty()->getId();
                 $data = $hydrator->extract($teacher);
                 $teacher = $data;
-                $data["documents"] = $documents;
+                $teacher["names"]=$data["name"];
+              
+                $country = $this->entityManager->getRepository(Countries::class)->findOneByName($data["livingCountry"]);
+                $nationality = $this->entityManager->getRepository(Countries::class)->findOneByName($data["nationality"]);
+                $city = $this->entityManager->getRepository(Cities::class)->findOneByName($data["livingCity"]);
+                if($country)
+                    $teacher["living_country"]=$hydrator->extract($country);
+                if($city)
+                $teacher["living_city"]=$hydrator->extract($city);
+                if($nationality)
+                $teacher["nationality"]= $nationality->getName() ; 
+                $teacher["marital_status"]= $data["maritalStatus"] ;
+                $teacher["phone"]= $data["phoneNumber"] ; 
+                $teacher["highest_degree"]= $data["highDegree"] ;
+                $teacher["grade_id"]= $academic_rank_id ;
+                $teacher["actual_employer"]= $teacher["currentEmployer"] ;
+                $teacher["requested_establishment_id"] = $requested_establishment_id;
                 
-            $query = $this->entityManager->createQuery('SELECT c.id,c.codeUe,c.nomUe,c.classe,c.semester,c.semId,c.totalHrs  FROM Application\Entity\CurrentYearUesAndSubjectsView c'
-                    .' WHERE c.teacher = :teacher');
-            $query->setParameter('teacher',$id);
+                if($data["birthDate"])
+                    $teacher["birthdate"]=$data["birthDate"]->format('Y-m-d');
+                $teacher["documents"] = $documents;
+                $query = $this->entityManager->createQuery('SELECT c.id,c.codeUe,c.nomUe,c.classe,c.semester,c.semId,c.totalHrs  FROM Application\Entity\CurrentYearUesAndSubjectsView c'
+                        .' WHERE c.teacher = :teacher');
+                $query->setParameter('teacher',$id);
 
-            $subjects_1 = $query->getResult();
-            $data["teaching_units"] = $subjects_1;
-            
+                $subjects_1 = $query->getResult();
+                $teacher["teaching_units"] = $subjects_1;
             return new JsonModel([
-                $data
+                "date"=>$data["birthDate"]->format('Y-m-d'),
+                $teacher
             ]);
         }
 
@@ -243,11 +266,29 @@ exit;
     {
         $this->entityManager->getConnection()->beginTransaction();
         try{
+            $data = $data["data"];
           
-            $rank =$this->entityManager->getRepository(AcademicRanck::class)->findOneById($id);
-            $rank->setName($data['name']);
-            $rank->setCode($data['code']);
-            $rank->setPaymentRate($data['paymentRate']);
+            $teacher =$this->entityManager->getRepository(Teacher::class)->findOneById($id);
+            $teacher->setCivility($data['civility']);
+            $teacher->setName($data['names']);
+            $teacher->setBirthDate(new \DateTime($data['birthdate']));
+            $teacher->setLivingCountry($data["living_country"]["name"]);
+            $teacher->setLivingCity($data["living_city"]["name"]);
+            $teacher->setNationality($data["nationality"]);
+            $teacher->setMaritalStatus($data["marital_status"]);
+            $teacher->setPhoneNumber($data["phone"]);
+            $teacher->setContactInEmergency($data["contactInEmergency"]);
+            $teacher->setEmail($data["email"]);
+            $teacher->setSpeciality($data["speciality"]);
+            $teacher->setCurrentEmployer($data["actual_employer"]);
+            $teacher->setHighDegree($data["highest_degree"]); 
+            $teacher->setType($data["type"]);
+            
+            $grade =$this->entityManager->getRepository(AcademicRanck::class)->find($data['grade_id']); 
+            $teacher->setAcademicRanck($grade);
+            $faculty =$this->entityManager->getRepository(Faculty::class)->find($data['requested_establishment_id']);  
+            
+            $teacher->setFaculty($faculty);
 
             
             $this->entityManager->flush();

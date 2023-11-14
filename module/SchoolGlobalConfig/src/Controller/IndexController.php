@@ -869,7 +869,7 @@ class IndexController extends AbstractActionController
     {
         
         $isRegistered = $this->entityManager->getRepository(AdminRegistration::class)->findOneBy(array("academicYear"=>$this->currentYear,"student"=>$std));
-/*        if($isRegistered)
+        if($isRegistered)
         {
             $isRegistered->setStudent($std);
             $isRegistered->setClassOfStudy($newClasse);            
@@ -882,7 +882,7 @@ class IndexController extends AbstractActionController
             //$this->entityManager->flush();
 
         }
-        else */
+        else 
             if(!$isRegistered){
             $adminRegistration = new AdminRegistration();
             $adminRegistration->setStudent($std);

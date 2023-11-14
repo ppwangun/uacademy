@@ -223,13 +223,17 @@
                                             
                                         </tr>
                                         <tr>
-                                            <td>{{currentProgressionStats.cm.total}}h</td>
-                                            <td>{{currentProgressionStats.cm.progress}}h</td>
+                                            <td>{{currentProgressionStats.cm.total}}H</td>
+                                            <td>{{currentProgressionStats.cm.progress}}H</td>
+                                            <td>{{currentProgressionStats.td.total}}H</td>
+                                            <td>{{currentProgressionStats.td.progress}}H</td> 
+                                            <td>{{currentProgressionStats.tp.total}}H</td>
+                                            <td>{{currentProgressionStats.tp.progress}}H</td>                                            
                                             <td colspan="4">
                                                 <div class="teaching-unit-progression">
-                                                    <div class="teaching-unit-progression-bar" ng-style="{'width': getRoundedPercentage(currentProgressionStats.cm.percentage)+'%'}"></div>
+                                                    <div class="teaching-unit-progression-bar" ng-style="{'width': getRoundedPercentage(currentProgressionStats.percentage)+'%'}"></div>
                                                 </div>
-                                                <span class="teaching-unit-progression-value">{{getRoundedPercentage(currentProgressionStats.cm.percentage)}}%</span>
+                                                <span class="teaching-unit-progression-value">{{getRoundedPercentage(currentProgressionStats.percentage)}}%</span>
                                             </td>
                                         </tr>
                                         <tr>

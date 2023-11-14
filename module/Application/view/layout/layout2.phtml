@@ -464,6 +464,9 @@
                             <ul class="nav nav-second-level">
                                 <li>
                                     <a href="#!/teacher-list"">Gérer les enseignants</a>
+                                </li>   
+                                <li>
+                                    <a href="#!/teacher-follow-up">Grilles d'attribution des Ues</a>
                                 </li>                                
                                 <li>
                                     <a href="#!/teacher-follow-up">Suivi des cours</a>
@@ -514,7 +517,7 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="#!/assignedteachingunit"><i class="fa fa-cogs">&nbsp;</i>Grilles d'enseignement</a>
+                            <a href="#!/assignedteachingunit"><i class="fa fa-cogs">&nbsp;</i>Unités d'enseignement</a>
                         </li>
 
                         <li ng-show="<?=($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())])==1)?true:false?>">

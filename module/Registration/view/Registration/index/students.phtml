@@ -39,7 +39,7 @@ md-sidenav.md-locked-open {
                             
                             <div >
                             <a ng-show="<?=($this->access('global.system.admin', null))||($this->access('manage.student', null))?true:false?>" href="" class="btn btn-danger" id='newacadyr'>Créer</a>
-                            <button  ng-show="<?=($this->access('global.system.admin', null))||($this->access('manage.student', null))?true:false?>" ng-disabled="true"  ng-click="$ctrl.loadStdData()" class="btn btn-primary" id='newacadyr'><i class="fa fa-upload"></i>&nbsp;Import étudiants</button>
+                            <button  ng-show="<?=($this->access('global.system.admin', null))||($this->access('manage.student', null))?true:false?>" ng-disabled="false"  ng-click="$ctrl.loadStdData()" class="btn btn-primary" id='newacadyr'><i class="fa fa-upload"></i>&nbsp;Import étudiants</button>
                             <button ng-show="<?=($this->access('global.system.admin', null))||($this->access('manage.student', null))?true:false?>" ng-click="$ctrl.loadStdPvData()" class="btn btn-primary" id='newacadyr'><i class="fa fa-file"></i>&nbsp;Import PV des résultats</button>
                             <button  ng-show="<?=($this->access('global.system.admin', null))||($this->access('manage.student', null))?true:false?>" ng-disabled="false"  ng-click="$ctrl.updateStdMpc()" class="btn btn-primary" id='newacadyr'><i class="fa fa-refresh"></i>&nbsp;MPC update</button>
                             <button ng-show="<?=($this->access('global.system.admin', null))||($this->access('manage.student', null))?true:false?>" ng-click="$ctrl.picturesGenerator()" class="btn btn-primary" id='newacadyr' title="Générer les photos"><i class="fa fa-picture-o"></i></button>

@@ -4,7 +4,7 @@ angular.module('teachingunit')
             controller: teacherListController 
 });
 
-function teacherListController($scope, $mdDialog, $http, $timeout){
+function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuilder,DTColumnDefBuilder){
     // $scope.teachers = [
     //     {id: 1, names: 'Tiger Nixon', speciality: 'System Architect'},
     //     {id: 2, names: 'Garrett Winters', speciality: 'Accountant'},
@@ -119,9 +119,9 @@ function teacherListController($scope, $mdDialog, $http, $timeout){
             //params: {id: $scope.teacherId,subjects : JSON.stringify(data)},
             headers : {'Content-Type' : "application/x-www-form-urlencoded;charset=utf-8;"}
         };        
-        $http.post(`teacherFollowUp`,data,config).then(function (response) {
+        $http.post(`unitFollowUp`,data,config).then(function (response) {
             console.log(response)
-            $scope.currentProgressionStats = response.data;
+            $scope.currentProgressionStats = response.data[0];
             $scope.hasLoadedCurrentProgressionStats = true;
         }, function (error) {
             console.error(error);
@@ -227,5 +227,26 @@ function teacherListController($scope, $mdDialog, $http, $timeout){
         });
     };
     
-    
+     $scope.dtOptions = DTOptionsBuilder.newOptions()
+     .withButtons([
+            //'columnsToggle',
+            //'colvis',
+            'copy',
+            'print'
+
+        ])
+        .withPaginationType('full_numbers')
+        .withDisplayLength(100)
+         /* .withFixedHeader({
+    top: true
+  })*/;
+  
+    $scope.dtColumnDefs = [
+    DTColumnDefBuilder.newColumnDef(0),
+    DTColumnDefBuilder.newColumnDef(1),
+    DTColumnDefBuilder.newColumnDef(2),
+    DTColumnDefBuilder.newColumnDef(3),
+    DTColumnDefBuilder.newColumnDef(4).notSortable(),
+    DTColumnDefBuilder.newColumnDef(5)
+  ];    
 };

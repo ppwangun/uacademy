@@ -431,6 +431,7 @@ class StudentManager {
             if(strlen($threeDigitNumber)==1)
                 $threeDigitNumber = "00".$threeDigitNumber;        
             $date = date('y');
+            $date = "23";
             $matricule = $date.'B'.$threeDigitNumber;
             while($this->entityManager->getRepository(RegisteredStudentView::Class)->findOneByMatricule($matricule))
             {

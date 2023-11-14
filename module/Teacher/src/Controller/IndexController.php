@@ -63,11 +63,24 @@ class IndexController extends AbstractActionController
     }
     public function teacherFollowUpAction()
     {
+        
+        $view =  new ViewModel([
+
+            'userName' => $this->sessionContainer->userName
+        ]);
+        
+        $view->setTerminal(true);
+
+        return $view;  
+
+    }    
+    public function unitFollowUpAction()
+    {
         $this->entityManager->getConnection()->beginTransaction();
         try
         { 
             $data = $this->params()->fromPost(); 
-            
+           
             $coshs = $this->entityManager->getRepository(ClassOfStudyHasSemester::class)->find($data["teachingUnitId"]);
             $progression = $this->entityManager->getRepository(ContractFollowUp::class)->findByClassOfStudyHasSemester($coshs); 
             
@@ -82,17 +95,36 @@ class IndexController extends AbstractActionController
             $totalTp = 0;
             foreach($progression as $value)
             { 
-                if($value->getId()== "cm")
+                if($value->getLectureType() == "cm") 
                     $totalCm += $value->getToalTime();
                 if($value->getLectureType() == "td")
-                    $totalCm+= $value->getToalTime();
+                    $totalTd+= $value->getToalTime();
                 if($value->getLectureType() == "tp")
-                    $totalCm+= $value->getToalTime();
+                    $totalTp+= $value->getToalTime();
+                
+                $total = $totalCm + $totalTd + $totalTp;
                 
             }
-            $dataOuput["cm"]["total"] = $coshs->getCmHours();
-            $dataOuput["cm"]["progress"] = $totalCm;
-              
+            $subjectCm = $coshs->getSubjectCmHours();
+            if ($coshs->getSubjectCmHours()==-1) $subjectCm = 0;
+            $subjectTd = $coshs->getSubjectTdHours();
+            if ($coshs->getSubjectTdHours()==-1) $subjectTd = 0;
+            $subjectTp = $coshs->getSubjectTpHours();
+            if ($coshs->getSubjectTpHours()==-1) $subjectTp = 0; 
+            
+            $dataOuput["cm"]["total"] = $coshs->getCmHours()+ $subjectCm;
+            $dataOuput["cm"]["progress"] = $totalCm; 
+            $dataOuput["td"]["total"] = $coshs->getTdHours() + +$subjectTd;
+            $dataOuput["td"]["progress"] = $totalTd; 
+            $dataOuput["tp"]["total"] = $coshs->getTpHours()+$subjectTp;
+            $dataOuput["tp"]["progress"] = $totalTp;
+            $total_prevu =  $coshs->getCmHours()+ $subjectCm + $coshs->getTdHours() + +$subjectTd;+$coshs->getTpHours()+$subjectTp ;
+            $total_real = $totalCm + $totalTd + $totalTp;  
+            if($total_prevu==0) 
+                $percentage = 0;
+            else
+                $percentage = ($total_real/$total_prevu)*100;
+            $dataOuput["percentage"] = $percentage; 
             $this->entityManager->getConnection()->commit();
             
             //$output = json_encode($output,$depth=1000000); 
