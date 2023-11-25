@@ -54,7 +54,27 @@ return [
                         'action'        => 'unitFollowUp',
                     ],
                 ],
-            ],            
+            ],  
+            'teacherAssignedSubjectsTpl' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/teacherAssignedSubjectsTpl',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'teacherAssignedSubjectsTpl',
+                    ],
+                ],
+            ], 
+            'teacherAssignedSubjects' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/teacherAssignedSubjects',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'teacherAssignedSubjects',
+                    ],
+                ],
+            ],             
             'acadranktpl' => [
                 'type'    => Literal::class,
                 'options' => [

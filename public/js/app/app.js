@@ -240,7 +240,8 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
             
         }).when("/teacher-follow-up", {
             template: "<teacher-follow-up></teacher-follow-up>",
-            
+        }).when("/teacherAssignedSubjectsTpl", {
+            template: "<teacher-assigned-subjects></teacher-assigned-subjects>",            
         }).when("/academicRankConfig", {
             template: "<acad-rank-config></acad-rank-config>",
             

@@ -2,6 +2,9 @@ angular.module('teachingunit')
         .component('teacherFollowUp',{
             templateUrl: 'teacherFollowUp',
             controller: teacherListController 
+})        .component('teacherAssignedSubjects',{
+            templateUrl: 'teacherAssignedSubjectsTpl',
+            controller: teacherListController 
 });
 
 function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuilder,DTColumnDefBuilder){
@@ -75,6 +78,17 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
     $scope.hasSucceededLoadingCurrentProgressionStats = function () {
         return !$scope.isLoadingCurrentProgressionStats() && !$scope.hasFailedLoadingCurrentProgressionStats();
     }
+    
+    
+    var $ctrl = this;
+    
+    $ctrl.init = function(){
+     
+    $timeout(
+     $http.get('teacherAssignedSubjects').then(function(response){
+         $ctrl.ue = response.data[0];
+     }),500);
+ };
 
     $scope.loadTeachers = function () {
         $scope.hasLoadedTeachers = null;

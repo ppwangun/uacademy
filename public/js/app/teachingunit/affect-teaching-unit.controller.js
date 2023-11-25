@@ -16,6 +16,8 @@ function AffectTeachingUnitController($scope, $mdDialog, $http, teacherId, teach
     $scope.subjects = [];
     $scope.selectedSubject = null;
     
+
+    
         //Loading subjects asynchronously
     $scope.query = function(subject)
     {

@@ -73,17 +73,93 @@ class IndexController extends AbstractActionController
 
         return $view;  
 
-    }    
+    } 
+    
+    public function teacherAssignedSubjectsTplAction()
+    {
+        $view = new ViewModel([
+         ]);
+        // Disable layouts; `MvcEvent` will use this View Model instead
+        $view->setTerminal(true);
+
+        return $view;        
+    }   
+    
+    public function teacherAssignedSubjectsAction()
+    {
+        $this->entityManager->getConnection()->beginTransaction();
+        try
+        { 
+            $userId = $this->sessionContainer->userId;
+            $user = $this->entityManager->getRepository(User::class)->find($userId );
+            $ue = [];
+            
+            if ($this->access('all.classes.view',['user'=>$user])||$this->access('global.system.admin',['user'=>$user])) 
+            {
+                //collect all courses affected to any semester
+                    $query = $this->entityManager->createQuery('SELECT t.id, c.id as ue_class_id,s.id as sem_id,s.code as sem_code,t.name,t.code,c1.code as class,c.credits, c.hoursVolume ,c.cmHours as cm_hrs,c.tpHours as tp_hrs, c.tdHours as td_hrs FROM Application\Entity\ClassOfStudyHasSemester c '
+                        . 'JOIN c.classOfStudy c1 JOIN c.teachingUnit t JOIN c.semester s JOIN s.academicYear a JOIN c.teacher teach   WHERE a.isDefault = 1 '
+                        . 'AND c.status = 1 ');
+                $ue= $query->getResult(); 
+                
+                //collect all courses affected to any semester
+            $query = $this->entityManager->createQuery('SELECT t.id, c.id as ue_class_id,s.id as sem_id,s.code as sem_code,t.subjectName as name,t.subjectCode as code,c1.code as class,c.credits, c.hoursVolume ,c.cmHours as cm_hrs,c.tpHours as tp_hrs, c.tdHours as td_hrs FROM Application\Entity\ClassOfStudyHasSemester c '
+                        . 'JOIN c.classOfStudy c1 JOIN c.subject t JOIN c.semester s JOIN s.academicYear a JOIN c.teacher teach   WHERE a.isDefault = 1 '
+                        . 'AND c.status = 1 ');  
+            $ue_1= $query->getResult();    
+             $ue = array_merge($ue,$ue_1);
+               
+            }
+            else
+            {
+                //Find clases mananged by the current user
+                $userClasses = $this->entityManager->getRepository(UserManagesClassOfStudy::class)->findBy(Array("user"=>$user));
+                
+                if($userClasses)
+                {
+                    foreach($userClasses as $classe)
+                    {
+                        //collect all courses affected to any semester
+                        $query = $this->entityManager->createQuery('SELECT t.id, c.id as ue_class_id,s.id as sem_id,s.code as sem_code,t.name,t.code,t.numberOfSubjects as subjects, c1.code as class,c.credits, c.hoursVolume ,c.cmHours as cm_hrs,c.tpHours as tp_hrs, c.tdHours as td_hrs FROM Application\Entity\ClassOfStudyHasSemester c '
+                                . 'JOIN c.classOfStudy c1 JOIN c1.teacher  teach  JOIN c.teachingUnit t JOIN c.semester s JOIN s.academicYear a WHERE a.isDefault = 1 '
+                                . 'AND c.status = 1 '
+                                . 'AND c1.code = ?1 ');
+                        $query->setParameter(1, $classe->getClassOfStudy()->getCode());
+                        $ue_1= $query->getResult(); 
+                        $ue = array_merge($ue,$ue_1);
+                        
+                    }
+                }
+            }
+            for($i=0;$i<sizeof($ue);$i++)
+            {
+               // $ue[$i]['name']= utf8_encode($ue[$i]['name']);
+
+            }            
+
+            $this->entityManager->getConnection()->commit();
+            return new JsonModel([
+                  $ue  
+                
+            ]);  
+        }
+        catch(Exception $e)
+        {
+           $this->entityManager->getConnection()->rollBack();
+            throw $e;
+            
+        }        
+    }
     public function unitFollowUpAction()
     {
         $this->entityManager->getConnection()->beginTransaction();
         try
         { 
             $data = $this->params()->fromPost(); 
-           
-            $coshs = $this->entityManager->getRepository(ClassOfStudyHasSemester::class)->find($data["teachingUnitId"]);
-            $progression = $this->entityManager->getRepository(ContractFollowUp::class)->findByClassOfStudyHasSemester($coshs); 
-            
+        
+            $coshs = $this->entityManager->getRepository(ClassOfStudyHasSemester::class)->find($data["teachingUnitId"]);    
+            $progression = $this->entityManager->getRepository(ContractFollowUp::class)->findByClassOfStudyHasSemester($coshs);  
+       
             foreach($progression as $key=>$value)
             {
                 $hydrator = new ReflectionHydrator(); 
@@ -96,11 +172,11 @@ class IndexController extends AbstractActionController
             foreach($progression as $value)
             { 
                 if($value->getLectureType() == "cm") 
-                    $totalCm += $value->getToalTime();
+                    $totalCm += $value->getTotalTime();
                 if($value->getLectureType() == "td")
-                    $totalTd+= $value->getToalTime();
+                    $totalTd+= $value->getTotalTime();
                 if($value->getLectureType() == "tp")
-                    $totalTp+= $value->getToalTime();
+                    $totalTp+= $value->getTotalTime();
                 
                 $total = $totalCm + $totalTd + $totalTp;
                 

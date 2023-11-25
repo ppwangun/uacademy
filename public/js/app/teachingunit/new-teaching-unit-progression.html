@@ -31,14 +31,14 @@
                     </md-input-container>
                     <md-input-container class="md-block" flex-gt-sm>
                         <label for="start_time">Heure de debut</label>
-                        <input type="time" name="start_time" ng-model="progression.start_time" id="start_time" min="07:00" max="18:00"  required/>
+                        <input type="time" name="start_time" ng-model="progression.start_time" id="start_time"   required/>
                         <div ng-messages="progressionForm.date.$error" multiple md-auto-hide="true">
                             <div ng-message="required">Ce champ est requis !</div>
                         </div>
                     </md-input-container>
                     <md-input-container class="md-block" flex-gt-sm>
                         <label for="end_time">Heure de fin</label>
-                        <input type="time" name="end_time" ng-model="progression.end_time" id="end_time" min="07:00" max="18:00"  required/>
+                        <input type="time" name="end_time" ng-model="progression.end_time" id="end_time"   required/>
                         <div ng-messages="progressionForm.date.$error" multiple md-auto-hide="true">
                             <div ng-message="required">Ce champ est requis !</div>
                         </div>

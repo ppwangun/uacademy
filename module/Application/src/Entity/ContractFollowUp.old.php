@@ -1,17 +1,16 @@
 <?php
 namespace Application\Entity;
 
-use Application\Entity\TeacherPaymentBill;
 use Application\Entity\ClassOfStudyHasSemester;
 use Application\Entity\Contract;
-
+use Application\Entity\TeacherPaymentBill;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ContractFollowUp
  *
- * @ORM\Table(name="contract_follow_up", indexes={@ORM\Index(name="fk_contract_follow_up_teacher_payment_bill1_idx", columns={"teacher_payment_bill_id"}), @ORM\Index(name="fk_contract_follow_up_class_of_study_has_semester1_idx", columns={"class_of_study_has_semester_id"}), @ORM\Index(name="fk_contract_follow_up_contract1_idx", columns={"contract_id"})})
+ * @ORM\Table(name="contract_follow_up", indexes={@ORM\Index(name="fk_contract_follow_up_class_of_study_has_semester1_idx", columns={"class_of_study_has_semester_id"}), @ORM\Index(name="fk_contract_follow_up_contract1_idx", columns={"contract_id"}), @ORM\Index(name="fk_contract_follow_up_teacher_payment_bill1_idx", columns={"teacher_payment_bill_id"})})
  * @ORM\Entity
  */
 class ContractFollowUp
@@ -33,6 +32,27 @@ class ContractFollowUp
     private $date;
 
     /**
+     * @var float|null
+     *
+     * @ORM\Column(name="hr_volume", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $hrVolume;
+
+    /**
+     * @var float|null
+     *
+     * @ORM\Column(name="payment_amount", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $paymentAmount;
+
+    /**
+     * @var bool|null
+     *
+     * @ORM\Column(name="payment_status", type="boolean", nullable=true)
+     */
+    private $paymentStatus = '0';
+
+    /**
      * @var \DateTime|null
      *
      * @ORM\Column(name="start_time", type="time", nullable=true)
@@ -45,13 +65,6 @@ class ContractFollowUp
      * @ORM\Column(name="end_time", type="time", nullable=true)
      */
     private $endTime;
-
-    /**
-     * @var float|null
-     *
-     * @ORM\Column(name="total_time", type="float", precision=10, scale=0, nullable=true)
-     */
-    private $totalTime;
 
     /**
      * @var string|null
@@ -68,11 +81,11 @@ class ContractFollowUp
     private $lectureType;
 
     /**
-     * @var bool|null
+     * @var float|null
      *
-     * @ORM\Column(name="payment_status", type="boolean", nullable=true)
+     * @ORM\Column(name="toal_time", type="float", precision=10, scale=0, nullable=true)
      */
-    private $paymentStatus = '0';
+    private $toalTime;
 
     /**
      * @var ClassOfStudyHasSemester
@@ -141,6 +154,78 @@ class ContractFollowUp
     }
 
     /**
+     * Set hrVolume.
+     *
+     * @param float|null $hrVolume
+     *
+     * @return ContractFollowUp
+     */
+    public function setHrVolume($hrVolume = null)
+    {
+        $this->hrVolume = $hrVolume;
+    
+        return $this;
+    }
+
+    /**
+     * Get hrVolume.
+     *
+     * @return float|null
+     */
+    public function getHrVolume()
+    {
+        return $this->hrVolume;
+    }
+
+    /**
+     * Set paymentAmount.
+     *
+     * @param float|null $paymentAmount
+     *
+     * @return ContractFollowUp
+     */
+    public function setPaymentAmount($paymentAmount = null)
+    {
+        $this->paymentAmount = $paymentAmount;
+    
+        return $this;
+    }
+
+    /**
+     * Get paymentAmount.
+     *
+     * @return float|null
+     */
+    public function getPaymentAmount()
+    {
+        return $this->paymentAmount;
+    }
+
+    /**
+     * Set paymentStatus.
+     *
+     * @param bool|null $paymentStatus
+     *
+     * @return ContractFollowUp
+     */
+    public function setPaymentStatus($paymentStatus = null)
+    {
+        $this->paymentStatus = $paymentStatus;
+    
+        return $this;
+    }
+
+    /**
+     * Get paymentStatus.
+     *
+     * @return bool|null
+     */
+    public function getPaymentStatus()
+    {
+        return $this->paymentStatus;
+    }
+
+    /**
      * Set startTime.
      *
      * @param \DateTime|null $startTime
@@ -186,30 +271,6 @@ class ContractFollowUp
     public function getEndTime()
     {
         return $this->endTime;
-    }
-
-    /**
-     * Set totalTime.
-     *
-     * @param float|null $totalTime
-     *
-     * @return ContractFollowUp
-     */
-    public function setTotalTime($totalTime = null)
-    {
-        $this->totalTime = $totalTime;
-    
-        return $this;
-    }
-
-    /**
-     * Get totalTime.
-     *
-     * @return float|null
-     */
-    public function getTotalTime()
-    {
-        return $this->totalTime;
     }
 
     /**
@@ -261,27 +322,27 @@ class ContractFollowUp
     }
 
     /**
-     * Set paymentStatus.
+     * Set toalTime.
      *
-     * @param bool|null $paymentStatus
+     * @param float|null $toalTime
      *
      * @return ContractFollowUp
      */
-    public function setPaymentStatus($paymentStatus = null)
+    public function setToalTime($toalTime = null)
     {
-        $this->paymentStatus = $paymentStatus;
+        $this->toalTime = $toalTime;
     
         return $this;
     }
 
     /**
-     * Get paymentStatus.
+     * Get toalTime.
      *
-     * @return bool|null
+     * @return float|null
      */
-    public function getPaymentStatus()
+    public function getToalTime()
     {
-        return $this->paymentStatus;
+        return $this->toalTime;
     }
 
     /**

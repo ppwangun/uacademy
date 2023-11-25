@@ -39,7 +39,7 @@ class ProgressionController extends AbstractRestfulController
     
     public function get($id)
     {   
-  
+
              $coshs= $this->entityManager->getRepository(ClassOfStudyHasSemester::class)->find($id);
             
             $progressions = $this->entityManager->getRepository(ContractFollowUp::class)->findByClassOfStudyHasSemester($coshs);
@@ -116,7 +116,7 @@ class ProgressionController extends AbstractRestfulController
         $this->entityManager->getConnection()->beginTransaction();
         try
         {
-           // var_dump($data); 
+           // var_dump($data); exit
             $progression = new ContractFollowUp();
                     $progression->setDate(new \DateTime($data["date"]));
                     $progression->setStartTime(new \DateTime ($data["start_time"]));
@@ -125,11 +125,11 @@ class ProgressionController extends AbstractRestfulController
                     $startTime = new \DateTime ($data["start_time"]);
                     $progression->setLectureType($data["target"]);
                     $endTime = new \DateTime ($data["end_time"]);
-                    $timeDiff = $startTime->diff($endTime); 
-                    $progression->setToalTime($timeDiff->h);
+                    $timeDiff = $startTime->diff($endTime);  
+                    $progression->setTotalTime($timeDiff->h);
 
 
-            
+           
             $coshs =$this->entityManager->getRepository(ClassOfStudyHasSemester::class)->find($data['teaching_unit_id']); 
             $progression->setClassOfStudyHasSemester($coshs );
 

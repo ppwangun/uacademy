@@ -80,7 +80,7 @@ class TeacherController extends AbstractRestfulController
                 if($data["birthDate"])
                     $teacher["birthdate"]=$data["birthDate"]->format('Y-m-d');
                 $teacher["documents"] = $documents;
-                $query = $this->entityManager->createQuery('SELECT c.id,c.codeUe,c.nomUe,c.classe,c.semester,c.semId,c.totalHrs  FROM Application\Entity\CurrentYearUesAndSubjectsView c'
+                $query = $this->entityManager->createQuery('SELECT c.coshs as id,c.codeUe,c.nomUe,c.classe,c.semester,c.semId,c.totalHrs  FROM Application\Entity\CurrentYearUesAndSubjectsView c'
                         .' WHERE c.teacher = :teacher');
                 $query->setParameter('teacher',$id);
 
@@ -101,7 +101,6 @@ class TeacherController extends AbstractRestfulController
         $this->entityManager->getConnection()->beginTransaction();
         try
         { 
-            
         $teachers = $this->entityManager->getRepository(Teacher::class)->findAll();
                 
             foreach($teachers as $key=>$value)
@@ -194,9 +193,9 @@ class TeacherController extends AbstractRestfulController
                   }
                 }
              
-exit;
+
                foreach ($_FILES["documents"]["name"] as $key=>$file)
-               {  echo $key." YES MAN ".$file["file"];
+               {  //echo $key." YES MAN ".$file["file"];
                 /*   if($key="img_file")
                    {
                    $filename = $file["name"][0];  
@@ -208,7 +207,7 @@ exit;
             }
            
 
-              exit;     
+ 
 
 
 
@@ -219,7 +218,7 @@ exit;
             
             $this->entityManager->flush();
             $message = true;
-            $this->entityManager->getConnection()->commit(); exit;
+            $this->entityManager->getConnection()->commit(); 
             
             return new JsonModel([
                  $message

@@ -136,8 +136,11 @@ class ProspectsController extends AbstractRestfulController
             
 
             $msge_en_std = "Votre candidature d\'admission à l'institue Agenla est acceptée. veuillez proceder à votre inscription académique"; 
-           // $this->examManager->sendWeb2sms237API($student->getPhoneNumber(),$msge_en_std);
+            //$this->examManager->sendWeb2sms237API($student->getPhoneNumber(),$msge_en_std);
+             $phoneNumber = "+237".$student->getPhoneNumber();
+            $this->examManager->sendAvylTextSMS($phoneNumber,$msge_en_std);
             
+        
         // $to = $prospect->getEmail();
             $to = "wangunpp@yahoo.fr";
          $subject = "Votre admission à l'institut agenla";
@@ -162,7 +165,7 @@ class ProspectsController extends AbstractRestfulController
          $header .= "Cc:wangunpp@yahoo.fr \r\n";
          $header .= "MIME-Version: 1.0\r\n";
          $header .= "Content-type: text/html\r\n";         
-         $retval = mail ($to,$subject,$message,$header);
+         //$retval = mail ($to,$subject,$message,$header);
          
         /* if( $retval == true ) {
             echo "Message sent successfully...";
