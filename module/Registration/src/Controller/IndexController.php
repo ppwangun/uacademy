@@ -1208,7 +1208,7 @@ class IndexController extends AbstractActionController
                         $imgdataBin= base64_decode(stream_get_contents($stud->getPhoto()));
 
                         
-                            $im = imagecreatefromstring($imgdataBin);
+                            $im = @imagecreatefromstring($imgdataBin);
 
                         // Specify the location where you want to save the image
                         $img_file_jpeg = $_SERVER["DOCUMENT_ROOT"].'/img/'.$stud->getMatricule().'.jpeg';
@@ -1219,6 +1219,7 @@ class IndexController extends AbstractActionController
                         // This will strip any metadata or invalid contents (including, the PHP backdoor)
                         // To block any possible exploits, consider increasing the compression level
                                                 //imagebmp($im, $img_file_bmp);
+                        if (!$im) continue;
                                                 imagepng($im, $img_file_png, 0);
 						imagejpeg($im, $img_file_jpeg);
 						// Libération de la mémoire
