@@ -5,6 +5,9 @@ angular.module('teachingunit')
 })        .component('teacherAssignedSubjects',{
             templateUrl: 'teacherAssignedSubjectsTpl',
             controller: teacherListController 
+}).component('subjectBilling',{
+            templateUrl: 'subjectBillingTpl',
+            controller: teacherListController 
 });
 
 function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuilder,DTColumnDefBuilder){
@@ -88,7 +91,61 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
      $http.get('teacherAssignedSubjects').then(function(response){
          $ctrl.ue = response.data[0];
      }),500);
+     
+    //Loading classes of study asynchronously
+    $ctrl.query = function(classe)
+    {
+       var  dataString = {id: classe},
+          config = {
+            params: dataString,
+            headers : {'Accept' : 'application/json; charset=utf-8'}
+            };
+    
+            return  $http.get('classes',config).then(function(response){
+                   return response.data[0];
+                });
+     };
+     
+     $timeout(    
+         $http.get('semester').then(function(response){
+             //$ctrl.semesters = response.data[0];
+         }).then(function(){
+             $http.get('examtype').then(function(response){
+                 $ctrl.examtypes = response.data[0];
+                 
+             });
+         }),500); 
+         
+     
  };
+ 
+ $ctrl.asignedSemToClasse = function(class_code){
+    var data = {id: class_code};
+    var config = {
+    params: data,
+    headers : {'Accept' : 'application/json'}
+    };      
+    $http.get('assignsemtoclass',config).then(function(response){
+        $ctrl.semesters = response.data[0];
+        $ctrl.isActivatedUeSelect = true;
+    });
+};
+
+ $ctrl.loadUE = function(classe){
+    $ctrl.ues = null;
+    $ctrl.subjects = [];
+    $ctrl.selectedSubject = null;
+    var data = {id: {classe_id:classe.id,sem_id:$ctrl.selectedSem.id}};
+    var config = {
+    params: data,
+    headers : {'Accept' : 'application/json'}
+    };
+    //Loading selected class information for update
+    $timeout(
+     $http.get('teacherAssignedSubjects').then(function(response){
+         $ctrl.ues = response.data[0];
+     }),1000);
+  };
 
     $scope.loadTeachers = function () {
         $scope.hasLoadedTeachers = null;

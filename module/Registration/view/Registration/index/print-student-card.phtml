@@ -49,16 +49,17 @@ class PDF extends TCPDF {
         // Set font
         $this->SetFont('coopbl', 'B', 10);
         $this->SetX(-5);
-        $this->SetY(5);
+ 
+        $this->SetY(4);
         
         $this->Cell(0,'', 'Université des Montagnes ', 0, false, '', 0, '', 0, false, 'M', 'M');
-        $this->SetY(13);
+        $this->SetY(8);
         $this->SetFont('helvetica', '', 10);
         $this->Cell(0,'',$this->faculty, 0, false, '', 0, '', 0, false, 'M', 'M');
-        $this->SetY(15);
+        $this->SetY(12);
         $this->Cell(0,'',$this->filiere, 0, false, '', 0, '', 0, false, 'M', 'M');
         // Title
-        $this->SetY(25);
+        $this->SetY(14);
         $html ='<hr>';
         $this->writeHTML($html, true, false, true, false, '');
         
@@ -66,19 +67,19 @@ class PDF extends TCPDF {
     function Footer() {
         $footertext="Report generated with UdMAcademy 2.0 By WTECH (" . date("d-m-Y H:i") . ")";
         // Position at 15 mm from bottom
-        $this->SetY(-15);
+        $this->SetY(-5);
         $this->SetFont('helvetica', '', 6);
         // Page number
          
        // $this->Cell(0, 5, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
         $html ='<hr>';
         $this->writeHTML($html, true, false, true, false, '');
-        $this->writeHTML($footertext, false, true, false, true);
+       // $this->writeHTML($footertext, false, true, false, true);
         
-        $this->SetY(-20);
-        $this->SetFont('freesans','I',8);
+        $this->SetY(-5);
+        $this->SetFont('freesans','I',6);
         $this->SetTextColor(34,68,136);
-        $this->Cell(0, 5, 'BP 208-Bangangté Cameroun  Tél. : (237) 243 02 51 41  E-mail : info@udm.aed-cm.org    Site web :  www.udm.aed-cm.org', 0, false, 'L', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 5, 'BP 208-Bangangté Cameroun  Tél. : (237) 243 02 51 41  E-mail : info@udm.aed-cm.org', 0, false, 'L', 0, '', 0, false, 'T', 'M');
         $this->SetTextColor(0,0,0);
         $this->SetFont('garamond','I',10);
        
@@ -86,14 +87,14 @@ class PDF extends TCPDF {
 }
 
 // create new PDF document
-$pdf = new PDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+$pdf = new PDF('L', PDF_UNIT,'A7', true, 'UTF-8', false);
 
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
 $pdf->SetAuthor('Parfait Wangun');
 $pdf->SetTitle('Universté des Montagnes');
-$pdf->SetSubject('TCPDF Tutorial');
-$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+$pdf->SetSubject('Student identity card');
+$pdf->SetKeywords('identity,card');
 
 $pdf->faculty = $this->faculty;
 $pdf->facultyCode = "";
@@ -104,19 +105,19 @@ $pdf->filiere = $this->filiere;
 //$pdf->SetHeaderData('', 0, 'Universté des Montagnes', $this->faculty."\n".$this->filiere."\n".$this->acadYr);
 
 // set header and footer fonts
-$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+//$pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+//$pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
 // set default monospaced font
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
 // set margins
-$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+$pdf->SetMargins(2.5,14, 2.5,2.5);
+//$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+//$pdf->SetFooterMargin(2.5);
 
 // set auto page breaks
-$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+//$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
 // set image scale factor
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
@@ -138,66 +139,52 @@ $pdf->AddPage('L','A7');
 //$pdf->Write(0, $this->classe, '', 0, 'L', true, 0, false, false, 0);
 //$pdf->Write(0, $nomUe.':    '.$codeUe, '', 0, 'L', true, 0, false, false, 0);
 //$pdf->SetFont('helvetica', '', 2);
-$pdf->Write(0, '', '', 0, 'L', true, 0, false, false, 0);
+//$pdf->Write(0, '', '', 0, 'L', true, 0, false, false, 0);
 //$pdf->SetFont('helvetica', '', 16);
 
 
-$pdf->setFont("coopbl",'',6); 
+$pdf->setFont("coopbl",'',12); 
 $student = $this->student;
 
-$html = '<div  style="width:100%;  text-align:center; background-color:#428bca; color:#191970;">FICHE D\'INSCRIPTION ADMINISTRATIVE ET ACADEMIQUE <br>'
-        . '<span style="font-size: 8px; font-weight:normal;"><i>ADMINISTRATIVE AND ACADEMIC REGISTRATION FILE</i></span></div>';
+$html1 = '<div  style="font-family: coopbl; font-size: 14px; color:#fff;  text-align:center; background-color:#428bca; ">CARTE D\'ETUDIANT  '.$this->acadYr.' <br>'
+        . '<span style="font-size: 8px; font-weight:normal;"><i>STUDENT CARD</i></span></div>';
 
-// output the HTML content
-$pdf->writeHTML($html, true, 0, true, 0);
-
-$pdf->SetFont('garamond', '', 10);
-
-$pdf->MultiCell(23, 5,$this->classe, 1, 'L', 0, 0, '', '', true);
-$pdf->MultiCell('', 5, 'Matricule: '.$this->student["matricule"], 0, 'R', 0, 1, '', '',true, true);
 
 
 // set JPEG quality
 $pdf->setJPEGQuality(100);
 //var_dump($this->student['photo']); exit;
 //var_dump($this->student['photo']); exit;
-$imgdata= base64_decode(stream_get_contents($this->student['photo']));
+//$imgdata= base64_decode(stream_get_contents($this->student['photo']));
+$imgdata= 'data:image/png;base64,'.stream_get_contents($this->student['photo']);
 //var_dump($imgdata); exit;
-$pdf->Image('@'.$imgdata,  '', '', 40, 40, '', '', 'T', false, 300, 'R', false, false, 1, false, false, false);
- //$html = '<img width="200" height="200"   src="data:image/jpeg;base64,'. $this->student['photo'] .'" />';
+//$pdf->Image('@'.$imgdata,  '', 15, '', '', '', '', 'T', false, 300, 'R', false, false, 1, false, false, false);
+
 //$pdf->writeHTML($html, true, 0, true, 0);
 
 //$pdf->SetFont('helvetica', '', 10);
-$html1 ='<div style="background-color:#edf0f5; font-weight: bold; color: grey;">IDENTIFICATION DE l\'ETUDIANT</div>';
+//$html1 ='<div style="background-color:#edf0f5; font-weight: bold; color: grey;">IDENTIFICATION DE l\'ETUDIANT</div>';
 // output the HTML content
-$pdf->writeHTML($html1, true, 0, true, 0);
-$pdf->SetFont('courier', '', 8);
+//$pdf->writeHTML($html1, true, 0, true, 0);
+$pdf->SetFont('helvetica', '', 8);
 //$pdf->writeHTMLCell(0, 0, '', 90, $html1, 0, 0, false, 'L', true);
 
-$htmlEtudiant ='<style> td{ height:20px;}</style><div> <table><tbody>'
-        . '<tr><td colspan="3"><span style="font-weight: bold">Nom(s) et Prénom(s):</span> '.$this->student["nom"].' '.$this->student["prenom"].''
-        . '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Sexe:</strong>'.$this->student["gender"].'</td>'
- 
-        . '</tr>'
-        . '<tr><td><span style="font-weight: bold">Date de naissance:</span> '.$this->student["dateOfBirth"]->format('d/m/Y').' </td> <td><span style="font-weight: bold">Lieu de naissance:</span> '.$this->student["bornAt"].'</td><td></td></tr>'
+$htmlEtudiant =$html1.'<table>'
+        .'<tr><td rowspan="6" style="width:100px;"><img width="100" height="100"   src="'. $imgdata .'" /></td><td></td></tr>'
+        . '<tr><td><span style="font-weight: bold"></span> '.$this->student["nom"].' '.$this->student["prenom"].'</td></tr>'
+        . '<tr><td><span style="font-weight: bold">Né le </span> '.$this->student["dateOfBirth"]->format('d/m/Y').'<span style="font-weight: bold"> A</span> '.$this->student["bornAt"].' </td></tr> '
+        .'<tr><td ><span style="font-weight: bold"></span> '.$this->student["phoneNumber"].'</td></tr>'
+        .'<tr><td ><span style="font-size: 16px; font-weight: bold">'.$this->studentMat.'</span></td></tr>'
+        .'<tr><td ><span style="font-size: 16px; font-weight: bold">'.$this->classe.'</span></td></tr>'
         
-          . '<tr>'
-   
-        . '</tr>'
+        . '</table>';
 
-        . '<tr>'
-        . '<td ><span style="font-weight: bold">Email:</span> '.$this->student["email"].'</td>'
-        . '<td ><span style="font-weight: bold">N° Téléphone:</span> '.$this->student["phoneNumber"].'</td>'
-        . '<td ></td>'
-        . '</tr>'
-    
-                   
-        . '</tbody></table></div>';
-$pdf->writeHTML($htmlEtudiant, true, 0, true, 0);
+$pdf->writeHTML($htmlEtudiant, true, false, true, false);
 
 
 
 ob_end_clean();
+
 //Close and output PDF document
 $pdf->Output($_SERVER["DOCUMENT_ROOT"].'/impressions/'.preg_replace('/\s+/', '','testID'.$this->studentMat).'.pdf', 'F');
 ?>

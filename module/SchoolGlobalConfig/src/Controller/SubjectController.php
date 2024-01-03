@@ -168,7 +168,7 @@ class SubjectController extends AbstractRestfulController
 
             if($ueClasse )
             {
-                
+              
                 $this->entityManager->remove($ueClasse );
                 $this->entityManager->remove($subject );
                 $this->entityManager->flush();

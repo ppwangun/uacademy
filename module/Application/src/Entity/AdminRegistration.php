@@ -84,7 +84,19 @@ class AdminRegistration
      */
     private $academicYear;
 
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="schoolCertificateReferenceId", type="string", length=45, nullable=true)
+     */
+    private $schoolcertificatereferenceid;
 
+    /**
+     * @var bool|null
+     *
+     * @ORM\Column(name="schoolCertificateAvailabilityStatus", type="boolean", nullable=true)
+     */
+    private $schoolcertificateavailabilitystatus = '0';
 
     /**
      * @var ClassOfStudy
@@ -225,6 +237,55 @@ class AdminRegistration
     {
         return $this->classOfStudy;
     }
+    
+ /**
+     * Set schoolcertificatereferenceid.
+     *
+     * @param string|null $schoolcertificatereferenceid
+     *
+     * @return AdminRegistration
+     */
+    public function setSchoolcertificatereferenceid($schoolcertificatereferenceid = null)
+    {
+        $this->schoolcertificatereferenceid = $schoolcertificatereferenceid;
+    
+        return $this;
+    }
+
+    /**
+     * Get schoolcertificatereferenceid.
+     *
+     * @return string|null
+     */
+    public function getSchoolcertificatereferenceid()
+    {
+        return $this->schoolcertificatereferenceid;
+    }
+
+    /**
+     * Set schoolcertificateavailabilitystatus.
+     *
+     * @param bool|null $schoolcertificateavailabilitystatus
+     *
+     * @return AdminRegistration
+     */
+    public function setSchoolcertificateavailabilitystatus($schoolcertificateavailabilitystatus = null)
+    {
+        $this->schoolcertificateavailabilitystatus = $schoolcertificateavailabilitystatus;
+    
+        return $this;
+    }
+
+    /**
+     * Get schoolcertificateavailabilitystatus.
+     *
+     * @return bool|null
+     */
+    public function getSchoolcertificateavailabilitystatus()
+    {
+        return $this->schoolcertificateavailabilitystatus;
+    }    
+    
     /**
      * Set feesDotation
      *

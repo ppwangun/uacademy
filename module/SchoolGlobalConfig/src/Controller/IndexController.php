@@ -30,6 +30,7 @@ use Application\Entity\Subject;
 use Application\Entity\UnitRegistration;
 use Application\Entity\StudentSemRegistration;
 use Application\Entity\CurrentYearTeachingUnitView;
+use PhpOffice\PhpSpreadsheet;
 
 class IndexController extends AbstractActionController
 {
@@ -52,6 +53,86 @@ class IndexController extends AbstractActionController
     {
         return [];
     }
+    
+   public function importSubjectAction()
+    {
+        $this->entityManager->getConnection()->beginTransaction();
+        try
+        {     
+
+            // Getting file name 
+           $filename = $_FILES['file']['name'];
+           // Location 
+           $location = './public/upload/';
+
+           $csv_mimetypes = array(
+               'text/csv',
+               'application/csv',
+               'text/comma-separated-values',
+               'application/excel',
+               'application/vnd.ms-excel',
+               'application/vnd.msexcel',
+            );
+        // Check if fill type is allowed  
+          if(!in_array($_FILES['file']['type'],$csv_mimetypes))
+          {
+             $result = false;
+
+              $view = new JsonModel([
+                $result
+              ]);
+              return $view; 
+          }
+
+            // Upload file 
+            move_uploaded_file($_FILES['file']['tmp_name'],$location.$filename);
+
+
+            $reader = new Csv(); 
+            $reader =  PhpSpreadsheet\IOFactory::createReader('Xlsx');
+            $reader->setReadDataOnly(TRUE);
+            $spreadsheet = $reader->load($location.$filename);
+            $spreadsheet = $reader->load($location.$filename);
+            $sheetData = $spreadsheet->getActiveSheet()->toArray();
+
+            if (!empty($sheetData)) {
+                for ($i=1; $i<count($sheetData); $i++) { //skipping first row
+                    $row["nom"] = $sheetData[$i][0];
+                    $row["prenom"] = $sheetData[$i][1];
+                    $row["telephone"] = $sheetData[$i][2];
+                    $row["classe"] = $sheetData[$i][3];
+                    $row["frais_admission"] = $sheetData[$i][4];
+                    $row["date_admission"] = $sheetData[$i][5];
+                    $row["type_concours"] = $sheetData[$i][6];
+                   
+
+                    $this->studentManager->addAdmittedStudent($row);
+
+                }
+            }
+
+
+        $this->entityManager->getConnection()->commit();
+
+        $result = true;
+
+          $view = new JsonModel([
+              $result
+         ]);
+
+// Disable layouts; `MvcEvent` will use this View Model instead
+       // $view->setTerminal(true);
+
+            return $view;      
+        }
+        catch(Exception $e)
+        {
+           $this->entityManager->getConnection()->rollBack();
+            throw $e;
+
+        }
+    } 
+        
     
     public function filfrmdegreeAction()
     {

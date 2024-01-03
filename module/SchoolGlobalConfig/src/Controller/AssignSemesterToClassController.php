@@ -14,6 +14,7 @@ use Application\Entity\Semester;
 use Application\Entity\ClassOfStudy;
 use Application\Entity\SemesterAssociatedToClass;
 use Application\Entity\AcademicYear;
+use Application\Entity\ClassOfStudyHasSemester;
 
 
 
@@ -117,14 +118,15 @@ class AssignSemesterToClassController extends AbstractRestfulController
         $this->entityManager->getConnection()->beginTransaction();
         try
         { 
-            
+            $data = json_decode($id,true);           
             $acadYr = $this->entityManager->getRepository(AcademicYear::class)->findOneBy(array("isDefault"=>1));
-            $sem = $this->entityManager->getRepository(Semester::class)->findOneByCode($id);
-            $assignedSemToClass = $this->entityManager->getRepository(SemesterAssociatedToClass::class)->findOneBy(array("semester"=>$sem,"academicYear"=>$acadYr ));
-            
+            $sem = $this->entityManager->getRepository(Semester::class)->findOneBy(array("code"=>$data["sem"],"academicYear"=>$acadYr)); 
+            $classe = $this->entityManager->getRepository(ClassOfStudy::class)->find($data["class_id"]);
+            $assignedSemToClass = $this->entityManager->getRepository(SemesterAssociatedToClass::class)->findOneBy(array("semester"=>$sem,"classOfStudy"=>$classe,"academicYear"=>$acadYr ));
+
             if($assignedSemToClass)
             {
-                $this->entityManager->remove($assignedSemToClass );
+                $this->entityManager->remove($assignedSemToClass);
                 $this->entityManager->flush();
               
             }

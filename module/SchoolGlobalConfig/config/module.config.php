@@ -394,7 +394,17 @@ return [
                         'action'        => 'searchFilByFaculty',
                     ],
                 ],
-            ],   
+            ],
+            'importSubject' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/importSubject',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'importSubject',
+                    ],
+                ],
+            ],             
             'searchSpeByFil' => [
                 'type'    => Literal::class,
                 'options' => [

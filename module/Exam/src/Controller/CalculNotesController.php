@@ -1020,7 +1020,8 @@ class CalculNotesController extends AbstractRestfulController
         }
         foreach ($noteRat as $key=>$value)
         {
-            $noteRat[$key]=$value/$cpt;
+            $noteRat[$key]=round($value/$cpt,2,PHP_ROUND_HALF_UP);
+            
                         
         }        
         return $noteRat;

@@ -126,7 +126,7 @@ function newclassesCtrl($timeout,$http,$scope,$location,$mdDialog,$routeParams,t
      
    $ctrl.removeSemToClasse = function(sem_code,ev)
    {
-        var data = {id: sem_code}; 
+        var data = {id: {sem:sem_code,class_id: $ctrl.classe.id }}; 
         var config = {
         params: data,
         headers : {'Accept' : 'application/json'}

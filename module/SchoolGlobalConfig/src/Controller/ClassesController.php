@@ -203,11 +203,10 @@ class ClassesController extends AbstractRestfulController
 
         $this->entityManager->getConnection()->beginTransaction();
         try
-        {
-            $classe = $this->entityManager->getRepository(ClassOfStudy::class)->findOneById($id);
+        {           
+            $classe = $this->entityManager->getRepository(ClassOfStudy::class)->find($id);
             if($classe )
             {
-                
                 $this->entityManager->remove($classe );
                 $this->entityManager->flush();
                 $this->entityManager->getConnection()->commit();

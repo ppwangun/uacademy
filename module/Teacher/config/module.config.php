@@ -65,6 +65,16 @@ return [
                     ],
                 ],
             ], 
+            'subjectBillingTpl' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/subjectBillingTpl',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'subjectBillingTpl',
+                    ],
+                ],
+            ],            
             'teacherAssignedSubjects' => [
                 'type'    => Literal::class,
                 'options' => [

@@ -77,7 +77,27 @@ function teachingunitCtrl($timeout,$http,$location,$mdDialog,$scope,DTOptionsBui
       
 $scope.subject = {code:'',name:'',credits: '',hours_vol:'',cm_hrs:'',tp_hrs:'',td_hrs:'',ue_classe_id: '', ue_id:''};
 
+$scope.uploadSubject = function(){
 
+    var fd = new FormData();
+    var files = document.getElementById('file').files[0];
+    fd.append('file',files);
+
+    // AJAX request
+    $http({
+     method: 'post',
+     url: 'importSubject',
+     data: fd,
+     headers: {'Content-Type': undefined},
+    }).then(function successCallback(response) { 
+      // Store response data
+      $scope.response = response.data[0];
+      response.data[0]?toastr.success('Import effectué avec succès'):toastr.error('Type de fichier incorrect', 'Erreur');
+      
+    } ,function errorCallback(){
+        toastr.error('Problème survenu lors de l\'import du fichier', 'Erreur');
+    });
+ };
  $scope.createSubject = function(){
      
      $http.post('subject',$scope.subject).then(function successCallback(response){

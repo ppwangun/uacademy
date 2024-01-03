@@ -363,7 +363,7 @@ class IndexController extends AbstractActionController
     
                 //$output = json_encode($output,$depth=1000000); 
             $view = new ViewModel([
-                'acadYr'=>$activeAcadYr->getName(),
+                'acadYr'=>$activeAcadYr->getCode(),
                 'classe'=>$classe,
                 'diplome'=>$diplome,
                 'filiere'=>$filiere,

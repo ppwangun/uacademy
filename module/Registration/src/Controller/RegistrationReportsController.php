@@ -67,7 +67,7 @@ class RegistrationReportsController extends AbstractActionController
             $classe_code= $this->params()->fromRoute('classe_code', -1); 
             $stdId = $this->params()->fromRoute('stdId', -1);
             $acadYr =  $this->entityManager->getRepository(AcademicYear::class)->findOneByIsDefault(1);
-            
+            $acadCode = $acadYr->getCode();
             //Retrieve all student registered to the given classe
             if($stdId==-1 || $stdId==0 ) $registeredStd = $this->entityManager->getRepository(RegisteredStudentView::class)->findBy(array("class"=>$classe_code,"status"=>1));
             else $registeredStd = $this->entityManager->getRepository(RegisteredStudentView::class)->findBy(array("studentId"=>$stdId,"status"=>1));
@@ -83,6 +83,32 @@ class RegistrationReportsController extends AbstractActionController
             $i=0;
             foreach($registeredStd as $key=>$value)
             {
+                $student = $this->entityManager->getRepository(Student::class)->findOneByMatricule($value->getMatricule());
+                $adminRegistration = $this->entityManager->getRepository(AdminRegistration::class)->findOneBy(array("academicYear"=>$acadYr,"student"=>$student,"classOfStudy"=>$classe_1));
+                if($adminRegistration->getSchoolcertificateavailabilitystatus ==0)
+                {
+                    //Genereate scholarshi certificate reference ID
+                    
+                   $totalStudentWithScholarshipCertificate = $this->entityManager->getRepository(AdminRegistration::class)->createQueryBuilder('a')
+                    // Filter by some parameter if you want
+                    // ->where('a.published = 1')
+                    ->select('count(a.id)')
+                    ->where('a.schoolcertificateavailabilitystatus = 1')
+                   ->where('a.academicyear = 1')
+                    ->getQuery()
+                    ->getSingleScalarResult();
+                    $i = $totalStudentWithScholarshipCertificate;
+                    $acadCode = substr($acadYr->getCode(),-4); 
+                    if($i<10) $id = "R00".$i;
+                    elseif($i<100) $id = "R0".$i;
+                    elseif($id<100) $id = "R".$i;
+                    $indice = $totalStudent -$i;
+
+                    if($stdSemReg)
+                        $stdSemReg->setTranscriptReferenceId($id."-".$classe_code."-".$indice."-".$acadCode);
+
+                    $i++;                    
+                }
 
                 $hydrator = new ReflectionHydrator();
                 $std = $hydrator->extract($value);

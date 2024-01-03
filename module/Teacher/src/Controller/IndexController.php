@@ -84,7 +84,15 @@ class IndexController extends AbstractActionController
 
         return $view;        
     }   
-    
+    public function subjectBillingTplAction()
+    {
+        $view = new ViewModel([
+         ]);
+        // Disable layouts; `MvcEvent` will use this View Model instead
+        $view->setTerminal(true);
+
+        return $view;        
+    }    
     public function teacherAssignedSubjectsAction()
     {
         $this->entityManager->getConnection()->beginTransaction();

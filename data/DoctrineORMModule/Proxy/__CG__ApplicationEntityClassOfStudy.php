@@ -66,10 +66,10 @@ class ClassOfStudy extends \Application\Entity\ClassOfStudy implements \Doctrine
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'studyLevel', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'name', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'isCoreCurriculum', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'isEndOfCoreCurriculum', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'isEndCycle', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'isEndDegreeTraining', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'cycle', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'degree', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'deliberation', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'grade'];
+            return ['__isInitialized__', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'studyLevel', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'name', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'isCoreCurriculum', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'isEndOfCoreCurriculum', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'isEndCycle', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'isEndDegreeTraining', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'cycle', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'degree', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'deliberation', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'fieldOfStudy', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'grade'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'studyLevel', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'name', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'isCoreCurriculum', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'isEndOfCoreCurriculum', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'isEndCycle', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'isEndDegreeTraining', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'cycle', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'degree', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'deliberation', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'grade'];
+        return ['__isInitialized__', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'code', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'studyLevel', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'name', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'isCoreCurriculum', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'isEndOfCoreCurriculum', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'isEndCycle', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'isEndDegreeTraining', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'cycle', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'degree', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'deliberation', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'fieldOfStudy', '' . "\0" . 'Application\\Entity\\ClassOfStudy' . "\0" . 'grade'];
     }
 
     /**
@@ -409,6 +409,28 @@ class ClassOfStudy extends \Application\Entity\ClassOfStudy implements \Doctrine
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDeliberation', []);
 
         return parent::getDeliberation();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setFieldOfStudy(\Application\Entity\FieldOfStudy $fieldOfStudy = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setFieldOfStudy', [$fieldOfStudy]);
+
+        return parent::setFieldOfStudy($fieldOfStudy);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFieldOfStudy()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFieldOfStudy', []);
+
+        return parent::getFieldOfStudy();
     }
 
     /**

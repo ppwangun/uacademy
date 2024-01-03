@@ -244,7 +244,9 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
             template: "<teacher-assigned-subjects></teacher-assigned-subjects>",            
         }).when("/academicRankConfig", {
             template: "<acad-rank-config></acad-rank-config>",
-            
+        }).when("/subjectBilling", {
+            template: "<subject-billing></subject-billing>",
+                       
         }).when("/newAcademicRank/", {
             template: "<new-acad-rank></new-acad-rank>",
             
