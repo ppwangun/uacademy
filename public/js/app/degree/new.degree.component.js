@@ -23,8 +23,9 @@ function degreeCtrl($http,$q,$timeout,$routeParams,$mdDialog,$location,$scope,to
     $ctrl.querySearch2 = querySearch2;
     $ctrl.selectedItemChange = selectedItemChange;
     $ctrl.searchTextChange   = searchTextChange;
+    $scope.cycle = {classesGenerationStatus: true};
     
- 
+
 
     //$ctrl.newState = newState;
 
@@ -351,7 +352,7 @@ function degreeCtrl($http,$q,$timeout,$routeParams,$mdDialog,$location,$scope,to
   function DialogController($scope, $mdDialog) {
       
       $vm = this;
-
+ $scope.cycle = {classesGenerationStatus: true};
 
  $scope.createCycle = function(){
      

@@ -73,7 +73,7 @@ function teachingunitCtrl($timeout,$http,$location,$mdDialog,$scope,DTOptionsBui
     }; 
     
  //Dialog Controller
-  function DialogController($scope, $mdDialog) {
+  function DialogController($scope, $mdDialog,toastr) {
       
 $scope.subject = {code:'',name:'',credits: '',hours_vol:'',cm_hrs:'',tp_hrs:'',td_hrs:'',ue_classe_id: '', ue_id:''};
 
@@ -93,6 +93,7 @@ $scope.uploadSubject = function(){
       // Store response data
       $scope.response = response.data[0];
       response.data[0]?toastr.success('Import effectué avec succès'):toastr.error('Type de fichier incorrect', 'Erreur');
+      $mdDialog.cancel();
       
     } ,function errorCallback(){
         toastr.error('Problème survenu lors de l\'import du fichier', 'Erreur');
