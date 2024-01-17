@@ -1009,9 +1009,9 @@ class IndexController extends AbstractActionController
                      $students = $this->entityManager->getRepository(AdminRegistration::class)->findBy(array("academicYear"=>$activeAcadYr,"classOfStudy"=>$classe));
                      foreach($students as $std)
                      {
-                        //managing only student for which the academic year is marked as COMPLETED
+                        //managing only student that are registered
                      
-                        if($std->getRegistrationStatus()=="COMPLETED")
+                        if($std->getStatus()==1)
                         {
                             $formerClasse = $std->getClassOfStudy();
                             $degree = $std->getClassOfStudy()->getDegree();

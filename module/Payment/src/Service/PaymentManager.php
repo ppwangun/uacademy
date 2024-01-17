@@ -75,8 +75,8 @@ class PaymentManager {
           
             foreach ($payments as $pmt)
             {
-                
-                $sum = $sum + $pmt->getAmount();
+                $amount = (int)$pmt->getAmount();
+                $sum = $sum + $amount;
             }
        }
        $adminRegistration->setFeesPaid($sum );

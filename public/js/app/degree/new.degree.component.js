@@ -89,14 +89,14 @@ function degreeCtrl($http,$q,$timeout,$routeParams,$mdDialog,$location,$scope,to
                     })                    
                     
 
-
+              
+        $scope.cycle={name:"",code:"",duration:"",degree_id:id};
+ 
+       
           
 
             }
               
-              
-        $scope.cycle={name:"",code:"",duration:"",degree_id:id};
- 
         $scope.isUpdate = false;
 //
     };
@@ -352,8 +352,8 @@ function degreeCtrl($http,$q,$timeout,$routeParams,$mdDialog,$location,$scope,to
   function DialogController($scope, $mdDialog) {
       
       $vm = this;
- $scope.cycle = {classesGenerationStatus: true};
-
+ //$scope.cycle = {...classesGenerationStatus};
+ $scope.cycle.classesGenerationStatus = true;
  $scope.createCycle = function(){
      
      $http.post('cycle',$scope.cycle).then(function successCallback(response){
