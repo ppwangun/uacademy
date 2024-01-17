@@ -91,7 +91,7 @@ class CycleController extends AbstractRestfulController
         
         $this->entityManager->getConnection()->beginTransaction();
         try
-        {
+        {   
            
             $curriculum= new TrainingCurriculum();  
             $curriculum->setName($data['name']);
@@ -104,22 +104,23 @@ class CycleController extends AbstractRestfulController
             $this->entityManager->persist($curriculum);
             $this->entityManager->flush();
             //Create classes associated with the curriculum
+          
             if($data['classesGenerationStatus'])
             {
                 if($data['cycleLevel'] == 1)
                 {
                     $level = 1;
-                    $duration = $data['duration'] +1;
+                    $duration = $level + $data['duration'] ;
                 }
                 if($data['cycleLevel'] == 2)
                 {
                     $level = 4; 
-                    $duration = $data['duration'] + 4;
+                    $duration = $level + $data['duration'] ;
                 }
                 if($data['cycleLevel'] == 3)
                 {
                     $level = 6; 
-                    $duration = $data['duration'] + 6;
+                    $duration = $level + $data['duration'] ;
                 } 
             
                 while ($level < $duration)
@@ -152,7 +153,7 @@ class CycleController extends AbstractRestfulController
                             case 6: $sems = $this->entityManager->getRepository(Semester::class)->findBy(array("ranking"=>[11,12],"academicYear"=>$acadYr));break;
                             case 7: $sems = $this->entityManager->getRepository(Semester::class)->findBy(array("ranking"=>[13,14],"academicYear"=>$acadYr)); break;   
                         }
-                        
+                      
                         foreach($sems as $sem)
                         {
                             //Check if the sem is already assigned to class for the current year
