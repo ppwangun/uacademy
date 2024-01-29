@@ -27,6 +27,7 @@ return [
                     'user'     => 'udm_root',
                     'password' => 'wpp',
                     'dbname'   => 'udm_academy',
+                    //'dbname'   => 'agenla_academy',
                     'charset'  => 'utf8',
                     'driverOptions' => [1002 => 'SET NAMES utf8'],
                 ]
