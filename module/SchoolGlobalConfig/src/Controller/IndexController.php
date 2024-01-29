@@ -100,15 +100,14 @@ class IndexController extends AbstractActionController
             $highestRow = $worksheet->getHighestDataRow(); // e.g. 10
             $highestColumn = $worksheet->getHighestDataColumn(); // e.g 'F'
             //
-    
+      
             // Increment the highest column letter
             ++$highestColumn;            
             //$spreadsheet = $reader->load($location.$filename);
             //$sheetData = $spreadsheet->getActiveSheet()->toArray();
 
-            $teachingUnit = null;
-            for ($row = 1; $row <= $highestRow; ++$row) {
-
+            $teachingUnit = null; 
+            for ($row = 2; $row <= $highestRow; ++$row) {
 
             if(empty($worksheet->getCell('D' . $row)->getValue()))
             {
@@ -1002,73 +1001,80 @@ class IndexController extends AbstractActionController
                         }
                     }
                }
+               
                $classes =  $this->entityManager->getRepository(ClassOfStudy::class)->findAll();
                foreach($classes as $classe)
-               { 
+               {
                      //Register student to their new classes
                      $students = $this->entityManager->getRepository(AdminRegistration::class)->findBy(array("academicYear"=>$activeAcadYr,"classOfStudy"=>$classe));
                      foreach($students as $std)
                      {
                         //managing only student that are registered
-                     
                         if($std->getStatus()==1)
                         {
                             $formerClasse = $std->getClassOfStudy();
                             $degree = $std->getClassOfStudy()->getDegree();
-                            $newClasse = $this->entityManager->getRepository(ClassOfStudy::class)->findOneBy(array("degree"=>$degree,"studyLevel"=>($formerClasse->getStudyLevel()+1),"option"=>$formerClasse->getOption()));
                             
-                            //Skip if student is already registered to his new class
-                            $stud = $this->entityManager->getRepository(AdminRegistration::class)->findBy(array("academicYear"=>$currentAcadYr,"classOfStudy"=>$newClasse,"student"=>$std->getStudent()));
-                            if($stud) continue;
-                            
-                            if($std->getDecision()=="ADM")
+                            //Check whetehr or not the secon semester of the year is already closed
+                            $formerSemester = $this->entityManager->getRepository(SemesterAssociatedToClass::class)->findBy(array("classOfStudy"=>$formerClasse,"academicYear"=>$activeAcadYr));
+                            foreach($formerSemester as $formerSem)
+                            if($formerSem->getSemester()->getRanking()% 2 ==0 && $formerSem->getMarkCalculationStatus() == 1)
                             {
-                                switch($formerClasse->getIsEndDegreeTraining())
+                            
+                            
+                                $newClasse = $this->entityManager->getRepository(ClassOfStudy::class)->findOneBy(array("degree"=>$degree,"studyLevel"=>($formerClasse->getStudyLevel()+1)));
+                                //Skip if student is already registered to his new class
+                                $stud = $this->entityManager->getRepository(AdminRegistration::class)->findOneBy(array("academicYear"=>$currentAcadYr,"classOfStudy"=>$newClasse,"student"=>$std->getStudent()));
+                                if($stud) continue;
+
+                                if($std->getDecision()=="ADM")
                                 {
-                                    case 1:
-                                        //Save student as a graduate student
-                                        $status = self::_ETUDIANT_DIPLOME_;
-                                        $std->getStudent()->setStatus($status);
-                                        break;
-                                    case 0: 
-                                        $isRepeating = 0;
-                                        //register student to the new class
-                                        if($newClasse)
-                                        { 
-                                           $this->registerStudentToClass($std->getStudent(),$formerClasse,$newClasse,$isRepeating);
-                                           if($formerClasse->getIsEndCycle()==1)$this->stdSemesterRegistrationNewCycle($formerClasse, $newClasse, $std->getStudent());
-                                           else $this->stdSemesterRegistration($formerClasse, $newClasse, $std->getStudent());
-                                        }
-                                        break;
+                                    switch($formerClasse->getIsEndDegreeTraining())
+                                    {
+                                        case 1:
+                                            //Save student as a graduate student
+                                            $status = self::_ETUDIANT_DIPLOME_;
+                                            $std->getStudent()->setStatus($status);
+                                            break;
+                                        case 0: 
+                                            $isRepeating = 0;
+                                            //register student to the new class
+                                            if($newClasse)
+                                            { 
+                                               $this->registerStudentToClass($std->getStudent(),$formerClasse,$newClasse,$isRepeating);
+                                               if($formerClasse->getIsEndCycle()==1)$this->stdSemesterRegistrationNewCycle($formerClasse, $newClasse, $std->getStudent());
+                                               else $this->stdSemesterRegistration($formerClasse, $newClasse, $std->getStudent());
+                                            }
+                                            break;
+                                    }
+
+
                                 }
+                                elseif($std->getDecision()=="RED") {
+                                    $isRepeating = 1;
+                                    $newClasse = $formerClasse;
+                                   $this->registerStudentToClass($std->getStudent(),$formerClasse,$newClasse,$isRepeating);
+                                    $this->stdSemesterRegistration($formerClasse, $newClasse, $std->getStudent());
+                                }
+                                elseif($std->getDecision()=="EXC"){
+                                    $status = self::_ETUDIANT_EXCLU_;
+                                    $std->getStudent()->setStatus($status);
+                                    $std->setStatus($status);
+                                }
+                               //Reporting all backlogs to the current year
+                                $degree = $classe->getDegree();
+                                $studyLevel = $classe->getStudyLevel();
 
+                                while($studyLevel>0)
+                                {
+                                   $formerClasse = $this->entityManager->getRepository(ClassOfStudy::class)->findOneBy(array("degree"=>$degree,"studyLevel"=>$studyLevel));
+                                   if($formerClasse)
+                                   { 
+                                      $this->reportStudentBacklogsSubjects($std->getStudent(),$formerClasse);
+                                       $studyLevel = $formerClasse->getStudyLevel()-1;
+                                   }else $studyLevel = $studyLevel-1;
 
-                            }
-                            elseif($std->getDecision()=="RED") {
-                                $isRepeating = 1;
-                                $newClasse = $formerClasse;
-                               $this->registerStudentToClass($std->getStudent(),$formerClasse,$newClasse,$isRepeating);
-                                $this->stdSemesterRegistration($formerClasse, $newClasse, $std->getStudent());
-                            }
-                            elseif($std->getDecision()=="EXC"){
-                                $status = self::_ETUDIANT_EXCLU_;
-                                $std->getStudent()->setStatus($status);
-                                $std->setStatus($status);
-                            }
-
-                           //Reporting all backlogs to the current year
-                            $degree = $classe->getDegree();
-                            $studyLevel = $classe->getStudyLevel();
-
-                            while($studyLevel>0)
-                            {
-                               $formerClasse = $this->entityManager->getRepository(ClassOfStudy::class)->findOneBy(array("degree"=>$degree,"studyLevel"=>$studyLevel));
-                               if($formerClasse)
-                               {
-                                  $this->reportStudentBacklogsSubjects($std->getStudent(),$formerClasse);
-                                   $studyLevel = $formerClasse->getStudyLevel()-1;
-                               }else $studyLevel = $studyLevel-1;
-
+                                }
                             }
 
                         }
@@ -1273,43 +1279,49 @@ class IndexController extends AbstractActionController
         //Getting the second semester of the active year
         $semesters= $this->entityManager->getRepository(SemesterAssociatedToClass::class)->findBy(array("classOfStudy"=>$classe,"academicYear"=>$this->activeYear));
         foreach($semesters as $formerSem)
-        {
+        { 
             //Getting the first semester of the current year
             $semesters_1= $this->entityManager->getRepository(SemesterAssociatedToClass::class)->findBy(array("classOfStudy"=>$classe,"academicYear"=>$this->currentYear));
             foreach($semesters_1 as $currentSem)
             {
 
                if(($formerSem->getSemester()->getRanking()==$currentSem->getSemester()->getRanking()))
-               {    
-                    $unitRegistration = $this->entityManager->getRepository(UnitRegistration::class)->findBy(array("student"=>$student,"semester"=>$formerSem->getSemester()));
+               {  
+           
+                    $unitRegistration = $this->entityManager->getRepository(UnitRegistration::class)->findBy(array("student"=>$student,"subject"=>[null,""],"semester"=>$formerSem->getSemester()));
                     foreach($unitRegistration as $unitR)
-                    { 
+                    {
                         if($unitR->getGrade()=="F"||$unitR->getGrade()=="E"|| is_null($unitR->getGrade()))
                         { 
+                            $unitS = $this->entityManager->getRepository(UnitRegistration::class)->findBy(array("student"=>$student,"teachingUnit"=>$unitR->getTeachingUnit(),"semester"=>$formerSem->getSemester()));
+                            foreach($unitS as $uReg) 
+                            { 
+                                $unit = $this->entityManager->getRepository(UnitRegistration::class)->findOneBy(array("student"=>$student,"teachingUnit"=>$uReg->getTeachingUnit(),"subject"=>$uReg->getSubject(),"semester"=>$currentSem->getSemester()));   
+                                if(!$unit)
+                                {
+                                     $unit = new UnitRegistration();
+                                     $unit->setStudent($student);
 
-                            $unit = $this->entityManager->getRepository(UnitRegistration::class)->findOneBy(array("student"=>$student,"teachingUnit"=>$unitR->getTeachingUnit(),"semester"=>$currentSem->getSemester()));
-                            if(!$unit)
-                            {
-                                 $unit = new UnitRegistration();
-                                 $unit->setStudent($student);
-                                 
-                                 $unit->setTeachingUnit($unitR->getTeachingUnit());
-                                 $unit->setSemester($currentSem->getSemester());
-                                 $unit->setIsRepeated(1);
-								 
-                                 $this->entityManager->persist($unit);
-                                 $this->entityManager->flush(); 
+                                     $unit->setTeachingUnit($uReg->getTeachingUnit());
+                                     $unit->setSubject($uReg->getSubject());
+                                     $unit->setSemester($currentSem->getSemester());
+                                     $unit->setIsRepeated(1);
+
+                                     $this->entityManager->persist($unit);
+                                     $this->entityManager->flush(); 
+                                }
+                                else{
+
+                                     $unit->setStudent($student);
+
+                                     $unit->setTeachingUnit($uReg->getTeachingUnit());
+                                     $unit->setSubject($uReg->getSubject());
+                                     $unit->setSemester($currentSem->getSemester());
+                                     $unit->setIsRepeated(1);  
+                                     $this->entityManager->flush();
+                                }
                             }
-                            else{
-                                 
-                                 $unit->setStudent($student);
-                                 
-                                 $unit->setTeachingUnit($unitR->getTeachingUnit());
-                                 $unit->setSemester($currentSem->getSemester());
-                                 $unit->setIsRepeated(1);  
-                                 $this->entityManager->flush();
-                            }
-                            
+                           
                         }
                     }
 

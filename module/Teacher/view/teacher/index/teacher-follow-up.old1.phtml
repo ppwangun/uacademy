@@ -1,38 +1,16 @@
+<div layout="column" class="wrapper" ng-cloak>
+    <md-toolbar md-scroll-shrink ng-if="true"  class="md-shadow-bottom-z-2" layout-padding>
+        <div style="padding: 0">
+            <h3 class="md-title">
+                Liste des enseignants
+            </h3>
+        </div>
+    </md-toolbar>
 
-<link rel="stylesheet" type="text/css" href="css/datatables.bootstrap.css">
-<link rel="stylesheel" type="text/css" href="css/buttons.datables.min.css">
-<style>
-/*md-dialog{
-max-width: 900px;
-
-}*/
-.md-dialog-container {
-
-    z-index: 1000;
-
-}
-
-</style>
-
-  
-
-</style>
-<div class="row">
-                <div class="col-lg-12">
-                    <h4 class="page-header">Suivi des enseignements</h4>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
-            <div class="row" ng-init="init()">
-                <div class="col-lg-12">
-                    <!-- Panneau des boutton -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading" style="margin-bottom: 15px;">
-                        <a href="#!/new-teacher/-1" class="btn btn-danger" id='newacadyr'>Nouveau Enseignant</a>
-                          
-                        </div>
-                        
+    <md-content layout="column">
+        <div>
+            <a href="#!new-teacher" class="md-button md-raised md-primary">Creer un enseignant</a>
+        </div>
         <div class="loading-container" ng-if="!hasSucceededLoadingTeachers()">
             <div class="error-block" ng-if="hasFailedLoadingTeachers()">
                 <img class="error-icon" src="assets/images/warning_752755.png" alt=""/>
@@ -101,15 +79,18 @@ max-width: 900px;
                                 </table>
 
                                 <div>
-
-                                    <button class="btn btn-danger" ng-click="openAffectTeachingUnitDialog()">
+                                    <a href="{{'#!edit/'+selectedTeacherId}}" class="md-button md-raised md-primary md-hue-4 no-margin-left">
+                                        <img src="assets/images/edit_4414703.png" alt="" width="16px" height="16px"/>
+                                        Editer
+                                    </a>
+                                    <md-button class="md-raised md-accent md-hue-2" ng-click="openAffectTeachingUnitDialog()">
                                         <img src="assets/images/plus_3839101.png" alt="" width="16px" height="16px"/>
                                         Affecter une UE
-                                    </button>
-                                    <button class="btn btn-primary">
+                                    </md-button>
+                                    <md-button class="md-raised md-warn md-hue-1 no-margin-left">
                                         <img src="assets/images/report_2912773.png" alt="" width="16px" height="16px"/>
                                         Generer la convention
-                                    </button>
+                                    </md-button>
                                 </div>
                             </div>
                             <div class="flex-gt-sm gap-1" id="teacher_documents" layout="column">
@@ -175,17 +156,6 @@ max-width: 900px;
                                         <img src="assets/images/download_9502265.png" alt=""/>
                                     </a>
                                 </div>
-                                
-                                <div ng-if="selectedTeachingUnitId && hasSucceededLoadingCurrentProgressionStats()">
-                                    <button class="btn btn-danger" ng-click="openNewProgressionDialog($event)">
-                                        <i class="fa fa-plus-circle"></i>&nbsp;Ajouter une progession
-                                    </button>
-                                    <button class="btn btn-info " ng-click="openProgressionsTimelineDialog($event)">
-                                        <i class="fa fa-plus-circle"></i>&nbsp;Afficher les details
-                                    </button>
-
-                                </div>
-                               
                             </div>
                         </div>
                         <br/>
@@ -266,10 +236,23 @@ max-width: 900px;
                                                 <span class="teaching-unit-progression-value">{{getRoundedPercentage(currentProgressionStats.percentage)}}%</span>
                                             </td>
                                         </tr>
-
+                                        <tr>
+                                            <td class="progression-divider" colspan="8"></td>
+                                        </tr>
 
                                     </table>
-
+                                    <div class="text-align-center">
+                                        <md-button style="width: -webkit-fill-available"
+                                                   ng-click="openProgressionsTimelineDialog($event)"
+                                                   class="md-raised md-accent md-hue-3 no-margin-left no-margin-right">
+                                            Afficher les details
+                                        </md-button>
+                                        <md-button style="width: -webkit-fill-available"
+                                                   ng-click="openNewProgressionDialog($event)"
+                                                   class="md-raised md-primary md-hue-3 no-margin-left no-margin-right">
+                                            Ajouter une progession
+                                        </md-button>
+                                    </div>
                                 </div>
 
                             </div>
@@ -278,9 +261,5 @@ max-width: 900px;
                 </div>
             </div>
         </div>
-                    </div>
-                    <!-- /.panel -->
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-
+    </md-content>
+</div>
