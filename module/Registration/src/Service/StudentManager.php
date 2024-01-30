@@ -18,6 +18,7 @@ use Application\Entity\SubjectRegistrationView;
 use Application\Entity\UnitRegistration;
 use Application\Entity\StudentSemRegistration;
 use Application\Entity\AdmittedStudentView;
+use Application\Entity\Subject;
 use Laminas\Hydrator\Reflection as ReflectionHydrator;
 
 
@@ -94,9 +95,9 @@ class StudentManager {
    //adding student from import
    public function addStudent($data)
    {
-        $this->entityManager->getConnection()->beginTransaction();
+
         try
-        {        
+        {     
             $date_naissance = strtotime($data['date_naissance']);
             $date_naissance = date('Y-m-d',$date_naissance);
 
@@ -138,7 +139,7 @@ class StudentManager {
          }
         catch(Exception $e)
         {
-           $this->entityManager->getConnection()->rollBack();
+           
             throw $e;
             
         }      
@@ -146,7 +147,7 @@ class StudentManager {
  //adding student from import
    public function addAdmittedStudent($data)
    {
-        
+      
                 $date_admission = strtotime($data['date_admission']);
                 $date_admission = date('Y-m-d',$date_admission);
                 //$date_admission= \DateTime::createFromFormat('!d/m/Y H:i', $date_admission);
@@ -319,26 +320,34 @@ class StudentManager {
 
                  $ue = $this->entityManager->getRepository(TeachingUnit::class)->findOneById($key->getId());
                  $semester = $this->entityManager->getRepository(Semester::class)->findOneByCode($key->getSemester());
-                 $unit_registered = $this->entityManager->getRepository(UnitRegistration::class)->findOneBy(array("student"=>$student,
+                 $unit_registered = $this->entityManager->getRepository(UnitRegistration::class)->findBy(array("student"=>$student,
                          "teachingUnit"=>$ue,"semester"=>$semester));
-
-                 //check whether the student is rgistered or not to subject
-                 if($unit_registered)
+                 foreach( $unit_registered as $unitR)
                  {
-
-                     $unit_registered->setStudent($student);
-                     $unit_registered->setTeachingUnit($ue);
-                     $unit_registered->setSemester($semester);
-
-                     $this->entityManager->flush();                
-                 }
-                 else{
-                 $unit_registration = new UnitRegistration();
-                 $unit_registration->setStudent($student);
-                 $unit_registration->setTeachingUnit($ue);
-                 $unit_registration->setSemester($semester);
-                 $this->entityManager->persist($unit_registration);
-                 $this->entityManager->flush();
+                    $subject = $this->entityManager->getRepository(Subject::class)->findBy(["teachingUnit"=>$ue]);
+                    foreach($subject as $sub)
+                    {
+                       //check whether the student is rgistered or not to subject
+                       $unitR =  $this->entityManager->getRepository(UnitRegistration::class)->findOneBy(array("student"=>$student,
+                         "teachingUnit"=>$ue,"subject"=>$sub,"semester"=>$semester));
+                       if($unitR)
+                       {
+                            $unitR->setStudent($student);
+                            $unitR->setTeachingUnit($ue);
+                            $unitR->setSubject($sub);
+                            $unitR->setSemester($semester);
+                            $this->entityManager->flush();                
+                       }
+                       else{
+                            $unit_registration = new UnitRegistration();
+                            $unit_registration->setStudent($student);
+                            $unit_registration->setTeachingUnit($ue);
+                            $unit_registration->setSubject($sub);
+                            $unit_registration->setSemester($semester);
+                            $this->entityManager->persist($unit_registration);
+                            $this->entityManager->flush();
+                            }
+                    }
                  }
              }
 

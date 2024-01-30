@@ -1040,7 +1040,126 @@ class IndexController extends AbstractActionController
 
         }
     } 
-    
+    public function importstudentsAction()
+    {
+        $this->entityManager->getConnection()->beginTransaction();
+        try
+        {     
+          
+            /* Getting file name */
+           $filename = $_FILES['file']['name'];
+           /* Location */
+           $location = './public/upload/';
+
+           $csv_mimetypes = array(
+               'text/csv',
+               'application/csv',
+               'text/comma-separated-values',
+               'application/excel',
+               'application/vnd.ms-excel',
+               'application/vnd.msexcel',
+            );
+        // Check if fill type is allowed  
+          if(!in_array($_FILES['file']['type'],$csv_mimetypes))
+          {
+             $result = false;
+
+              $view = new JsonModel([
+                $result
+              ]);
+              return $view; 
+          }
+
+            /* Upload file */
+            move_uploaded_file($_FILES['file']['tmp_name'],$location.$filename);
+
+            $reader = new Csv(); 
+            $spreadsheet = $reader->load($location.$filename);
+            $sheetData = $spreadsheet->getActiveSheet()->toArray();
+            
+            
+  /*          $delimiter = ';';
+            $file = new \SplFileObject($location.$filename);
+            $reader = new CsvReader($file,$delimiter);
+            // Tell the reader that the first row in the CSV file contains column headers
+            $reader->setHeaderRowNumber(0);
+            $workflow = new Workflow($reader);
+
+            // Create a writer: you need Doctrine’s EntityManager.
+            $doctrineWriter = new DoctrineWriter($this->entityManager, Student::class);
+            $doctrineWriter->disableTruncate();
+            $workflow->addWriter($doctrineWriter,['matricule']);
+*/
+            /*$step = new FilterStep();
+            $filter = new OffsetFilter(1, 3);
+            $step->add($filter);
+            $workflow->addStep($step);*/
+
+            //$workflow->process();
+
+
+
+
+          //  $writer = new DoctrineWriter($this->entityManager,'Application:Student');
+
+          //  $writer->prepare();
+
+            // Iterate over the reader and write each row to the database
+            
+            if (!empty($sheetData)) {
+                for ($i=1; $i<count($sheetData); $i++) { //skipping first row
+                    $row["matricule"] = $sheetData[$i][0];
+                    $row["nom"] = $sheetData[$i][1];
+                    $row["prenom"] = $sheetData[$i][2];
+                    $row["date_naissance"] = $sheetData[$i][3];
+                    $row["classe"] = $sheetData[$i][4];
+                    $row["fees"] = $sheetData[$i][5];
+                    $row["debt"] = $sheetData[$i][6];
+                    $row["mpc"] = $sheetData[$i][7];
+                   
+                    $std = $this->studentManager->addStudent($row);
+                   
+                    $this->studentManager->stdAdminRegistration($row,1,0);
+                    $this->studentManager->stdPedagogicRegistration($row["classe"],$std);
+                    $this->studentManager->stdSemesterRegistration($row["classe"],$std,$row["mpc"],0,0,0,0,0);
+                }
+            }            
+  /*      foreach ($reader as $row) {
+            //$id=$this->studentManager->getRegistrationID(10);
+           
+            $row_1 = array_slice($row, 0, 4);
+            $data = array("matricule"=>$row["matricule"],"classe"=>$row["classe"],"fees"=>$row["fees"],"debt"=>$row["debt"]);
+            $std = $this->studentManager->addStudent($row);
+           
+            
+            $this->studentManager->stdAdminRegistration($data);
+            $this->studentManager->stdPedagogicRegistration($row["classe"],$std);
+            $this->studentManager->stdSemesterRegistration($row["classe"],$std,$row["mpc"]);
+        }*/
+        
+            
+        $this->entityManager->getConnection()->commit();
+       
+
+        $arr = array("name"=>$filename);
+        $result = true;
+        
+          $view = new JsonModel([
+              $result
+         ]);
+        
+// Disable layouts; `MvcEvent` will use this View Model instead
+       // $view->setTerminal(true);
+
+        return $view;      
+    }
+    catch(Exception $e)
+    {
+       $this->entityManager->getConnection()->rollBack();
+        throw $e;
+
+    }
+    }    
     public function furthersubjectregistrationAction()
     {
         $this->entityManager->getConnection()->beginTransaction();
