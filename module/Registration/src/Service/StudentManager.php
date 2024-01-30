@@ -322,6 +322,7 @@ class StudentManager {
                  $semester = $this->entityManager->getRepository(Semester::class)->findOneByCode($key->getSemester());
                  $unit_registered = $this->entityManager->getRepository(UnitRegistration::class)->findBy(array("student"=>$student,
                          "teachingUnit"=>$ue,"semester"=>$semester));
+                 if($unit_registered)
                  foreach( $unit_registered as $unitR)
                  {
                     $subject = $this->entityManager->getRepository(Subject::class)->findBy(["teachingUnit"=>$ue]);
@@ -348,6 +349,15 @@ class StudentManager {
                             $this->entityManager->flush();
                             }
                     }
+                 }
+                 else{
+                        $unit_registration = new UnitRegistration();
+                        $unit_registration->setStudent($student);
+                        $unit_registration->setTeachingUnit($ue);
+                        
+                        $unit_registration->setSemester($semester);
+                        $this->entityManager->persist($unit_registration);
+                        $this->entityManager->flush();                     
                  }
              }
 
