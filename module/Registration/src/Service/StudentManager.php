@@ -322,7 +322,7 @@ class StudentManager {
                  $semester = $this->entityManager->getRepository(Semester::class)->findOneByCode($key->getSemester());
                  $unit_registered = $this->entityManager->getRepository(UnitRegistration::class)->findBy(array("student"=>$student,
                          "teachingUnit"=>$ue,"semester"=>$semester));
-                 if($unit_registered)
+                 if(sizeof($unit_registered)>0)
                  foreach( $unit_registered as $unitR)
                  {
                     $subject = $this->entityManager->getRepository(Subject::class)->findBy(["teachingUnit"=>$ue]);
