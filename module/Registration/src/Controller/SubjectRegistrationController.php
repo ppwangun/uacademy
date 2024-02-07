@@ -40,7 +40,7 @@ class SubjectRegistrationController extends AbstractRestfulController
         {   
             // retrieve the sutdent  based on the student ID 
             $std = $this->entityManager->getRepository(RegisteredStudentForActiveRegistrationYearView::class)->find($id); 
-            $std_registered_subjects = $this->entityManager->getRepository(SubjectRegistrationOnlineRegistrationYearView::class)->findBy(array("matricule"=>$id));
+            $std_registered_subjects = $this->entityManager->getRepository(SubjectRegistrationOnlineRegistrationYearView::class)->findBy(array("matricule"=>$id,"subjectId"=>[NULL," "]));
             
 
             foreach($std_registered_subjects as $key=>$value)
@@ -110,6 +110,7 @@ class SubjectRegistrationController extends AbstractRestfulController
            // if ($this->getRequest()->isPost()){
            
            // Retrieve form data from POST variables
+            
             
             if(isset($data["ueId"])&&!isset($data["subjectId"]))
             {

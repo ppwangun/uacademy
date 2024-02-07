@@ -183,6 +183,16 @@ return [
                         'controller' => Controller\ProgressionController::class,
                     ],
                 ],
+            ],  
+            'programmingtpl' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/programmingtpl[/:id]',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'=>'programmingtpl'
+                    ],
+                ],
             ],            
              /*  'home' => [
                 'type' => Literal::class,

@@ -25,7 +25,9 @@ angular.module('myApp', [
   'myApp.version',
   'datatables',
   'datatables.buttons',
-  'datatables.fixedheader'
+  'datatables.fixedheader',
+  'ui.calendar', 
+
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
@@ -110,6 +112,9 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
           .when('/teachingunit',{
               template: '<teachingunit-details></teachingunit-details>'
           })
+          .when('/courseProgramming',{
+              template: '<course-programming></course-programming>'
+          })          
           .when('/newteachingunit',{
               template: '<new-teachingunit></new-teachingunit>'
           }).when('/newteachingunit/:id/:ue_class_id',{
@@ -274,7 +279,14 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
         })           //returns the users permission level 
     }
     return obj;
-}).controller('testCtrl',function($scope,accessFac){
+}).controller('testCtrl',function($scope,accessFac,$interval){
+    var controller = this;
+
+      controller.date = new Date();
+
+      $interval(function() {
+        controller.date = new Date();
+      }, 1000);
     $scope.getAccess = function(){
         accessFac.getPermission();       //call the method in acccessFac to allow the user permission.
     }

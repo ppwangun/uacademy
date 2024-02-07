@@ -211,7 +211,7 @@ class StudentManager {
    //adding student as a current academic year student
    public function stdAdminRegistration($data,$status,$isRepeating)
    {
-        $this->entityManager->getConnection()->beginTransaction();
+     
         try
         {      
             $std = $this->entityManager->getRepository(Student::class)->findOneByMatricule(array($data["matricule"],"status"=>1));
@@ -269,10 +269,7 @@ class StudentManager {
                  $this->entityManager->flush();
 
             }
-
-            
-            
-            $this->entityManager->getConnection()->commit();            
+         
         }
         catch(Exception $e)
         {
@@ -322,7 +319,7 @@ class StudentManager {
                  $semester = $this->entityManager->getRepository(Semester::class)->findOneByCode($key->getSemester());
                  $unit_registered = $this->entityManager->getRepository(UnitRegistration::class)->findBy(array("student"=>$student,
                          "teachingUnit"=>$ue,"semester"=>$semester));
-                 if($unit_registered)
+                 if(sizeof($unit_registered)>0)
                  foreach( $unit_registered as $unitR)
                  {
                     $subject = $this->entityManager->getRepository(Subject::class)->findBy(["teachingUnit"=>$ue]);

@@ -1267,7 +1267,7 @@ class IndexController extends AbstractActionController
                         $subjects = $this->entityManager->getRepository(ClassOfStudyHasSemester::class)->findBy(array("classOfStudy"=>$classe,"semester"=>$sem));
                         foreach($subjects as $sub)
                         {
-                            $unitRegistration = $this->entityManager->getRepository(UnitRegistration::class)->findBy(array("student"=>$std,"semester"=>$sem,'teachingUnit'=>$sub->getTeachingUnit()));
+                            $unitRegistration = $this->entityManager->getRepository(UnitRegistration::class)->findBy(array("student"=>$std,"semester"=>$sem,'teachingUnit'=>$sub->getTeachingUnit(),'subject'=>[NULL," "]));
                             if(sizeof($unitRegistration)>1)
                             {
                                 for( $i=1;$i<sizeof($unitRegistration);$i++)

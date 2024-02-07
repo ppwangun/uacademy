@@ -47,7 +47,7 @@
 
         <!-- Scripts -->
         <?= $this->headScript()
-        ->prependFile($this->basePath('js/moment.min.js'))
+        
         ->prependFile($this->basePath('js/morris.js-0.5.1/morris.min.js'))
         ->prependFile($this->basePath('js/raphael-js/raphaeljs.js'))
        //
@@ -68,6 +68,7 @@
         
         ->prependFile($this->basePath('js/metisMenu/metisMenu.min.js'))
         ->prependFile($this->basePath('js/angular-toastr.min.js'))
+        
         ->prependFile($this->basePath('js/sb-admin-2.js'))
         ->prependFile($this->basePath('js/ui.utils.js'))
         ->prependFile($this->basePath('bower_components/angular-material/angular-material.min.js'))
@@ -79,14 +80,22 @@
             
           ->prependFile($this->basePath('js/loading-bar.js'))   
          ->prependFile($this->basePath('js/my_js/globalconfig/angulartest.js')) 
-        ->prependFile($this->basePath('js/ui-bootstrap-tpls-2.5.0.min.js'))
+        
         ->prependFile($this->basePath('js/angular-animate.js'))
         ->prependFile($this->basePath('js/angular-route.js'))
-           ->prependFile($this->basePath('js/angular-1.6.7/angular.js'))
+          
        // ->prependFile($this->basePath('js/boostrap5/bootstrap.min.js'))
+        
+        
         ->prependFile($this->basePath('js/bootstrap.min.js'))
+        ->prependFile($this->basePath('js/calendar.js'))
+        ->prependFile($this->basePath('js/moment.min.js'))
+        ->prependFile($this->basePath('js/ui-bootstrap-tpls-2.5.0.min.js'))
+        ->prependFile($this->basePath('js/angular-1.6.7/angular.js'))
         ->prependFile($this->basePath('js/jquery-3.1.0.min.js'))
         
+        
+         
            
         //->prependFile($this->basePath('../vendor/onokumus/metismenu/dist/metisMenu.min.js'))
         
@@ -129,6 +138,7 @@
     <script src="js/app/classes/new.classe.component.js"></script>
     
     <script src="js/app/teachingunit/teachingunit.module.js"></script>
+    
     <script src="js/app/teachingunit/teachingunit.component.js"></script>
     <script src="js/app/teachingunit/new.teachingunit.component.js"></script> 
   <script src="js/app/teachingunit/teacher.component.js"></script> 
@@ -136,6 +146,7 @@
   <script src="js/app/teachingunit/affect-teaching-unit.controller.js"></script>
   <script src="js/app/teachingunit/progressions-timeline.controller.js"></script> 
   <script src="js/app/teachingunit/new-teaching-unit-progression.controller.js"></script> 
+  <script src="js/app/teachingunit/course.programming.component.js"></script>
     
     <script src="js/app/student/student.module.js"></script>
     <script src="js/app/student/student.component.js"></script>
@@ -156,7 +167,7 @@
   <script src="js/app/components/version/interpolate-filter.js"></script>
 
     </head>
-<body ng-app="myApp" ng-cloak>
+<body ng-app="myApp" ng-controller="testCtrl as mainController"ng-cloak>
 <div id="wrapper">
 
         <!-- Navigation -->
@@ -173,6 +184,10 @@
             <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right">
+
+                <li><ul style="font-family: 'Oswald', sans-serif;  font-size: 40px;"> {{mainController.date | date:"HH:mm:ss" }}</ul></li>
+                <li><ul style="font-family: 'Oswald', sans-serif;">{{mainController.date | date:"EEEE dd.MM.yyyy" }}</ul></li><!-- comment -->
+
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
@@ -517,7 +532,15 @@
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
-                            <a href="#!/assignedteachingunit"><i class="fa fa-cogs">&nbsp;</i>Unités d'enseignement</a>
+                            <a href="#"><i class="fa fa-cogs"></i> Gestion des enseignements<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="#!/assignedteachingunit"><i >&nbsp;</i>Unités d'enseignement</a>
+                                </li>
+                                <li>
+                                    <a href="#!/courseProgramming"><i >&nbsp;</i>Programmation</a>
+                                </li>                                
+                            </ul>
                         </li>
 
                         <li ng-show="<?=($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())])==1)?true:false?>">
