@@ -8,9 +8,42 @@ angular.module('teachingunit')
 });
 function programmingCtrl($timeout,$http,$location,$mdDialog,$scope,uiCalendarConfig){
     var $ctrl = this;
-    $scope.eventSources = [];
+    $scope.eventSources = [ 
+        
+        {
+           
+      events: [ // put the array in the `events` property
+        {
+            id : 1,
+            resourceId: 'a',
+          title  : 'event1',
+          start  : '2024-02-09T08:30:00',
+          end    : '2024-02-09T12:30:00',
+          color: 'black',
+        },
+        {
+            id : 3,
+          title  : 'event2 \n Campus B A001',
+          start  : '2024-02-09T12:30:00',
+          end    : '2024-02-09T14:30:00'
+        },
+        {
+          id : 3,
+          title  : 'event3',
+          start  : '2024-02-08T12:30:00',
+        }
+      ],
+      //color: 'black',     // an option!
+     //textColor: 'yellow' // an option!
+
+    },
+];
     
-    
+    $scope.alertEventOnClick = function(info)
+  {
+      console.log(info);
+      alert("je suis dedans"+info.id)
+  }  
     /* config object */
     $scope.uiConfig = {
       calendar:{
@@ -19,18 +52,17 @@ function programmingCtrl($timeout,$http,$location,$mdDialog,$scope,uiCalendarCon
         editable: true,
         header:{
           //left: 'month basicWeek basicDay agendaWeek agendaDay',
-          left: ' agendaWeek',
+          left: ' month agendaWeek',
           center: 'title',
           right: 'today prev,next'
         },
         eventClick: $scope.alertEventOnClick,
         eventDrop: $scope.alertOnDrop,
-        eventResize: $scope.alertOnResize
+        eventResize: $scope.alertOnResize,
+        
       }
-    }; 
-    
-    
-    
+    };    
+
  $ctrl.init = function(){
 
     //Loading classes of study asynchronously
