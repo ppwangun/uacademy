@@ -395,6 +395,16 @@ return [
                     ],
                 ],
             ],
+            'searchDegreeBySpeciality' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/searchDegreeBySpeciality',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'searchDegreeBySpeciality',
+                    ],
+                ],
+            ],            
             'importSubject' => [
                 'type'    => Literal::class,
                 'options' => [

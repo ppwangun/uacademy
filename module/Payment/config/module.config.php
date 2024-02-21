@@ -80,6 +80,17 @@ return [
                        
                     ],
                 ],
+            ],  
+            'savePymtTransaction' => [
+                'type'    => 'Literal',
+                'options' => [
+                    'route'    => '/savePymtTransaction',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'savePymtTransaction',
+                       
+                    ],
+                ],
             ],            
             'payments' => [
                 'type'    => 'Literal',

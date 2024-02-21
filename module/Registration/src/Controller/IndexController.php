@@ -212,12 +212,14 @@ class IndexController extends AbstractActionController
             if(!isset($data['classeId'])) $data['classeId'] = "%";
             $conn = $this->entityManager->getConnection();
             $sql = '
-                SELECT s.id,s.matricule,s.nom,s.prenom
+                SELECT s.id,s.matricule,s.nom,s.prenom,c.code
                 FROM student s
                 INNER JOIN admin_registration a
-                ON s.id = a.student_id
+                INNER JOIN class_of_study c
+                ON ((s.id = a.student_id)AND (a.class_of_study_id = c.id ))
                 WHERE a.academic_year_id = :acadYrId 
                 AND s.matricule like :matricule
+                OR s.nom like :matricule
                 AND a.class_of_study_id like :classeId
                 AND a.status=1;
                 ';

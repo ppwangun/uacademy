@@ -629,7 +629,33 @@ class IndexController extends AbstractActionController
       }
         
     }    
-    
+    public function searchDegreeBySpecialityAction()
+    {
+      $this->entityManager->getConnection()->beginTransaction();
+      try
+      {
+            $data = $this->params()->fromQuery();            
+            $speciality= $this->entityManager->getRepository(Faculty::class)->find($data['spe_id']);
+            $degrees = $this->entityManager->getRepository(Degree::class)->findBy(array('speciality'=>$speciality,'status'=>1),array("name"=>"ASC"));
+            foreach($degrees as $key=>$value)
+            {
+                $hydrator = new ReflectionHydrator();
+                $data = $hydrator->extract($value);
+                $data['spe_id'] = $value->getSepeciality()->getId();
+               
+                $degrees[$key] = $data;
+            }
+        $this->entityManager->getConnection()->commit();
+        return new JsonModel([
+                $degrees
+        ]);          
+      }
+      catch(Exception $e){
+            $this->entityManager->getConnection()->rollBack();
+            throw $e; 
+      }
+        
+    }    
     public function searchCommonCoreTrainingAction()
     {
       $this->entityManager->getConnection()->beginTransaction();

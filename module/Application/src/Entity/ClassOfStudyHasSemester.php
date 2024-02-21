@@ -153,16 +153,6 @@ class ClassOfStudyHasSemester
     private $classOfStudy;
 
     /**
-     * @var Contract
-     *
-     * @ORM\ManyToOne(targetEntity="Contract")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="contract_id", referencedColumnName="id")
-     * })
-     */
-    private $contract;
-
-    /**
      * @var Semester
      *
      * @ORM\ManyToOne(targetEntity="Semester")
@@ -620,30 +610,6 @@ class ClassOfStudyHasSemester
     public function getClassOfStudy()
     {
         return $this->classOfStudy;
-    }
-
-    /**
-     * Set contract.
-     *
-     * @param Contract|null $contract
-     *
-     * @return ClassOfStudyHasSemester
-     */
-    public function setContract(Contract $contract = null)
-    {
-        $this->contract = $contract;
-    
-        return $this;
-    }
-
-    /**
-     * Get contract.
-     *
-     * @return Contract|null
-     */
-    public function getContract()
-    {
-        return $this->contract;
     }
 
     /**

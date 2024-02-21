@@ -340,7 +340,7 @@ $ctrl.updateExamRegistration = function(){
     };
     //Dialog Controller
 function DialogController($scope, $mdDialog, $q,toastr) {
-    $scope.selectedStd= null;
+    $scope.selectedStd;
     $scope.studs = [];
     $scope.selectedSubject = null;
 

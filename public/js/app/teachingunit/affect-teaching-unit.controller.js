@@ -5,6 +5,7 @@ function AffectTeachingUnitController($scope, $mdDialog, $http, teacherId, teach
 
     $scope.suggestionsList = [];
     $scope.selectedTeachingUnits = [];
+    $scope.partialAttribution = false;
     $scope.searchQuery = null;
     $scope.autocomplete = null;
     $scope.lastSearchedTime = 0;

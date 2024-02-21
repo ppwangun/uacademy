@@ -89,7 +89,36 @@ class IndexController extends AbstractActionController
         return $view;            
 
     }  
-    
+
+    public function savePymtTransactionAction()
+    {
+        $this->entityManager->getConnection()->beginTransaction();
+        try
+        {
+            $data = $this->params()->fromQuery();
+            $data = json_decode($data["std"],true);            var_dump($data); exit;
+            ($data["amountPaid"])?$data["montant"]=$data["amountPaid"]:$data["montant"]=null;
+            $this->paymentManager->importPayments($data);
+            //$message = $this->paymentManager->updatePymtAPI($data);
+
+
+            $this->entityManager->getConnection()->commit();
+            $view = new JsonModel([
+               "session"=>true  
+             ]);
+            // Disable layouts; `MvcEvent` will use this View Model instead
+            $view->setTerminal(true);
+
+            return $view;            
+        }
+        catch(Exception $e)
+        {
+            $this->entityManager->getConnection()->rollBack();
+            throw $e;
+
+        }       
+
+    }    
     public function importBalanceAction()
     {
         $this->entityManager->getConnection()->beginTransaction();

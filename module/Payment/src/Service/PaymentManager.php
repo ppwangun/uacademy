@@ -242,7 +242,7 @@ class PaymentManager {
             $adminRegistration = $this->entityManager->getRepository(AdminRegistration::class)->findOneBy(array("student"=>$std,"academicYear"=>$academicYear));
             if($adminRegistration)
             {
-                 $currentDate  = date_create(date('Y-m-d H:i:s'));
+                (isset($data["transactionDate"]))? $currentDate=date_create($data["transactionDate"]): $currentDate  = date_create(date('Y-m-d H:i:s'));
 
                     $payment = new Payment();
                     $payment->setAcademicYear($academicYear);
@@ -258,6 +258,117 @@ class PaymentManager {
 
       
    } 
+   
+      public function updatePymtAPI($data)
+   {
+
+        $url = "http://testagenla.lekef.net/web/session/authenticate";
+
+        // Odoo database credentials
+        $db = "testagenla";
+        $username = "webservice";
+        $password = "webservice";
+
+        // Request data
+        $payload = array(
+            "jsonrpc" => "2.0",
+            "method" => "call",
+            "params" => array(
+                "db" => $db,
+                "login" => $username,
+                "password" => $password,
+            )
+        );
+
+        // Convert the payload to JSON
+        $data = json_encode($payload);
+
+        // Set cURL options
+        $options = array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSL_VERIFYHOST => 2,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $data,
+            CURLOPT_HTTPHEADER => array(
+                "Content-Type: application/json",
+                "Content-Length: " . strlen($data)
+            )
+        );
+
+        // Initialize cURL
+        $curl = curl_init();
+        curl_setopt_array($curl, $options);
+
+        // Send the request
+        $response = curl_exec($curl);
+
+        // Check for errors
+        if ($response === false) {
+            $error = curl_error($curl);
+            return  "message: " . $error;
+        } else {
+         //Send the request
+          
+          
+                
+            // Handle the response
+            $result = json_decode($response, true);
+
+            // Check if the authentication was successful
+            if (array_key_exists("result", $result)) {
+                // Retrieve the session ID 
+                $session_id = $result["result"]["session_id"];
+                $data = ["partner_id"=> "64c7c85c85cfe720ceafaf1a",
+                            "name"=> "Ann Blair",
+                            "email"=> "annblair@xerex.com",
+                            "phone"=> "+1 (904) 469-2398",
+                            "street"=> "679 Sunnyspartner_ide Court, Warren, Palau, 8700"];
+                // Convert the payload to JSON
+                $url =" https://tesdetagenla.lekef.net/api/agenla/partner/create";
+                $data = json_encode($data);
+                $options = array(
+                    CURLOPT_URL => $url,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_POST => true,
+                    CURLOPT_POSTFIELDS => $data,
+                    CURLOPT_HTTPHEADER => array(
+                        "Content-Type: application/json",
+                        "Content-Length: " . strlen($data),
+                        "Set-Cookie: session_id".$session_id."; Expires=Wed, 15-May-2024 16:12:37 GMT; Max-Age=7776000; HttpOnly; Path=/",
+                    )
+                ); 
+                
+                curl_close($curl); 
+                $curl = curl_init();
+                curl_setopt_array($curl, $options);
+
+                // Send the request
+                $response = curl_exec($curl); 
+                // Get information about the cURL request
+                $info = curl_getinfo($curl);
+
+                // Check for errors
+                if ($response === false) {
+                    $error = curl_error($curl);                   
+                    echo "message: " . $error; exit;
+                } 
+              curl_close($curl);
+              echo 'HTTP Code: ' . $info['http_code'] . '<br>';
+                echo 'Total Time: ' . $info['total_time'] . ' seconds<br>';
+                echo 'Content Type: ' . $info['content_type'] . '<br>';
+
+
+
+            } 
+
+            // Close cURL
+        curl_close($curl); 
+}
+
+      
+   }
    
    public function importDotations($data)
    {

@@ -24,10 +24,10 @@ z-index: 120000}
 
       <div class="md-dialog-content" >
         <md-content layout-padding >
-        <form ng-cloak name="subjectForm">
+            <form ng-cloak name="subjectForm">
             <div layout-gt-sm='column'>
                     <div>
-                      <form name="subejctForm">
+                     
                           <div layout='row' flex>
                                                     
                             <md-input-container class="md-icon-float md-block" flex-gt-sm flex>
@@ -87,6 +87,18 @@ z-index: 120000}
                   <td ng-bind="sub.nomUe"></td>
                   <td ng-bind="sub.classe"></td>
                   <td ng-bind="sub.semester"></td>
+                  
+                  <td>
+                        <md-input-container class="md-block" flex-gt-sm ng-show="partialAttribution">
+                            <label>Montant frais de scolarité</label>
+                            <input name="volumeHrs" ng-model="sub.volumeHrs" style="background-color:#fab1a0; color: #fff; font-weight: bold" required />
+                            <div ng-messages="dotationForm.feesPaid.$error">
+                                <div ng-message="required">le champ numéro de téléphone est obligatoire</div>
+                                <div ng-message="pattern">Numéro de téléphone invalid</div>
+
+                            </div>                        
+                        </md-input-container>                      
+                  </td>
                   <td ><button  type="button" ng-click="removeSubject(sub)" class="btn btn-default btn" ><i class="fa fa-trash-o"></i></button></td>
                 </tr>
             
@@ -95,7 +107,7 @@ z-index: 120000}
     <md-dialog-actions layout="row">
       <span flex></span>
       <md-button ng-click="cancel()"> Annuler</md-button>
-      <md-button ng-hide ="showforceToProceeButton" class="md-warn" ng-click="saveChoices(0)" >
+      <md-button ng-hide ="showforceToProceeButton" class="md-warn" ng-click="saveChoices(0)" ng-disabled="subjectForm.$invalid">
           <span class="fa fa-check">  Valider </span>
       </md-button>
       <md-button ng-show ="showforceToProceeButton" class="md-warn" ng-click="saveChoices(1)" >
@@ -103,10 +115,11 @@ z-index: 120000}
       </md-button>      
 
     </md-dialog-actions>
+                </div>
         </form>    
           </md-content>
-      </div>
       
+      </div>S   
 
   
 </md-dialog>

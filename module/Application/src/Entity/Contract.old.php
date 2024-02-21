@@ -1,18 +1,16 @@
 <?php
 
-
 namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 use Application\Entity\Teacher;
 use Application\Entity\AcademicYear;
-use Application\Entity\ClassOfStudyHasSemester;
 
 /**
  * Contract
  *
- * @ORM\Table(name="contract", indexes={@ORM\Index(name="fk_contract_class_of_study_has_semester1_idx", columns={"class_of_study_has_semester_id"}), @ORM\Index(name="fk_contract_teacher1_idx", columns={"teacher_id"}), @ORM\Index(name="fk_contract_academic_year1_idx", columns={"academic_year_id"})})
+ * @ORM\Table(name="contract", indexes={@ORM\Index(name="fk_contract_teacher1_idx", columns={"teacher_id"}), @ORM\Index(name="fk_contract_academic_year1_idx", columns={"academic_year_id"})})
  * @ORM\Entity
  */
 class Contract
@@ -63,16 +61,6 @@ class Contract
      * })
      */
     private $academicYear;
-
-    /**
-     * @var ClassOfStudyHasSemester
-     *
-     * @ORM\ManyToOne(targetEntity="ClassOfStudyHasSemester")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="class_of_study_has_semester_id", referencedColumnName="id")
-     * })
-     */
-    private $classOfStudyHasSemester;
 
     /**
      * @var Teacher
@@ -214,30 +202,6 @@ class Contract
     public function getAcademicYear()
     {
         return $this->academicYear;
-    }
-
-    /**
-     * Set classOfStudyHasSemester.
-     *
-     * @param ClassOfStudyHasSemester|null $classOfStudyHasSemester
-     *
-     * @return Contract
-     */
-    public function setClassOfStudyHasSemester(ClassOfStudyHasSemester $classOfStudyHasSemester = null)
-    {
-        $this->classOfStudyHasSemester = $classOfStudyHasSemester;
-    
-        return $this;
-    }
-
-    /**
-     * Get classOfStudyHasSemester.
-     *
-     * @return ClassOfStudyHasSemester|null
-     */
-    public function getClassOfStudyHasSemester()
-    {
-        return $this->classOfStudyHasSemester;
     }
 
     /**

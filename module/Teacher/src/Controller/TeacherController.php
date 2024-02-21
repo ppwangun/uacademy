@@ -19,7 +19,9 @@ use Application\Entity\Countries;
 use Application\Entity\Cities;
 use Application\Entity\Faculty;
 use Application\Entity\Teacher;
+use Application\Entity\Contract;
 use Application\Entity\FileDocument;
+use Application\Entity\AllContractsView;
 
 
 class TeacherController extends AbstractRestfulController
@@ -76,12 +78,13 @@ class TeacherController extends AbstractRestfulController
                 $teacher["grade_id"]= $academic_rank_id ;
                 $teacher["actual_employer"]= $teacher["currentEmployer"] ;
                 $teacher["requested_establishment_id"] = $requested_establishment_id;
-                
+              
                 if($data["birthDate"])
                     $teacher["birthdate"]=$data["birthDate"]->format('Y-m-d');
                 $teacher["documents"] = $documents;
-                $query = $this->entityManager->createQuery('SELECT c.coshs as id,c.codeUe,c.nomUe,c.classe,c.semester,c.semId,c.totalHrs  FROM Application\Entity\CurrentYearUesAndSubjectsView c'
-                        .' WHERE c.teacher = :teacher');
+                //$query = $this->entityManager->createQuery('SELECT c.coshs as id,c.codeUe,c.nomUe,c.classe,c.semester,c.semId,con.volumeHrs  as totalHrs  FROM Application\Entity\ClassOfStudyHasSemster c'
+                $query = $this->entityManager->createQuery('SELECT c.coshs as id,c.codeUe,c.nomUe,c.classe,c.semester,c.semId,c.totalHrs,c.teacher   FROM Application\Entity\AllContractsView c '
+                        .'WHERE c.teacher = :teacher' );
                 $query->setParameter('teacher',$id);
 
                 $subjects_1 = $query->getResult();
