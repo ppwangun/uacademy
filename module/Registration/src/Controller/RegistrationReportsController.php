@@ -15,6 +15,7 @@ use Application\Entity\AllYearsRegisteredStudentView;
 use Application\Entity\StudentSemRegistration;
 use Application\Entity\SemesterAssociatedToClass;
 use Application\Entity\Semester;
+use Application\Entity\AdminRegistration;
 
 
 class RegistrationReportsController extends AbstractActionController
@@ -78,14 +79,14 @@ class RegistrationReportsController extends AbstractActionController
 
             $classe_1 = $this->entityManager->getRepository(ClassOfStudy::class)->findOneByCode($classe_code);
             $studyLevel = $classe_1->getStudyLevel();
-            
+            $totalStudent = 100;
 
             $i=0;
             foreach($registeredStd as $key=>$value)
             {
                 $student = $this->entityManager->getRepository(Student::class)->findOneByMatricule($value->getMatricule());
                 $adminRegistration = $this->entityManager->getRepository(AdminRegistration::class)->findOneBy(array("academicYear"=>$acadYr,"student"=>$student,"classOfStudy"=>$classe_1));
-                if($adminRegistration->getSchoolcertificateavailabilitystatus ==0)
+                if($adminRegistration->getSchoolCertificateAvailabilityStatus() ==0 && $adminRegistration->getStatus()==1)
                 {
                     //Genereate scholarshi certificate reference ID
                     
@@ -93,8 +94,8 @@ class RegistrationReportsController extends AbstractActionController
                     // Filter by some parameter if you want
                     // ->where('a.published = 1')
                     ->select('count(a.id)')
-                    ->where('a.schoolcertificateavailabilitystatus = 1')
-                   ->where('a.academicyear = 1')
+                    ->where('a.schoolCertificateAvailabilityStatus = 1')
+                   ->where('a.academicYear = 1')
                     ->getQuery()
                     ->getSingleScalarResult();
                     $i = $totalStudentWithScholarshipCertificate;
@@ -103,11 +104,13 @@ class RegistrationReportsController extends AbstractActionController
                     elseif($i<100) $id = "R0".$i;
                     elseif($id<100) $id = "R".$i;
                     $indice = $totalStudent -$i;
+                    
 
-                    if($stdSemReg)
-                        $stdSemReg->setTranscriptReferenceId($id."-".$classe_code."-".$indice."-".$acadCode);
+                    if($adminRegistration)
+                        $adminRegistration->setSchoolCertificateReferenceId($id."-".$classe_code."-".$indice."-".$acadCode);
 
-                    $i++;                    
+                    $i++; 
+                    $this->entityManager->flush();
                 }
 
                 $hydrator = new ReflectionHydrator();
@@ -132,7 +135,7 @@ class RegistrationReportsController extends AbstractActionController
             $niveauEtude = $classe_1->getStudyLevel();
             
             $classe = $classe_1->getCode();
-            $option = $classe_1->getOption();
+            //$option = $classe_1->getOption();
             $diplome = $diplome->getName();
             $filiere = $filiere->getName();
             $facultyCode = $faculty->getCode();
@@ -158,7 +161,7 @@ class RegistrationReportsController extends AbstractActionController
                 'facultyCode'=>$facultyCode,
                 'personOnChargeOfFaculty'=>$personOnChargeOfFaculty,
                 'diplome'=>$diplome,
-                'option'=>$option
+               // 'option'=>$option
                
                 
             ]);

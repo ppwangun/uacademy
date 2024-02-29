@@ -375,7 +375,7 @@ class IndexController extends AbstractActionController
         try
         {
             $cities = [];
-            $data= $this->params()->fromPost();            
+            $data= $this->params()->fromPost();           
             $proceeByForce =(int) $data["proceedByForce"];           
             //$data = json_decode($data,true);
           
@@ -410,62 +410,67 @@ class IndexController extends AbstractActionController
                 $this->entityManager->persist($contract);*/
             
             
-           
+          
                 foreach($data["subjects"] as $key=>$value)
                 { 
-                    $coshs = $this->entityManager->getRepository(ClassOfStudyHasSemester::class)->find($value);
+                    $coshs = $this->entityManager->getRepository(ClassOfStudyHasSemester::class)->find($value["coshs"]);
                     if($coshs)
                     {
-                        
-                        //check whetehr or not the sbject is already 
-                        $contract = $this->entityManager->getRepository(Contract::class)->findBy(["academicYear"=>$acadYear,"classOfStudyHasSemester"=>$coshs]); 
-                        if(sizeof($contract)<=0)
-                        {                           
-
-                            $contract = sizeof($contract);
-                            if($contract<10)
-                            $contract = str_pad($contract,4,0,STR_PAD_LEFT);
-                            else if ($contract<100)
-                                $contract = str_pad($contract,3,0,STR_PAD_LEFT);
-                            else if ($contract<1000) 
-                                $contract = str_pad($contract,2,0,STR_PAD_LEFT);
-
-                            $faculty = $teacher->getFaculty()->getCode();
-                            $refNum = $acadYear->getCode()."/".$faculty."/".$contract;
-                            $contract = new Contract();
-                            $contract->setAcademicYear($acadYear);
-                            $contract->setTeacher($teacher);
-                            $courseHoursVolume = 0;
-                            ($coshs->getSubject())?$courseHoursVolume = $coshs->getSubjectHours():$courseHoursVolume = $coshs->getHoursVolume(); 
-                            $contract->setVolumeHrs($courseHoursVolume);
-                            $contract->setClassOfStudyHasSemester($coshs);
-                            $contract->setRefNumber($refNum); 
-
-                            $this->entityManager->persist($contract); 
-                            $this->entityManager->flush();
-                        }
-                        else{
-                        echo "je suis dedans 123"; exit;
-                        $contract = $this->entityManager->getRepository(Contract::class)->findBy(["academicYear"=>$acadYear],$coshs);
+                        $contract = $this->entityManager->getRepository(Contract::class)->findOneBy(["academicYear"=>$acadYear,"classOfStudyHasSemester"=>$coshs,"teacher"=>$teacher]);
                         $totalHoursAffected = 0;
+                        $courseHoursVolume = 0; 
+                        ($coshs->getSubject())?$courseHoursVolume = $coshs->getSubjectHours():$courseHoursVolume = $coshs->getHoursVolume();                       
                         //calculate the total time already affected
-                        foreach($contract as $c) $totalHoursAffected+=$c->getVolumeHrs(); 
+                        foreach($contract as $c) $totalHoursAffected+=$c->getVolumeHrs();                        
+                        //check whetehr or not the sbject is already 
                         
-                        ($coshs->getSubject())?$courseHoursVolume = $coshs->getSubjectHoursVolume():$courseHoursVolume = $coshs->getHoursVolume();
-                        if($courseHoursVolume<=$totalHoursAffected() && !$proceeByForce) {
-                            return  new JsonModel([
-                                     false
-                             ]);                         
-                        }
+                        //non affectd time
+                        $nonAffectedTime = $courseHoursVolume-$totalHoursAffected;
+
+                                $contract = sizeof($contract);
+                                if($contract<10)
+                                $contract = str_pad($contract,4,0,STR_PAD_LEFT);
+                                else if ($contract<100)
+                                    $contract = str_pad($contract,3,0,STR_PAD_LEFT);
+                                else if ($contract<1000) 
+                                    $contract = str_pad($contract,2,0,STR_PAD_LEFT);
+
+
+                                $faculty = $teacher->getFaculty()->getCode();
+                                $refNum = $acadYear->getCode()."/".$faculty."/".$contract;                                
+                        if(!$contract) $contract = new Contract();
+                        elseif($data["partialAttribution"]&&$nonAffectedTime>$value["volumeHrs"] ) $contract = new Contract();
+                        elseif(!$proceeByForce) $contract = new Contract();
+                        
+                        
+                        
+                                $contract->setAcademicYear($acadYear);
+                                $contract->setTeacher($teacher);
+                                $courseHoursVolume = 0; 
+                                ($coshs->getSubject())?$courseHoursVolume = $coshs->getSubjectHours():$courseHoursVolume = $coshs->getHoursVolume(); 
+                               ($data["partialAttribution"])?   $contract->setVolumeHrs($value["volumeHrs"]): $contract->setVolumeHrs($courseHoursVolume);
+                                $contract->setClassOfStudyHasSemester($coshs);
+                                $contract->setRefNumber($refNum); 
+
+                                $this->entityManager->persist($contract); 
+                                $this->entityManager->flush();
+
+                      
+
+                            if(!$proceeByForce) {
+                                return  new JsonModel([
+                                         false
+                                 ]);                         
+                            }
                        // $contract->setClassOfStudyHasSemester($coshs);
                        // $coshs->setContract($contract);
                         //$coshs->setTeacher($teacher);
                        // $contract->setTeacher($teacher);
-                        }
-                    }
+                        
+      
                 }
             
-            //}
+            }
 
             /*$regions = $this->entityManager->getRepository(States::class)->findByCountry($country);
             foreach($regions as $region)

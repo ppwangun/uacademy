@@ -96,7 +96,7 @@ class IndexController extends AbstractActionController
         try
         {
             $data = $this->params()->fromQuery();
-            $data = json_decode($data["std"],true);            var_dump($data); exit;
+            $data = json_decode($data["std"],true);            
             ($data["amountPaid"])?$data["montant"]=$data["amountPaid"]:$data["montant"]=null;
             $this->paymentManager->importPayments($data);
             //$message = $this->paymentManager->updatePymtAPI($data);

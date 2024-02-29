@@ -1272,10 +1272,11 @@ class IndexController extends AbstractActionController
                             $unitRegistration = $this->entityManager->getRepository(UnitRegistration::class)->findBy(array("student"=>$std,"semester"=>$sem,'teachingUnit'=>$sub->getTeachingUnit(),'subject'=>[NULL," "]));
                             if(sizeof($unitRegistration)>1)
                             {
+                                
                                 for( $i=1;$i<sizeof($unitRegistration);$i++)
                                 {
-                                   
-                                    $this->entityManager->remove($unitRegistration[$i]);
+                                    
+                                        $this->entityManager->remove($unitRegistration[$i]);
                                     
                                 }
 

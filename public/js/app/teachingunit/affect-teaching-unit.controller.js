@@ -115,7 +115,7 @@ function AffectTeachingUnitController($scope, $mdDialog, $http, teacherId, teach
         var data = $scope.teachingUnitsToSave().map(elt => elt.coshs);
         if (data.length === 0 || $scope.isProcessing) return;
         
-        data = {teacherid: $scope.teacherId,subjects : $scope.teachingUnitsToSave().map(elt => elt.coshs),proceedByForce:proceedByForce}
+        data = {teacherid: $scope.teacherId,subjects : $scope.teachingUnitsToSave(),proceedByForce:proceedByForce,partialAttribution:$scope.partialAttribution}
         data = $.param(data)
         var config = {
             //params: {id: $scope.teacherId,subjects : JSON.stringify(data)},

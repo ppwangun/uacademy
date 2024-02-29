@@ -66,8 +66,18 @@ z-index: 120000}
                          
                           </div>
             </div>
+                        <md-input-container class="md-block" flex-gt-sm >
+                                            
 
-    
+                            <md-checkbox  ng-model="partialAttribution" ng-disabled="std.isRepeated===1"  aria-label="Checkbox Indeterminate" 
+                                              ng-true-value="1"
+                                       ng-checked="flase"                   
+                                              class="md-primary">
+
+                            </md-checkbox>
+                            Attribution partielle
+                        </md-input-container> 
+                       
         <table class="table">
             <thead>
                     <tr>
@@ -76,6 +86,7 @@ z-index: 120000}
                         <th scope="col">intiutle</th>
                         <th scope="col">Classe</th>
                         <th scope="col">Semestre</th>
+                        <th scope="col">Volume Horaire</th>
                         <th scope="col"></th>
                     </tr>
             </thead>
@@ -87,12 +98,13 @@ z-index: 120000}
                   <td ng-bind="sub.nomUe"></td>
                   <td ng-bind="sub.classe"></td>
                   <td ng-bind="sub.semester"></td>
+                  <td ng-bind="sub.totalHrs+'H'"></td>
                   
                   <td>
-                        <md-input-container class="md-block" flex-gt-sm ng-show="partialAttribution">
-                            <label>Montant frais de scolarité</label>
-                            <input name="volumeHrs" ng-model="sub.volumeHrs" style="background-color:#fab1a0; color: #fff; font-weight: bold" required />
-                            <div ng-messages="dotationForm.feesPaid.$error">
+                        <md-input-container class="md-block"  ng-show="partialAttribution">
+                            <label>Volume horaire attibué</label>
+                            <input name="volumeHrs" ng-model="sub.volumeHrs" style="background-color:#fab1a0; color: #fff; font-weight: bold" ng-required="partialAttribution===1" />
+                            <div ng-messages="subjectForm.volumeHrs.$error">
                                 <div ng-message="required">le champ numéro de téléphone est obligatoire</div>
                                 <div ng-message="pattern">Numéro de téléphone invalid</div>
 
@@ -119,7 +131,7 @@ z-index: 120000}
         </form>    
           </md-content>
       
-      </div>S   
+      </div>   
 
   
 </md-dialog>
