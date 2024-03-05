@@ -247,7 +247,7 @@ class AdminRegistration
      */
     public function setSchoolCertificateReferenceId($schoolcertificatereferenceid = null)
     {
-        $this->schoolcertificatereferenceid = $schoolcertificatereferenceid;
+        $this->schoolCertificateReferenceId = $schoolcertificatereferenceid;
     
         return $this;
     }
@@ -259,7 +259,7 @@ class AdminRegistration
      */
     public function getSchoolCertificateReferenceId()
     {
-        return $this->schoolcertificatereferenceid;
+        return $this->schoolCertificateReferenceId;
     }
 
     /**

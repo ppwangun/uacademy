@@ -86,6 +86,8 @@ class RegistrationReportsController extends AbstractActionController
             {
                 $student = $this->entityManager->getRepository(Student::class)->findOneByMatricule($value->getMatricule());
                 $adminRegistration = $this->entityManager->getRepository(AdminRegistration::class)->findOneBy(array("academicYear"=>$acadYr,"student"=>$student,"classOfStudy"=>$classe_1));
+                $numRef = $adminRegistration->getSchoolCertificateReferenceId();
+                
                 if($adminRegistration->getSchoolCertificateAvailabilityStatus() ==0 && $adminRegistration->getStatus()==1)
                 {
                     //Genereate scholarshi certificate reference ID
@@ -98,16 +100,14 @@ class RegistrationReportsController extends AbstractActionController
                    ->where('a.academicYear = 1')
                     ->getQuery()
                     ->getSingleScalarResult();
-                    $i = $totalStudentWithScholarshipCertificate;
+                    $ref = $totalStudentWithScholarshipCertificate;
                     $acadCode = substr($acadYr->getCode(),-4); 
                     if($i<10) $id = "R00".$i;
-                    elseif($i<100) $id = "R0".$i;
+                    elseif($i<100) $id = "R0".$ref ;
                     elseif($id<100) $id = "R".$i;
-                    $indice = $totalStudent -$i;
-                    
-
-                    if($adminRegistration)
-                        $adminRegistration->setSchoolCertificateReferenceId($id."-".$classe_code."-".$indice."-".$acadCode);
+                    $indice = $totalStudent -$ref ;
+                    $numRef = $id."-".$classe_code."-".$indice."-".$acadCode;
+                    $adminRegistration->setSchoolCertificateReferenceId($numRef);
 
                     $i++; 
                     $this->entityManager->flush();
@@ -119,6 +119,7 @@ class RegistrationReportsController extends AbstractActionController
                
                 $std = $hydrator->extract($stud);
                 $std['dateOfBirth'] = $std['dateOfBirth']->format('d/m/Y');
+                $std['referenceNumber'] = $numRef;
                
                 $students[$i]=$std;
                 $i++;
@@ -126,7 +127,7 @@ class RegistrationReportsController extends AbstractActionController
 
              } 
 
-           
+
             $diplome = $classe_1->getDegree();
             $filiere = $diplome->getFieldStudy();
             $faculty = $filiere->getFaculty();
