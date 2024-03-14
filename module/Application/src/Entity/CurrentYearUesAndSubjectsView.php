@@ -23,9 +23,9 @@ class CurrentYearUesAndSubjectsView
     /**
     * @var integer
     *
-    * @ORM\Column(name="coshs", type="string", length=45, nullable=true)
+    * @ORM\Column(name="subject_id", type="string", length=45, nullable=true)
     */
-    private $coshs;    
+    private $subjectId;    
     
     /**
     * @var string
@@ -139,9 +139,9 @@ class CurrentYearUesAndSubjectsView
      *
      * @return integer
      */
-    public function getCoshs()
+    public function getSubjectId()
     {
-        return $this->coshs;
+        return $this->subjectId;
     }    
     
      /**

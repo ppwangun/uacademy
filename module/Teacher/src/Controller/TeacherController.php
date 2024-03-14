@@ -83,7 +83,7 @@ class TeacherController extends AbstractRestfulController
                     $teacher["birthdate"]=$data["birthDate"]->format('Y-m-d');
                 $teacher["documents"] = $documents;
                 //$query = $this->entityManager->createQuery('SELECT c.coshs as id,c.codeUe,c.nomUe,c.classe,c.semester,c.semId,con.volumeHrs  as totalHrs  FROM Application\Entity\ClassOfStudyHasSemster c'
-                $query = $this->entityManager->createQuery('SELECT c.coshs as id,c.codeUe,c.nomUe,c.classe,c.semester,c.semId,c.totalHrs,c.teacher   FROM Application\Entity\AllContractsView c '
+                $query = $this->entityManager->createQuery('SELECT c.id as id,c.codeUe,c.nomUe,c.classe,c.semester,c.semId,c.totalHrs,c.teacher   FROM Application\Entity\AllContractsView c '
                         .'WHERE c.teacher = :teacher' );
                 $query->setParameter('teacher',$id);
 

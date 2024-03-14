@@ -20,12 +20,7 @@ class AllContractsView
     * @ORM\GeneratedValue(strategy="IDENTITY")
     */
     private $id;
-    /**
-    * @var integer
-    *
-    * @ORM\Column(name="coshs", type="string", length=45, nullable=true)
-    */
-    private $coshs;    
+   
     
     /**
     * @var string
@@ -61,6 +56,27 @@ class AllContractsView
     * @ORM\Column(name="total_hrs", type="float",  nullable=true)
     */
     private $totalHrs;  
+    
+    /**
+    * @var integer
+    *
+    * @ORM\Column(name="cm_hrs", type="float",  nullable=true)
+    */
+    private $cmHrs;  
+    
+    /**
+    * @var integer
+    *
+    * @ORM\Column(name="td_hrs", type="float",  nullable=true)
+    */
+    private $tdHrs; 
+
+    /**
+    * @var integer
+    *
+    * @ORM\Column(name="tp_hrs", type="float",  nullable=true)
+    */
+    private $tpHrs;     
      
     /**
     * @var string
@@ -69,7 +85,12 @@ class AllContractsView
     */
     private $classe;
     
-   
+    /**
+    * @var string
+    *
+    * @ORM\Column(name="teacher_name", type="string", length=255, nullable=true)
+    */
+    private $teacherName;   
     
        /**
     * @var integer
@@ -103,132 +124,7 @@ class AllContractsView
     * @ORM\Column(name="teacher", type="integer", nullable=true)
     */
     private $teacher;    
-     /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    } 
-     /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getCoshs()
-    {
-        return $this->coshs;
-    }    
-    
-     /**
-     * Get string
-     *
-     * @return string
-     */
-    public function getClasse()
-    {
-        return $this->classe;
-    }
-    
-     /**
-     * Get string
-     *
-     * @return string
-     */
-    public function getSemester()
-    {
-        return $this->semester;
-    } 
     
     
-     /**
-     * Get string
-     *
-     * @return string
-     */
-    public function getCodeUe()
-    {
-        return $this->codeUe;
-    }
-    
-    /**
-     * Get string
-     *
-     * @return string
-     */
-    public function getNomUe()
-    {
-        return $this->nomUe;
-    }
-    
-    
-     /**
-     * Get string
-     *
-     * @return string
-     */
-    public function getDegreeCode()
-    {
-        return $this->degreeCode;
-    }    
-    
-     /**
-     * Get float
-     *
-     * @return float
-     */
-    public function getCredits()
-    {
-        return $this->credits;
-    }
-     /**
-     * Get integer
-     *
-     * @return integer
-     */
-    public function getTotalHrs()
-    {
-        return $this->totalHrs;
-    } 
-    
-     /**
-     * Get integer
-     *
-     * @return integer
-     */
-    public function getSemId()
-    {
-        return $this->semId;
-    }
-         /**
-     * Get integer
-     *
-     * @return integer
-     */
-    public function getStudyLevel()
-    {
-        return $this->studyLevel;
-    }
-    
-         /**
-     * Get integer
-     *
-     * @return integer
-     */
-    public function getSemRanking()
-    {
-        return $this->semRanking;
-    } 
-    /**
-     * Get integer
-     *
-     * @return integer
-     */
-    public function getTeacher()
-    {
-        return $this->teacher;
-    }    
 }
 

@@ -112,7 +112,7 @@ function AffectTeachingUnitController($scope, $mdDialog, $http, teacherId, teach
     }
 
     $scope.saveChoices = (proceedByForce) => {
-        var data = $scope.teachingUnitsToSave().map(elt => elt.coshs);
+        var data = $scope.teachingUnitsToSave().map(elt => elt.id);
         if (data.length === 0 || $scope.isProcessing) return;
         
         data = {teacherid: $scope.teacherId,subjects : $scope.teachingUnitsToSave(),proceedByForce:proceedByForce,partialAttribution:$scope.partialAttribution}

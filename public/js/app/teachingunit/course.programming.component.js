@@ -8,6 +8,7 @@ angular.module('teachingunit')
 });
 function programmingCtrl($timeout,$http,$location,$mdDialog,$scope,uiCalendarConfig){
     var $ctrl = this;
+    $ctrl.isActivatedUeSelect = false;
     $scope.eventSources = [ 
         
         {
@@ -93,6 +94,7 @@ function programmingCtrl($timeout,$http,$location,$mdDialog,$scope,uiCalendarCon
     };      
     $http.get('assignsemtoclass',config).then(function(response){
         $ctrl.semesters = response.data[0];
+        $ctrl.isActivatedUeSelect = true;
                 
     });
 };
@@ -112,11 +114,52 @@ function programmingCtrl($timeout,$http,$location,$mdDialog,$scope,uiCalendarCon
                         $http.get('teachingunit',config).then(
      
                         function(response){
-                            $ctrl.ues=response.data[0];
+                                $ctrl.ues=response.data[0];
+                                $ctrl.isActivatedMatiereSelect = true;
+                      
 
                         }),1000);
 
  };
+ 
+ 
+  //Looad all student who are registered to the subject
+ //Load all subjects associated with the UE as well
+ $ctrl.loadPedagogicalRegStd = function(selectedUe,classe){
+                            $ctrl.isActivatedMatiereSelect = false;
+                            $ctrl.isMatiereRequired = false;
+                            
+                            $scope.items = [];
+                            if($ctrl.selectedSubject) var data ={id: {ueId: $ctrl.selectedUe.id,subjectId: $ctrl.selectedSubject.id,classId : classe.id}};
+                            else    var data ={id: {ueId: $ctrl.selectedUe.id,classId : classe.id}};
+                             
+                            var i;
+                            var config = {
+                            params: data,
+                            headers : {'Accept' : 'application/json'}
+                            };
+
+
+                                data ={id: $ctrl.selectedUe.id}
+                                    var config = {
+                                    params: data,
+                                    headers : {'Accept' : 'application/json'}
+                                    };   
+                                    if($ctrl.subjects<=0)
+                                        $http.get('subjectbyue',config).then(function(response){
+
+                                            $ctrl.subjects = response.data[0];
+ 
+
+                                        });
+                                                $ctrl.isActivatedMatiereSelect = true;
+                                                $ctrl.isMatiereRequired = true;                                    
+  
+                        
+                           
+                        };
+                        
+
      
     /*--------------------------------------------------------------------------
      *--------------------------- updating curriculum---------------------------

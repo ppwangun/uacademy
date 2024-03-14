@@ -129,7 +129,7 @@ class ProgressionController extends AbstractRestfulController
                     $progression->setTotalTime($timeDiff->h);
 
 
-           
+          
             $coshs =$this->entityManager->getRepository(ClassOfStudyHasSemester::class)->find($data['teaching_unit_id']); 
             $progression->setClassOfStudyHasSemester($coshs );
 

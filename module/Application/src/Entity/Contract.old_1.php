@@ -1,20 +1,18 @@
 <?php
 
-namespace Application\Entity;
 
+namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Application\Entity\TeachingUnit;
-use Application\Entity\Subject;
-use Application\Entity\Semester;
-use Application\Entity\AcademicYear;
 use Application\Entity\Teacher;
+use Application\Entity\AcademicYear;
+use Application\Entity\ClassOfStudyHasSemester;
 
 /**
  * Contract
  *
- * @ORM\Table(name="contract", indexes={@ORM\Index(name="fk_contract_teaching_unit1_idx", columns={"teaching_unit_id"}), @ORM\Index(name="fk_contract_subject1_idx", columns={"subject_id"}), @ORM\Index(name="fk_contract_teacher1_idx", columns={"teacher_id"}), @ORM\Index(name="fk_contract_semester1_idx", columns={"semester_id"}), @ORM\Index(name="fk_contract_academic_year1_idx", columns={"academic_year_id"})})
+ * @ORM\Table(name="contract", indexes={@ORM\Index(name="fk_contract_class_of_study_has_semester1_idx", columns={"class_of_study_has_semester_id"}), @ORM\Index(name="fk_contract_teacher1_idx", columns={"teacher_id"}), @ORM\Index(name="fk_contract_academic_year1_idx", columns={"academic_year_id"})})
  * @ORM\Entity
  */
 class Contract
@@ -67,24 +65,14 @@ class Contract
     private $academicYear;
 
     /**
-     * @var Semester
+     * @var ClassOfStudyHasSemester
      *
-     * @ORM\ManyToOne(targetEntity="Semester")
+     * @ORM\ManyToOne(targetEntity="ClassOfStudyHasSemester")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="semester_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="class_of_study_has_semester_id", referencedColumnName="id")
      * })
      */
-    private $semester;
-
-    /**
-     * @var Subject
-     *
-     * @ORM\ManyToOne(targetEntity="Subject")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="subject_id", referencedColumnName="id")
-     * })
-     */
-    private $subject;
+    private $classOfStudyHasSemester;
 
     /**
      * @var Teacher
@@ -95,16 +83,6 @@ class Contract
      * })
      */
     private $teacher;
-
-    /**
-     * @var TeachingUnit
-     *
-     * @ORM\ManyToOne(targetEntity="TeachingUnit")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="teaching_unit_id", referencedColumnName="id")
-     * })
-     */
-    private $teachingUnit;
 
 
 
@@ -239,51 +217,27 @@ class Contract
     }
 
     /**
-     * Set semester.
+     * Set classOfStudyHasSemester.
      *
-     * @param Semester|null $semester
+     * @param ClassOfStudyHasSemester|null $classOfStudyHasSemester
      *
      * @return Contract
      */
-    public function setSemester(Semester $semester = null)
+    public function setClassOfStudyHasSemester(ClassOfStudyHasSemester $classOfStudyHasSemester = null)
     {
-        $this->semester = $semester;
+        $this->classOfStudyHasSemester = $classOfStudyHasSemester;
     
         return $this;
     }
 
     /**
-     * Get semester.
+     * Get classOfStudyHasSemester.
      *
-     * @return Semester|null
+     * @return ClassOfStudyHasSemester|null
      */
-    public function getSemester()
+    public function getClassOfStudyHasSemester()
     {
-        return $this->semester;
-    }
-
-    /**
-     * Set subject.
-     *
-     * @param Subject|null $subject
-     *
-     * @return Contract
-     */
-    public function setSubject(Subject $subject = null)
-    {
-        $this->subject = $subject;
-    
-        return $this;
-    }
-
-    /**
-     * Get subject.
-     *
-     * @return Subject|null
-     */
-    public function getSubject()
-    {
-        return $this->subject;
+        return $this->classOfStudyHasSemester;
     }
 
     /**
@@ -308,29 +262,5 @@ class Contract
     public function getTeacher()
     {
         return $this->teacher;
-    }
-
-    /**
-     * Set teachingUnit.
-     *
-     * @param TeachingUnit|null $teachingUnit
-     *
-     * @return Contract
-     */
-    public function setTeachingUnit(TeachingUnit $teachingUnit = null)
-    {
-        $this->teachingUnit = $teachingUnit;
-    
-        return $this;
-    }
-
-    /**
-     * Get teachingUnit.
-     *
-     * @return TeachingUnit|null
-     */
-    public function getTeachingUnit()
-    {
-        return $this->teachingUnit;
     }
 }
