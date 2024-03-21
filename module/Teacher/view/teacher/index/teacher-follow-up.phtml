@@ -110,6 +110,7 @@ max-width: 900px;
                                         <img src="assets/images/report_2912773.png" alt="" width="16px" height="16px"/>
                                         Generer la convention
                                     </button>
+                                    <i class="fa fa-trash-o" ng-click="unAssignSubjectToTeacher(selectedTeachingUnitId)"></i>
                                 </div>
                             </div>
                             <div class="flex-gt-sm gap-1" id="teacher_documents" layout="column">
@@ -183,7 +184,7 @@ max-width: 900px;
                                     <button class="btn btn-info " ng-click="openProgressionsTimelineDialog($event)">
                                         <i class="fa fa-plus-circle"></i>&nbsp;Afficher les details
                                     </button>
-
+                                   
                                 </div>
                                
                             </div>
@@ -210,6 +211,7 @@ max-width: 900px;
                                         <td>{{teachingUnit.semester}}</td>
                                         <td>{{teachingUnit.classe}}</td>
                                         <td>{{teachingUnit.totalHrs}}H</td>
+                                       
                                     </tr>
                                     <tr style="text-align:center;font-weight : bold; color: #fff; background-color:#708090;"><td  colspan="4">Total Volume Horaire</td><td align="left">{{currentTeacher.teaching_units|sumByKey:'totalHrs'}}H</td></tr>
                                     </tbody>

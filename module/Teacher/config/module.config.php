@@ -124,6 +124,16 @@ return [
                         'action'        => 'assignSubjectToTeacher',
                     ],
                 ],
+            ],  
+            'unAssignSubjectToTeacher' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/unAssignSubjectToTeacher[/:teacherID][/:subjectIDs]',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'unAssignSubjectToTeacher',
+                    ],
+                ],
             ],            
 
             'new-teacher-form-assets' => [

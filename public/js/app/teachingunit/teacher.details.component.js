@@ -233,6 +233,45 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
         $scope.currentProgressionStats = null;
         $scope.loadCurrentProgressionStats();
     }
+    
+    $scope.unAssignSubjectToTeacher = function(teachingUnitId,ev)
+    {
+        data = {teacherid: $scope.selectedTeacherId,subject : teachingUnitId} 
+        data = $.param(data)
+        var config = {
+            //params: {id: $scope.teacherId,subjects : JSON.stringify(data)},
+            headers : {'Content-Type' : "application/x-www-form-urlencoded;charset=utf-8;"}
+        };
+        $scope.isProcessing = true;
+        
+// Preparing the confirm windows
+      var confirm = $mdDialog.confirm()
+            .title('Annuler Attribution?')
+            .textContent('VOus êtes sur le point d\'annuler l\'attribution de l\'unité d\'enseignement séléctionné Voulez vous continuer')
+             // .ariaLabel('Lucky day')
+            .targetEvent(ev)
+            .ok('Confirmer')
+            .cancel('Annuler');
+//open de confirm window
+    $mdDialog.show(confirm).then(function() {
+        //in case delete is pressee excute  the delete backend 
+        $http.post(`unAssignSubjectToTeacher`,data,config)
+            .then(function (response) {
+
+               // alert('L\'enseignant a ete mis a jour avec succes !');
+                $scope.isProcessing = false;
+            }, function (error) {
+                console.error(error);
+                $scope.isProcessing = false;
+                alert('Une erreur s\'est produite lors du traitement ! Veuillez reessayer !')
+            });
+    }, function() {
+     // $scope.status = 'You decided to keep your debt.';
+    }); 
+    
+        
+        
+    }
 
     $scope.onViewDocument = function () {
         console.log("Viewing document")

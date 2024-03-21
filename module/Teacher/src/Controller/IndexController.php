@@ -536,7 +536,58 @@ class IndexController extends AbstractActionController
 
         }    
     }
-    
+
+    public function unAssignSubjectToTeacherAction()
+    {
+        $this->entityManager->getConnection()->beginTransaction();
+        try
+        {
+            $cities = [];
+            $data= $this->params()->fromPost();           
+      
+            
+            //$data = json_decode($data,true);
+         
+            $teacher = $this->entityManager->getRepository(Teacher::class)->find($data['teacherid']);
+            $acadYear = $this->entityManager->getRepository(AcademicYear::class)->findOneByIsDefault(1);
+
+            $coshs = $this->entityManager->getRepository(ClassOfStudyHasSemester::class)->find($data["subject"]);
+                    $unit = null;
+                    $subject= null;
+                
+                   if($coshs->getTeachingUnit()) 
+                    {       
+                       $unit = $coshs->getTeachingUnit(); 
+
+                        $contract = $this->entityManager->getRepository(Contract::class)->findOneBy(["academicYear"=>$acadYear,"teachingUnit"=>$unit,"teacher"=>$teacher]);
+                        
+                    }
+                   if($coshs->getSubject()) 
+                    {
+                       $subject = $coshs->getSubject();
+         
+                        $contract = $this->entityManager->getRepository(Contract::class)->findOneBy(["academicYear"=>$acadYear,"subject"=>$subject,"teacher"=>$teacher]);
+                    } 
+                   
+                   
+                   
+;
+                    $this->entityManager->remove($contract); 
+                    $this->entityManager->flush();
+
+            $this->entityManager->getConnection()->commit();
+            
+            //$output = json_encode($output,$depth=1000000); 
+            $output = new JsonModel([
+                    true
+            ]); 
+            
+            return $output;
+        }
+        catch (Exception $ex) {
+
+        }    
+    }    
     public function searchAllSubjectsAction()
     {
         $this->entityManager->getConnection()->beginTransaction();
