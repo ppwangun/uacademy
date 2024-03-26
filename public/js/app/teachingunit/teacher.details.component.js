@@ -259,6 +259,7 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
             .then(function (response) {
 
                // alert('L\'enseignant a ete mis a jour avec succes !');
+                $scope.loadCurrentTeacher();
                 $scope.isProcessing = false;
             }, function (error) {
                 console.error(error);

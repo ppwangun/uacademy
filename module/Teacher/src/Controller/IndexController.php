@@ -380,49 +380,21 @@ class IndexController extends AbstractActionController
             $teacher = $this->entityManager->getRepository(Teacher::class)->find($data['teacherid']);
             $acadYear = $this->entityManager->getRepository(AcademicYear::class)->findOneByIsDefault(1);
             
-            //Cheking if a contract already exist for the current year
-           // $contract = $this->entityManager->getRepository(Contract::class)->findOneBy(["academicYear"=>$acadYear,"teacher"=>$teacher]);  
-          /*  if($contract)
-            {
-                $contract->setAcademicYear($acadYear);
-                $contract->setTeacher($teacher);                
-            }
-            else{*/
-               /* $contract = $this->entityManager->getRepository(Contract::class)->findBy(["academicYear"=>$acadYear]); 
-                $contract = sizeof($contract);
-                if($contract<10)
-                $contract = str_pad($contract,4,0,STR_PAD_LEFT);
-                else if ($contract<100)
-                    $contract = str_pad($contract,3,0,STR_PAD_LEFT);
-                else if ($contract<1000) 
-                    $contract = str_pad($contract,2,0,STR_PAD_LEFT);
-                
-                        
-                $faculty = $teacher->getFaculty()->getCode();
-                $refNum = $acadYear->getCode()."/".$faculty."/".$contract;
-                $contract = new Contract();
-                $contract->setAcademicYear($acadYear);
-                $contract->setTeacher($teacher);
-                $contract->setRefNumber($refNum);
-                
-                $this->entityManager->persist($contract);*/
-            
-             
-           
+          
                 foreach($data["subjects"] as $key=>$value)
-                {  
+                { 
                     $coshs = $this->entityManager->getRepository(ClassOfStudyHasSemester::class)->find($value["id"]);
                     $unit = null;
                     $subject= null;
                 
                    if($coshs->getTeachingUnit()) 
-                    {        
+                    {         
                        $unit = $coshs->getTeachingUnit();
 
                         $contract = $this->entityManager->getRepository(Contract::class)->findBy(["academicYear"=>$acadYear,"teachingUnit"=>$unit,"teacher"=>$teacher]);
                     }
                    if($coshs->getSubject()) 
-                    {
+                    { 
                        $subject = $coshs->getSubject();
          
                         $contract = $this->entityManager->getRepository(Contract::class)->findBy(["academicYear"=>$acadYear,"subject"=>$subject,"teacher"=>$teacher]);
@@ -488,40 +460,13 @@ class IndexController extends AbstractActionController
                                 $this->entityManager->persist($contract); 
                                 $this->entityManager->flush();
 
-                      
 
-
-                       // $contract->setClassOfStudyHasSemester($coshs);
-                       // $coshs->setContract($contract);
-                        //$coshs->setTeacher($teacher);
-                       // $contract->setTeacher($teacher);
                         
       
                 }
             
             
 
-            /*$regions = $this->entityManager->getRepository(States::class)->findByCountry($country);
-            foreach($regions as $region)
-            {
-                $cities_1 = $this->entityManager->getRepository(Cities::class)->findByState($region); 
-                $cities = array_merge($cities,$cities_1);
-            }
-            
-    
-            foreach($cities as $key=>$value)
-            {
-              
-                $hydrator = new ReflectionHydrator();
-                $data = $hydrator->extract($value);
-                $cities[$key] = $data;
-            }
-               usort($cities, function($a, $b)
-                    {
-                        return strnatcmp($a['name'], $b['name']);
-                    }
-                ); 
-              */
             $this->entityManager->flush();
             $this->entityManager->getConnection()->commit();
             

@@ -1,11 +1,11 @@
 <?php
+
 namespace Application\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
 
 use Application\Entity\AcademicRanck;
 use Application\Entity\Faculty;
-
-
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Teacher
@@ -15,6 +15,13 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Teacher
 {
+    
+    /**
+     * General Failure
+     */
+     const STATUS_UNACTIVE = 0;
+     const STATUS_ACTIVE = 1;
+    
     /**
      * @var int
      *
@@ -170,6 +177,20 @@ class Teacher
      * @ORM\Column(name="act_of_appointment", type="string", length=45, nullable=true)
      */
     private $actOfAppointment;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="password", type="string", length=45, nullable=true)
+     */
+    private $password;
+
+    /**
+     * @var bool|null
+     *
+     * @ORM\Column(name="is_first_connection", type="boolean", nullable=true, options={"default"="1"})
+     */
+    private $isFirstConnection = true;
 
     /**
      * @var AcademicRanck
@@ -705,6 +726,54 @@ class Teacher
     public function getActOfAppointment()
     {
         return $this->actOfAppointment;
+    }
+
+    /**
+     * Set password.
+     *
+     * @param string|null $password
+     *
+     * @return Teacher
+     */
+    public function setPassword($password = null)
+    {
+        $this->password = $password;
+    
+        return $this;
+    }
+
+    /**
+     * Get password.
+     *
+     * @return string|null
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Set isFirstConnection.
+     *
+     * @param bool|null $isFirstConnection
+     *
+     * @return Teacher
+     */
+    public function setIsFirstConnection($isFirstConnection = null)
+    {
+        $this->isFirstConnection = $isFirstConnection;
+    
+        return $this;
+    }
+
+    /**
+     * Get isFirstConnection.
+     *
+     * @return bool|null
+     */
+    public function getIsFirstConnection()
+    {
+        return $this->isFirstConnection;
     }
 
     /**
