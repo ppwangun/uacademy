@@ -1,6 +1,7 @@
-function NewTeachingUnitProgressionController($scope, $mdDialog, $http, teachingUnitId, teachingUnitCode, teacherId) {
+function NewTeachingUnitProgressionController($scope, $mdDialog, $http, teachingUnitId, teachingUnitCode, teacherId,contractId) {
     $scope.teachingUnitId = teachingUnitId;
     $scope.teachingUnitCode = teachingUnitCode;
+    $scope.contractId= contractId;
     $scope.isProcessing = false;
 
     $scope.progression = {
@@ -14,7 +15,8 @@ function NewTeachingUnitProgressionController($scope, $mdDialog, $http, teaching
         description: null,
         target: 'cm',
         teaching_unit_id: teachingUnitId,
-        teacher_id: teacherId
+        teacher_id: teacherId,
+        contract_id: contractId
     }
 
     $scope.saveProgression = function(progressionForm) {

@@ -184,7 +184,7 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
 
     $scope.loadCurrentProgressionStats = function () {
         $scope.hasLoadedCurrentProgressionStats = null;
-        data = {teachingUnitId: $scope.selectedTeachingUnitId}
+        data = {contractId: $scope.selectedContractId}
         data = $.param(data)
         var config = {
             //params: {id: $scope.teacherId,subjects : JSON.stringify(data)},
@@ -233,10 +233,16 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
         $scope.currentProgressionStats = null;
         $scope.loadCurrentProgressionStats();
     }
-    
+    $scope.onSelectContract = function ($contractId) {
+        $scope.selectedContractId = $contractId;
+        $scope.currentContract = $scope.currentTeacher?.teaching_units?.find(elt => elt.coshs === $contractId);
+
+        $scope.currentProgressionStats = null;
+        $scope.loadCurrentProgressionStats();
+    }    
     $scope.unAssignSubjectToTeacher = function(teachingUnitId,ev)
     {
-        data = {teacherid: $scope.selectedTeacherId,subject : teachingUnitId} 
+        data = {teacherId: $scope.selectedTeacherId,subject : teachingUnitId,contractId: $scope.selectedContractId} 
         data = $.param(data)
         var config = {
             //params: {id: $scope.teacherId,subjects : JSON.stringify(data)},
@@ -286,7 +292,7 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
             targetEvent: ev,
             clickOutsideToClose: true,
             fullscreen: false, // Only for -xs, -sm breakpoints.
-            locals: {teachingUnitId: $scope.currentTeachingUnit?.id, teachingUnitCode: $scope.currentTeachingUnit?.code, teacherId: $scope.currentTeacher?.id}
+            locals: {teachingUnitId: $scope.currentTeachingUnit?.id, teachingUnitCode: $scope.currentTeachingUnit?.code, teacherId: $scope.currentTeacher?.id,contractId:$scope.selectedContractId }
         }).then(function (newProgressionResult) {
             if ($scope.selectedTeachingUnitId === newProgressionResult.teaching_unit_id) {
                 const previousData = $scope.currentProgressionStats[newProgressionResult.target];
@@ -334,7 +340,7 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
             targetEvent: ev,
             clickOutsideToClose: false,
             fullscreen: false, // Only for -xs, -sm breakpoints.
-            locals: {teachingUnitId: $scope.currentTeachingUnit.id, teachingUnitCode: $scope.currentTeachingUnit.code, teacherId: $scope.currentTeacher.id}
+            locals: { teacherId: $scope.currentTeacher.id,contractId:$scope.selectedContractId}
         });
     };
     

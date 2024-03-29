@@ -20,6 +20,7 @@ use Application\Entity\Teacher;
 
 use Application\Entity\FileDocument;
 use Application\Entity\ContractFollowUp;
+use Application\Entity\Contract;
 use Application\Entity\ClassOfStudyHasSemester;
 
 
@@ -40,9 +41,9 @@ class ProgressionController extends AbstractRestfulController
     public function get($id)
     {   
 
-             $coshs= $this->entityManager->getRepository(ClassOfStudyHasSemester::class)->find($id);
+             $contract= $this->entityManager->getRepository(Contract::class)->find($id);
             
-            $progressions = $this->entityManager->getRepository(ContractFollowUp::class)->findByClassOfStudyHasSemester($coshs);
+            $progressions = $this->entityManager->getRepository(ContractFollowUp::class)->findByContract($contract);
             $dataOutPut = []; 
           
                 foreach($progressions as $key=>$value)
@@ -116,7 +117,8 @@ class ProgressionController extends AbstractRestfulController
         $this->entityManager->getConnection()->beginTransaction();
         try
         {
-           // var_dump($data); exit
+            $contract =$this->entityManager->getRepository(Contract::class)->find($data['contract_id']);
+            $teacher =$this->entityManager->getRepository(Teacher::class)->find($data['teacher_id']);
             $progression = new ContractFollowUp();
                     $progression->setDate(new \DateTime($data["date"]));
                     $progression->setStartTime(new \DateTime ($data["start_time"]));
@@ -127,11 +129,13 @@ class ProgressionController extends AbstractRestfulController
                     $endTime = new \DateTime ($data["end_time"]);
                     $timeDiff = $startTime->diff($endTime);  
                     $progression->setTotalTime($timeDiff->h);
+                    $progression->setContract($contract);
+                    
 
 
           
-            $coshs =$this->entityManager->getRepository(ClassOfStudyHasSemester::class)->find($data['teaching_unit_id']); 
-            $progression->setClassOfStudyHasSemester($coshs );
+           // $coshs =$this->entityManager->getRepository(ClassOfStudyHasSemester::class)->find($data['teaching_unit_id']); 
+           // $progression->setClassOfStudyHasSemester($coshs );
 
             $this->entityManager->persist($progression);
  

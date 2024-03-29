@@ -2,15 +2,19 @@
 
 namespace Application\Entity;
 
+
 use Doctrine\ORM\Mapping as ORM;
 
-use Application\Entity\Teacher;
+use Application\Entity\TeachingUnit;
+use Application\Entity\Subject;
+use Application\Entity\Semester;
 use Application\Entity\AcademicYear;
+use Application\Entity\Teacher;
 
 /**
  * Contract
  *
- * @ORM\Table(name="contract", indexes={@ORM\Index(name="fk_contract_teacher1_idx", columns={"teacher_id"}), @ORM\Index(name="fk_contract_academic_year1_idx", columns={"academic_year_id"})})
+ * @ORM\Table(name="contract", indexes={@ORM\Index(name="fk_contract_teaching_unit1_idx", columns={"teaching_unit_id"}), @ORM\Index(name="fk_contract_subject1_idx", columns={"subject_id"}), @ORM\Index(name="fk_contract_teacher1_idx", columns={"teacher_id"}), @ORM\Index(name="fk_contract_semester1_idx", columns={"semester_id"}), @ORM\Index(name="fk_contract_academic_year1_idx", columns={"academic_year_id"})})
  * @ORM\Entity
  */
 class Contract
@@ -63,6 +67,26 @@ class Contract
     private $academicYear;
 
     /**
+     * @var Semester
+     *
+     * @ORM\ManyToOne(targetEntity="Semester")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="semester_id", referencedColumnName="id")
+     * })
+     */
+    private $semester;
+
+    /**
+     * @var Subject
+     *
+     * @ORM\ManyToOne(targetEntity="Subject")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="subject_id", referencedColumnName="id")
+     * })
+     */
+    private $subject;
+
+    /**
      * @var Teacher
      *
      * @ORM\ManyToOne(targetEntity="Teacher")
@@ -71,6 +95,16 @@ class Contract
      * })
      */
     private $teacher;
+
+    /**
+     * @var TeachingUnit
+     *
+     * @ORM\ManyToOne(targetEntity="TeachingUnit")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="teaching_unit_id", referencedColumnName="id")
+     * })
+     */
+    private $teachingUnit;
 
 
 
@@ -205,6 +239,54 @@ class Contract
     }
 
     /**
+     * Set semester.
+     *
+     * @param Semester|null $semester
+     *
+     * @return Contract
+     */
+    public function setSemester(Semester $semester = null)
+    {
+        $this->semester = $semester;
+    
+        return $this;
+    }
+
+    /**
+     * Get semester.
+     *
+     * @return Semester|null
+     */
+    public function getSemester()
+    {
+        return $this->semester;
+    }
+
+    /**
+     * Set subject.
+     *
+     * @param Subject|null $subject
+     *
+     * @return Contract
+     */
+    public function setSubject(Subject $subject = null)
+    {
+        $this->subject = $subject;
+    
+        return $this;
+    }
+
+    /**
+     * Get subject.
+     *
+     * @return Subject|null
+     */
+    public function getSubject()
+    {
+        return $this->subject;
+    }
+
+    /**
      * Set teacher.
      *
      * @param Teacher|null $teacher
@@ -226,5 +308,29 @@ class Contract
     public function getTeacher()
     {
         return $this->teacher;
+    }
+
+    /**
+     * Set teachingUnit.
+     *
+     * @param TeachingUnit|null $teachingUnit
+     *
+     * @return Contract
+     */
+    public function setTeachingUnit(TeachingUnit $teachingUnit = null)
+    {
+        $this->teachingUnit = $teachingUnit;
+    
+        return $this;
+    }
+
+    /**
+     * Get teachingUnit.
+     *
+     * @return TeachingUnit|null
+     */
+    public function getTeachingUnit()
+    {
+        return $this->teachingUnit;
     }
 }

@@ -1,13 +1,13 @@
-function ProgressionsTimelineController($scope, $mdDialog, $http, teachingUnitId, teachingUnitCode, teacherId) {
-    $scope.teachingUnitId = teachingUnitId;
-    $scope.teachingUnitCode = teachingUnitCode;
+function ProgressionsTimelineController($scope, $mdDialog, $http, teacherId,contractId) {
+   // $scope.teachingUnitId = teachingUnitId;
+   // $scope.teachingUnitCode = teachingUnitCode;
 
     $scope.progressions = [];
     $scope.hasLoadedProgressions = null;
 
     $scope.loadProgressions = function () {
         $scope.hasLoadedProgressions = null;
-        var data = {"id": teachingUnitId}
+        var data = {"id": contractId}
         var config  = {
           params: data,
           headers: {'Accept': 'application/json'}

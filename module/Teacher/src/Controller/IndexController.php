@@ -174,16 +174,16 @@ class IndexController extends AbstractActionController
         $this->entityManager->getConnection()->beginTransaction();
         try
         { 
-            $data = $this->params()->fromPost(); 
+            $data = $this->params()->fromPost(); // var_dump($data); exit;
         
-            $coshs = $this->entityManager->getRepository(ClassOfStudyHasSemester::class)->find($data["teachingUnitId"]);    
-            $progression = $this->entityManager->getRepository(ContractFollowUp::class)->findByClassOfStudyHasSemester($coshs);  
+            $contract = $this->entityManager->getRepository(Contract::class)->find($data["contractId"]);    
+            $progression = $this->entityManager->getRepository(ContractFollowUp::class)->findByContract($contract);  
        
             foreach($progression as $key=>$value)
             {
                 $hydrator = new ReflectionHydrator(); 
                 $data = $hydrator->extract($value);
-                $countries[$key] = $data; 
+                //$countries[$key] = $data; 
             }  
             $totalCm = 0;
             $totalTd = 0;
@@ -200,20 +200,15 @@ class IndexController extends AbstractActionController
                 $total = $totalCm + $totalTd + $totalTp;
                 
             }
-            $subjectCm = $coshs->getSubjectCmHours();
-            if ($coshs->getSubjectCmHours()==-1) $subjectCm = 0;
-            $subjectTd = $coshs->getSubjectTdHours();
-            if ($coshs->getSubjectTdHours()==-1) $subjectTd = 0;
-            $subjectTp = $coshs->getSubjectTpHours();
-            if ($coshs->getSubjectTpHours()==-1) $subjectTp = 0; 
-            
-            $dataOuput["cm"]["total"] = $coshs->getCmHours()+ $subjectCm;
+
+           
+            $dataOuput["cm"]["total"] = $contract->getCmHrs();
             $dataOuput["cm"]["progress"] = $totalCm; 
-            $dataOuput["td"]["total"] = $coshs->getTdHours() + +$subjectTd;
+            $dataOuput["td"]["total"] = $contract->getTdHrs();
             $dataOuput["td"]["progress"] = $totalTd; 
-            $dataOuput["tp"]["total"] = $coshs->getTpHours()+$subjectTp;
+            $dataOuput["tp"]["total"] = $contract->getTpHrs();
             $dataOuput["tp"]["progress"] = $totalTp;
-            $total_prevu =  $coshs->getCmHours()+ $subjectCm + $coshs->getTdHours() + +$subjectTd;+$coshs->getTpHours()+$subjectTp ;
+            $total_prevu =  $contract->getCmHrs()+  $contract->getTdHrs() + $contract->getTpHrs() ;
             $total_real = $totalCm + $totalTd + $totalTp;  
             if($total_prevu==0) 
                 $percentage = 0;
@@ -374,9 +369,10 @@ class IndexController extends AbstractActionController
         {
             $cities = [];
             $data= $this->params()->fromPost();           
-            $proceeByForce =(int) $data["proceedByForce"];           
+            $proceeByForce =(int) $data["proceedByForce"]; 
+            $flag = 0;
             //$data = json_decode($data,true);
-          
+         
             $teacher = $this->entityManager->getRepository(Teacher::class)->find($data['teacherid']);
             $acadYear = $this->entityManager->getRepository(AcademicYear::class)->findOneByIsDefault(1);
             
@@ -388,22 +384,29 @@ class IndexController extends AbstractActionController
                     $subject= null;
                 
                    if($coshs->getTeachingUnit()) 
-                    {         
-                       $unit = $coshs->getTeachingUnit();
+                    {            
+                        $unit = $coshs->getTeachingUnit();
+                        $tpHrs = $coshs->getTpHours();
+                        $cmHrs = $coshs->getCmHours();
+                        $tdHrs = $coshs->getTdHours();                      
 
                         $contract = $this->entityManager->getRepository(Contract::class)->findBy(["academicYear"=>$acadYear,"teachingUnit"=>$unit,"teacher"=>$teacher]);
+
                     }
                    if($coshs->getSubject()) 
-                    { 
-                       $subject = $coshs->getSubject();
-         
+                    {  
+                        $subject = $coshs->getSubject();
+                        $tpHrs = $coshs->getSubjectTpHours();
+                        $tdHrs = $coshs->getSubjectTDHours();
+                        $cmHrs = $coshs->getSubjectCmHours();         
                         $contract = $this->entityManager->getRepository(Contract::class)->findBy(["academicYear"=>$acadYear,"subject"=>$subject,"teacher"=>$teacher]);
+
                     } 
-                   
-                   
+                 
                         $totalHoursAffected = 0;
                         $courseHoursVolume = 0; 
                         ($coshs->getSubject())?$courseHoursVolume = $coshs->getSubjectHours():$courseHoursVolume = $coshs->getHoursVolume();  
+
                         
                         //calculate the total time already affected
                         foreach($contract as $c) $totalHoursAffected+=$c->getVolumeHrs();                         
@@ -427,38 +430,54 @@ class IndexController extends AbstractActionController
                                $hrToAffect = $value["totalHrs"];
                                
                        
-                        if(isset($data["partialAttribution"])&&$nonAffectedTime>$value["totalHrs"] ) $contract = new Contract();
-                        elseif(($data["partialAttribution"])&&($nonAffectedTime>$value["totalHrs"])&&($nonAffectedTime>0)){
-                            $contract = new Contract();
-                            $hrToAffect = $nonAffectedTime;
-                            
+                        if(isset($data["partialAttribution"])&&$data["partialAttribution"]&&$nonAffectedTime>=$value["totalHrs"] )
+                        {
+                             $contract = new Contract();
+
                         }
+                        elseif((isset($data["partialAttribution"])&&$data["partialAttribution"]&&$nonAffectedTime<$value["totalHrs"] ))
+                        {
+                                $contract = new Contract();
+                                $hrToAffect = $nonAffectedTime;                              
+                        }
+
                         elseif(sizeof($contract)<=0) $contract = new Contract(); 
                         elseif($proceeByForce && !$data["partialAttribution"])
                         {
-                            foreach ($contract as $cont) $this->entityManager->remove($cont);
-                            $contract = new Contract();
+                            foreach($contract as $con)$this->entityManager->remove($con);
+                            if(sizeof($contract)<0) $contract = new Contract();
+                            else
+                            {
+                                foreach($contract as $con) $contrat = $con;
+                                $flag=1; 
+                            }
                         }
                         elseif(!$proceeByForce) return  new JsonModel([false]);
                         else{
                             
                         }
                        
-                    
-                       
+                                if($flag) $contract = $contrat;  
+                     
                                 $contract->setAcademicYear($acadYear);
                                 $contract->setTeacher($teacher);
                                 $contract->setTeachingUnit($unit);
                                 $contract->setSubject($subject);
                                 $contract->setSemester($coshs->getSemester());
                                 
-                             //   ($coshs->getSubject())?$courseHoursVolume = $coshs->getSubjectHours():$courseHoursVolume = $coshs->getHoursVolume(); 
+                             //   ($contract->getSubject())?$courseHoursVolume = $contract->getSubjectHours():$courseHoursVolume = $contract->getHoursVolume(); 
                                 $contract->setVolumeHrs($hrToAffect);
-                                //$contract->setClassOfStudyHasSemester($coshs);
+                                $contract->setCmHrs($cmHrs);
+                                $contract->setTdHrs($tdHrs);
+                                $contract->setTpHrs($tpHrs);
+                                //$contract->setClassOfStudyHasSemester($contract);
                                 $contract->setRefNumber($refNum); 
-
-                                $this->entityManager->persist($contract); 
-                                $this->entityManager->flush();
+                                if($flag);
+                                else
+                                {
+                                    $this->entityManager->persist($contract); 
+                                    $this->entityManager->flush();
+                                }
 
 
                         
@@ -467,7 +486,7 @@ class IndexController extends AbstractActionController
             
             
 
-            $this->entityManager->flush();
+            //$this->entityManager->flush();
             $this->entityManager->getConnection()->commit();
             
             //$output = json_encode($output,$depth=1000000); 
@@ -490,33 +509,16 @@ class IndexController extends AbstractActionController
             $cities = [];
             $data= $this->params()->fromPost();           
       
-            
+  
             //$data = json_decode($data,true);
          
-            $teacher = $this->entityManager->getRepository(Teacher::class)->find($data['teacherid']);
-            $acadYear = $this->entityManager->getRepository(AcademicYear::class)->findOneByIsDefault(1);
+          /*  $teacher = $this->entityManager->getRepository(Teacher::class)->find($data['teacherId']);
+            $acadYear = $this->entityManager->getRepository(AcademicYear::class)->findOneByIsDefault(1);*/
 
-            $coshs = $this->entityManager->getRepository(ClassOfStudyHasSemester::class)->find($data["subject"]);
-                    $unit = null;
-                    $subject= null;
+            $contract = $this->entityManager->getRepository(Contract::class)->find($data["contractId"]); 
+             $contractFollowUp = $this->entityManager->getRepository(ContractFollowUp::class)->findByContract($contract);
+             foreach($contractFollowUp as $con) $this->entityManager->remove($con);
                 
-                   if($coshs->getTeachingUnit()) 
-                    {       
-                       $unit = $coshs->getTeachingUnit(); 
-
-                        $contract = $this->entityManager->getRepository(Contract::class)->findOneBy(["academicYear"=>$acadYear,"teachingUnit"=>$unit,"teacher"=>$teacher]);
-                        
-                    }
-                   if($coshs->getSubject()) 
-                    {
-                       $subject = $coshs->getSubject();
-         
-                        $contract = $this->entityManager->getRepository(Contract::class)->findOneBy(["academicYear"=>$acadYear,"subject"=>$subject,"teacher"=>$teacher]);
-                    } 
-                   
-                   
-                   
-;
                     $this->entityManager->remove($contract); 
                     $this->entityManager->flush();
 
@@ -616,7 +618,7 @@ class IndexController extends AbstractActionController
                 //$rsm = new ResultSetMapping();
                 // build rsm here
 
-                $query = $this->entityManager->createQuery('SELECT c.id,c.coshs,c.codeUe,c.nomUe,c.classe,c.semester,c.semId,c.totalHrs FROM Application\Entity\CurrentYearUesAndSubjectsView c'
+                $query = $this->entityManager->createQuery('SELECT c.id,c.contract,c.codeUe,c.nomUe,c.classe,c.semester,c.semId,c.totalHrs FROM Application\Entity\CurrentYearUesAndSubjectsView c'
                         .' WHERE c.codeUe LIKE :code');
                 $query->setParameter('code', '%'.$id.'%');
 

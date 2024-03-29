@@ -5,12 +5,12 @@ namespace Application\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CurrentYearTeachingUnitView
+ * AllContractsFollowUpView
  *
- * @ORM\Table(name="all_contracts_view")
+ * @ORM\Table(name="all_contracts_follow_up_view")
  * @ORM\Entity
  */
-class AllContractsView
+class AllContractsFollowUpView
 {
     /**
     * @var integer
@@ -21,12 +21,6 @@ class AllContractsView
     */
     private $id;
    
-    /**
-    * @var integer
-    *
-    * @ORM\Column(name="coshs", type="integer", nullable=false)
-    */
-    private $coshs;
     
     /**
     * @var string
@@ -62,6 +56,14 @@ class AllContractsView
     * @ORM\Column(name="total_hrs", type="float",  nullable=true)
     */
     private $totalHrs;  
+
+
+    /**
+    * @var integer
+    *
+    * @ORM\Column(name="total_hrs_done", type="float",  nullable=true)
+    */
+    private $totalHrsDone;
     
     /**
     * @var integer
