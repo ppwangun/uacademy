@@ -372,7 +372,7 @@ class IndexController extends AbstractActionController
             $proceeByForce =(int) $data["proceedByForce"]; 
             $flag = 0;
             //$data = json_decode($data,true);
-         
+      
             $teacher = $this->entityManager->getRepository(Teacher::class)->find($data['teacherid']);
             $acadYear = $this->entityManager->getRepository(AcademicYear::class)->findOneByIsDefault(1);
             
@@ -427,38 +427,39 @@ class IndexController extends AbstractActionController
                                 $faculty = $teacher->getFaculty()->getCode(); 
                                 $refNum = $acadYear->getCode()."/".$faculty."/".$contractSize; 
                                 
-                               $hrToAffect = $value["totalHrs"];
+                               $hrToAffect = intval($value["totalHrs"]);
                                
                        
-                        if(isset($data["partialAttribution"])&&$data["partialAttribution"]&&$nonAffectedTime>=$value["totalHrs"] )
+                        if(isset($data["partialAttribution"])&&$data["partialAttribution"]&&$nonAffectedTime>=$value["volumeHrs"] )
                         {
-                             $contract = new Contract();
+                            $hrToAffect = intval($value["volumeHrs"]);
+                            
+                            foreach($contract as $key=>$con){$this->entityManager->remove($con);array_splice($contract, $key);}
+                            if(sizeof($contract)<=0) $contract = new Contract();
+                            
 
                         }
-                        elseif((isset($data["partialAttribution"])&&$data["partialAttribution"]&&$nonAffectedTime<$value["totalHrs"] ))
+                        elseif((isset($data["partialAttribution"])&&$data["partialAttribution"]&&$nonAffectedTime<intval($value["volumeHrs"]) ))
                         {
-                                $contract = new Contract();
-                                $hrToAffect = $nonAffectedTime;                              
+                            $hrToAffect = $nonAffectedTime;
+                                                     
+                            foreach($contract as $key=>$con){$this->entityManager->remove($con);array_splice($contract, $key);}
+                            if(sizeof($contract)<=0) $contract = new Contract();
+
+                                                        
                         }
 
                         elseif(sizeof($contract)<=0) $contract = new Contract(); 
                         elseif($proceeByForce && !$data["partialAttribution"])
                         {
-                            foreach($contract as $con)$this->entityManager->remove($con);
-                            if(sizeof($contract)<0) $contract = new Contract();
-                            else
-                            {
-                                foreach($contract as $con) $contrat = $con;
-                                $flag=1; 
-                            }
+                            foreach($contract as $key=>$con){$this->entityManager->remove($con);array_splice($contract, $key);}
+                            if(sizeof($contract)<=0) $contract = new Contract();
+
                         }
                         elseif(!$proceeByForce) return  new JsonModel([false]);
                         else{
                             
                         }
-                       
-                                if($flag) $contract = $contrat;  
-                     
                                 $contract->setAcademicYear($acadYear);
                                 $contract->setTeacher($teacher);
                                 $contract->setTeachingUnit($unit);
@@ -472,7 +473,7 @@ class IndexController extends AbstractActionController
                                 $contract->setTpHrs($tpHrs);
                                 //$contract->setClassOfStudyHasSemester($contract);
                                 $contract->setRefNumber($refNum); 
-                                if($flag);
+                                if($flag) $this->entityManager->flush();
                                 else
                                 {
                                     $this->entityManager->persist($contract); 
