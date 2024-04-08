@@ -44,6 +44,27 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
     //     {id: 10, name: 'Mathematiques', classe: '4eme'},
     //     {id: 11, name: 'Chimie', classe: '3eme'},
     // ]
+     $scope.dtOptions = DTOptionsBuilder.newOptions()
+     .withButtons([
+            //'columnsToggle',
+            //'colvis',
+            //'copy',
+           // 'print'
+
+        ])
+        .withPaginationType('full_numbers')
+        .withDisplayLength(25)
+        .withOption('lengthChange', false);
+         /* .withFixedHeader({
+    top: true
+    info: false 
+  })*/;
+  
+    $scope.dtColumnDefs = [
+    DTColumnDefBuilder.newColumnDef(0),
+    DTColumnDefBuilder.newColumnDef(1),
+
+  ];     
     $scope.teachers = [];
     $scope.hasLoadedTeachers = null;
     $scope.currentTeacher = null;
@@ -344,26 +365,5 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
         });
     };
     
-     $scope.dtOptions = DTOptionsBuilder.newOptions()
-     .withButtons([
-            //'columnsToggle',
-            //'colvis',
-            'copy',
-            'print'
-
-        ])
-        .withPaginationType('full_numbers')
-        .withDisplayLength(100)
-         /* .withFixedHeader({
-    top: true
-  })*/;
-  
-    $scope.dtColumnDefs = [
-    DTColumnDefBuilder.newColumnDef(0),
-    DTColumnDefBuilder.newColumnDef(1),
-    DTColumnDefBuilder.newColumnDef(2),
-    DTColumnDefBuilder.newColumnDef(3),
-    DTColumnDefBuilder.newColumnDef(4).notSortable(),
-    DTColumnDefBuilder.newColumnDef(5)
-  ];    
+   
 };

@@ -103,9 +103,7 @@ function newTeacherController($scope, $http, $location,$routeParams,$timeout,toa
     
     $scope.isFormUpdate =false;
     
-    $scope.redirect= function(id){
-     $location.path("/newAcademicRank/"+id)
-    };
+
     
     $scope.redirect= function(id){
 
@@ -113,6 +111,14 @@ function newTeacherController($scope, $http, $location,$routeParams,$timeout,toa
      $scope.dptId=id;
 
     };
+    
+    $scope.redirectBareme= function(id){
+
+     $location.path("/newAcademicRank/"+id)
+    $scope.isUpdate = true;
+    console.log($scope.isUpdate)
+
+    };    
     
     $scope.init = function(){
         
@@ -319,7 +325,7 @@ function newTeacherController($scope, $http, $location,$routeParams,$timeout,toa
         $scope.syllabusFile = null;
     }
 
-    $scope.onSubmit = function (teacherForm) {
+    $scope.onSubmit = function (teacherForm) {console.log("je suis dedans");
         if (!teacherForm.$valid) {
             alert('Formulaire invalide !');
             return;
@@ -421,6 +427,9 @@ function newTeacherController($scope, $http, $location,$routeParams,$timeout,toa
                 });
             }            
     }
+    
+    
+    
      $scope.dtOptions = DTOptionsBuilder.newOptions()
      .withButtons([
             //'columnsToggle',
@@ -444,7 +453,7 @@ function newTeacherController($scope, $http, $location,$routeParams,$timeout,toa
   ];    
     
   /*----------------------------------------------------------------------------
-   * fonction for deleting faculty
+   * fonction for deleting grade
    ---------------------------------------------------------------------------*/
   $scope.deleteGrade = function(grd,ev)
   {
@@ -466,6 +475,49 @@ function newTeacherController($scope, $http, $location,$routeParams,$timeout,toa
     $mdDialog.show(confirm).then(function() {
         //in case delete is pressee excute  the delete backend 
         $http.delete('teacherGrade',config).then(
+          function successCallback(response){
+              //check the index of the current object in the array
+              var index = $scope.grades.findIndex(x => x.id === grd.id)
+              //remove the current object from the array
+
+              $scope.grades.splice(index,1);
+              toastr.success("Operation effectuée avec succès");
+
+         },
+        function errorCallback(response){
+            toastr.error("Une erreur inattendue s'est produite");
+            });
+    }, function() {
+     // $scope.status = 'You decided to keep your debt.';
+    });
+     
+  };    
+  
+ 
+    
+  /*----------------------------------------------------------------------------
+   * fonction for deleting teacher
+   ---------------------------------------------------------------------------*/
+  $scope.deleteTeacher = function(teacher,ev)
+  {
+      var data = {id: teacher.id}; 
+      var config = {
+      params: data,
+      headers : {'Accept' : 'application/json'}
+      };
+
+// Preparing the confirm windows
+      var confirm = $mdDialog.confirm()
+            .title('Voulez vous vraiment supprimer?')
+            .textContent('Toutes les données associées à cette information seront perdues')
+             // .ariaLabel('Lucky day')
+            .targetEvent(ev)
+            .ok('Supprimer')
+            .cancel('Annuler');
+//open de confirm window
+    $mdDialog.show(confirm).then(function() {
+        //in case delete is pressee excute  the delete backend 
+        $http.delete('teachers',config).then(
           function successCallback(response){
               //check the index of the current object in the array
               var index = $scope.grades.findIndex(x => x.id === grd.id)

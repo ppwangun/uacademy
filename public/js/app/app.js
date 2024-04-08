@@ -279,7 +279,7 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
         })           //returns the users permission level 
     }
     return obj;
-}).controller('testCtrl',function($scope,accessFac,$interval){
+}).controller('testCtrl',function($scope,accessFac,$interval,$timeout,$http){
     var controller = this;
 
       controller.date = new Date();
@@ -287,6 +287,20 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
       $interval(function() {
         controller.date = new Date();
       }, 1000);
+      
+      
+             $timeout(
+              $http.get('currentAcademicYear').then(
+              function successCallback(response){
+                  $scope.acadyr = response.data[0];
+
+
+              },
+              function errorCallbacl(response){
+                   toastr.error('Problème survenu lors du chargement des informations', 'Erreur');
+                  
+              }),1000);
+              
     $scope.getAccess = function(){
         accessFac.getPermission();       //call the method in acccessFac to allow the user permission.
     }

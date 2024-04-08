@@ -399,6 +399,27 @@ class IndexController extends AbstractActionController
             throw $e; 
       }
     }
+    public function currentAcademicYearAction()
+    {
+      $this->entityManager->getConnection()->beginTransaction();
+      try
+      {
+            $activeYr = $this->entityManager->getRepository(AcademicYear::class)->findOneBy(array("isDefault"=>1));
+            
+            $hydrator = new ReflectionHydrator();
+            $data = $hydrator->extract($activeYr);
+
+                    
+            
+        return new JsonModel([
+                $data
+        ]);          
+      }
+      catch(Exception $e){
+            $this->entityManager->getConnection()->rollBack();
+            throw $e; 
+      }
+    }    
     public function searchSemByClasseAndAcadYrAction()
     {
       $this->entityManager->getConnection()->beginTransaction();

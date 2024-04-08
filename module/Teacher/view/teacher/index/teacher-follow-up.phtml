@@ -12,6 +12,10 @@ max-width: 900px;
 
 }
 
+    .dataTables_filter {
+        position: relative;
+    }
+
 </style>
 
   
@@ -29,7 +33,7 @@ max-width: 900px;
                     <!-- Panneau des boutton -->
                     <div class="panel panel-default">
                         <div class="panel-heading" style="margin-bottom: 15px;">
-                        <a href="#!/new-teacher/-1" class="btn btn-danger" id='newacadyr'>Nouveau Enseignant</a>
+                        <a href="#!/new-teacher/-1" class="btn btn-danger" id='newacadyr'>Créer Enseignant</a>
                           
                         </div>
                         
@@ -46,21 +50,21 @@ max-width: 900px;
         <div layout="row" id="container" ng-if="hasSucceededLoadingTeachers()">
             <div class="panel " flex="30"  flex-gt-sm>
                 <div class="panel-body">
-                    <table class="table table-bordered bordered table-striped table-condensed datatable" style="font-size:0.8em; background-color: #dfe4ea; color: #0c2461;" ui-jq="dataTable" ui-options="dataTableOpt">
+                    <table datatable="ng" dt-options="dtOptions" dt-column-defs="dtColumnDefs" class="table table-bordered bordered table-striped table-condensed   " style="font-size:0.8em; color: #0c2461;" >
                         <thead>
                         <tr>
-                            <th>#</th>
+                            <th></th>
                             <th>Noms & Prenoms</th>
-                            <th>Grade</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr ng-repeat="teacher in teachers" class="clickable teacher-item xx-small"
-                            ng-style="{'background-color': teacher.id === selectedTeacherId ? 'lightblue' : 'initial'}"
+                            ng-style="{'background-color': teacher.id === selectedTeacherId ? '#3B71CA' : 'initial','color': teacher.id === selectedTeacherId ? '#fff' : ''}"
                             ng-click="onSelectTeacher(teacher.id)">
                             <td>{{$index+1}}</td>
                             <td>{{teacher.name}}</td>
-                            <td>{{teacher.grade.name}}</td>
+                            <td></td>
                         </tr>
                         </tbody>
                     </table>

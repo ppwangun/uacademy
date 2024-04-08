@@ -104,7 +104,11 @@ class TeacherController extends AbstractRestfulController
         $this->entityManager->getConnection()->beginTransaction();
         try
         { 
-        $teachers = $this->entityManager->getRepository(Teacher::class)->findAll();
+            
+            
+            $q = $this->entityManager->createQuery("select t from Application\Entity\Teacher t ORDER BY t.name ASC");
+            $teachers = $q->getResult();            
+       // $teachers = $this->entityManager->getRepository(Teacher::class)->findAll([],array("name"=>"ASC"));
                 
             foreach($teachers as $key=>$value)
             {
@@ -243,11 +247,11 @@ class TeacherController extends AbstractRestfulController
         $this->entityManager->getConnection()->beginTransaction();
         try
         {
-            $rank = $this->entityManager->getRepository(AcademicRanck::class)->findOneById($id);
-            if($rank )
+            $teacher = $this->entityManager->getRepository(Teacher::class)->find($id);
+            if($teacher )
             {
                 
-                $this->entityManager->remove($rank );
+                $this->entityManager->remove($teacher );
                 $this->entityManager->flush();
                 $this->entityManager->getConnection()->commit();
             }

@@ -3,8 +3,9 @@
 <html lang="fr" >
     <head>
         <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
+    
        
-        <?= $this->headTitle('UdmAcademy Application')->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?= $this->headTitle('UdmAcademy Apps')->setSeparator(' - ')->setAutoEscape(false) ?>
 
         <?= $this->headMeta()
             ->appendName('viewport', 'width=device-width, initial-scale=1.0')
@@ -20,10 +21,10 @@
         ->prependStylesheet($this->basePath('css/sb-admin-2.css'))
         ->prependStylesheet($this->basePath('assets/css/styles.css'))
      
-       // ->prependStylesheet($this->basePath('css/buttons.datables.min.css'))
-        //->prependStylesheet($this->basePath('css/jquery.dataTables.min.css'))
+        ->prependStylesheet($this->basePath('css/buttons.datables.min.css'))
+        ->prependStylesheet($this->basePath('css/jquery.dataTables.min.css'))
         
-        //->prependStylesheet($this->basePath('css/datatables.bootstrap.css'))
+        ->prependStylesheet($this->basePath('css/datatables.bootstrap.css'))
         
         ->prependStylesheet($this->basePath('js/datatables-responsive/dataTables.responsive.css'))
         ->prependStylesheet($this->basePath('js/datatables-plugins/dataTables.bootstrap.css'))
@@ -167,11 +168,14 @@
   <script src="js/app/components/version/interpolate-filter.js"></script>
 
     </head>
-<body ng-app="myApp" ng-controller="testCtrl as mainController"ng-cloak>
-<div id="wrapper">
+<body ng-app="myApp" ng-controller="testCtrl as mainController"ng-cloak >
+    <div style="height: 65px; position: relative;background-color: red;">
+        
+    </div>
+<div id="wrapper" >
 
         <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <nav class="navbar navbar-default navbar-static-top navbar-fixed-top" role="navigation"">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -179,7 +183,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand " href="index"><span class="zf-green">Agenla Academy</span></a>
+                <a class="navbar-brand " href="index"><span class="zf-green">UdM Academy &nbsp;&nbsp;[{{acadyr.code}}]</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -629,7 +633,7 @@
             <!-- /.navbar-static-side -->
         </nav>
 
-        <div id="page-wrapper">
+        <div id="page-wrapper" >
             
             <div ng-view id="component-tpl"></div>
             

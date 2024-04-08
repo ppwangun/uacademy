@@ -51,6 +51,7 @@ class ProgressionController extends AbstractRestfulController
 
                     $hydrator = new ReflectionHydrator();
                     $data = $hydrator->extract($value); 
+                    $dataOutPut["id"]= $data["id"];
                     $dataOutPut["date"]= $data["date"]->format('Y-m-d H:i:s');
                     $dataOutPut["start_time"] = $data["startTime"]->format('H:i:s');
                     $dataOutPut["end_time"] = $data["endTime"]->format('H:i:s');
@@ -164,11 +165,11 @@ class ProgressionController extends AbstractRestfulController
         $this->entityManager->getConnection()->beginTransaction();
         try
         {
-            $rank = $this->entityManager->getRepository(AcademicRanck::class)->findOneById($id);
-            if($rank )
+            $progressions = $this->entityManager->getRepository(ContractFollowUp::class)->find($id);
+            if($progressions )
             {
                 
-                $this->entityManager->remove($rank );
+                $this->entityManager->remove($progressions );
                 $this->entityManager->flush();
                 $this->entityManager->getConnection()->commit();
             }

@@ -153,4 +153,6 @@ function AffectTeachingUnitController($scope, $mdDialog, $http, teacherId, teach
         }
         $mdDialog.cancel();
     };
+    
+    
 }

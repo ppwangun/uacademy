@@ -34,7 +34,7 @@
                     <li ng-repeat="progression in progressions" >
                         <div class="timeline-header" >
                             <h4 class="timeline-title" style="margin-left: 20px;">{{getProgressionLabel(progression.lectureType)}}</h4>
-                            <span class="timeline-date">{{getProgressionDateString(progression.date, progression.start_time, progression.end_time)}}</span><i style="cursor: pointer; color:red;" class="fa fa-trash"></i>
+                            <span class="timeline-date">{{getProgressionDateString(progression.date, progression.start_time, progression.end_time)}}</span><i ng-click='deleteProgression(progression.id)' style="cursor: pointer; color:red;" class="fa fa-trash"></i>
                         </div>
                         <p style="margin-left: 20px;">{{progression.description}}</p>
                     </li>

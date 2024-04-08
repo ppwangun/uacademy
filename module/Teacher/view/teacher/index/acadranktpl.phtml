@@ -42,7 +42,7 @@
                                 </thead>
                                 <tbody>
     
-                                    <tr ng-repeat="grd in grades" style="cursor: hand;cursor: pointer;" ng-dblclick="redirect(grd.id)">
+                                    <tr ng-repeat="grd in grades" style="cursor: hand;cursor: pointer;" ng-dblclick="redirectBareme(grd.id)">
                                        <td >{{1+$index}}</td> 
                                       <td ng-bind="grd.name"></td>
                                       <td ng-bind="grd.code"></td>

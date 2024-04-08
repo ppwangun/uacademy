@@ -85,7 +85,17 @@ return [
                         'action' => "searchAcademicYear"
                     ],
                 ],
-            ],            
+            ],  
+            'currentAcademicYear' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/currentAcademicYear[/:id]',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action' => "currentAcademicYear"
+                    ],
+                ],
+            ],             
             'academicYrDataMigration' => [
                 'type'    => Segment::class,
                 'options' => [

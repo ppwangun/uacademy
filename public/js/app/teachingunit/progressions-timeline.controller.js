@@ -1,4 +1,4 @@
-function ProgressionsTimelineController($scope, $mdDialog, $http, teacherId,contractId) {
+function ProgressionsTimelineController($scope, $mdDialog, $http, teacherId,contractId,toastr) {
    // $scope.teachingUnitId = teachingUnitId;
    // $scope.teachingUnitCode = teachingUnitCode;
 
@@ -63,6 +63,43 @@ function ProgressionsTimelineController($scope, $mdDialog, $http, teacherId,cont
         result += ` (De ${startTime} a ${endTime})`;
 
         return result;
+    }
+    
+    $scope.deleteProgression = function(id,ev){
+        data = {id: id} 
+        console.log(id);
+        //data = $.param(data)
+        var config = {
+            params: data,
+            headers : {'Accept' : 'application/json'}
+        };
+        $scope.isProcessing = true;
+        
+// Preparing the confirm windows
+      var confirm = $mdDialog.confirm()
+            .title('Annuler la pogression?')
+            .textContent('VOus êtes sur le point d\'annuler une progression Voulez vous continuer ?')
+             // .ariaLabel('Lucky day')
+            .targetEvent(ev)
+            .ok('Confirmer')
+            .cancel('Annuler');
+//open de confirm window
+    $mdDialog.show(confirm).then(function() {
+        //in case delete is pressee excute  the delete backend 
+        $http.delete('unitProgression',config)
+            .then(function (response) {
+                toastr.success("Operation effectuée avec succès")
+               // alert('L\'enseignant a ete mis a jour avec succes !');
+                //$scope.loadCurrentTeacher();
+                $scope.isProcessing = false;
+            }, function (error) {
+                console.error(error);
+                $scope.isProcessing = false;
+                alert('Une erreur s\'est produite lors du traitement ! Veuillez reessayer !')
+            });
+    }, function() {
+     // $scope.status = 'You decided to keep your debt.';
+    });         
     }
 
     $scope.cancel = function () {

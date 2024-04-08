@@ -17,12 +17,12 @@ li.active a.ng-binding {
 </style>
 
 
-<div class="well"  style="margin-left: -30px; margin-right: -30px;" ng-init="init()">
+<div class="well"  style="margin-left: -30px; margin-right: -30px; " ng-init="init()">
         
             <div class="row">
                 <div class='col-md-4'>
-
-                    <button  ng-show=" <?=($this->access('global.system.admin', null))?true:false?> && !isUpdate" type="button" ng-click="newBareme(grade)" class="btn btn-danger" ng-disabled="myForm.$invalid" ><span class="fa fa-plus-square"></span>&nbsp;Ajouter un barème</button>
+                    <div></div>
+                    <button ng-show=" <?=($this->access('global.system.admin', null))?true:false?> && !isUpdate"   type="button" ng-click="newBareme(grade)" class="btn btn-danger" ng-disabled="myForm.$invalid" ><span class="fa fa-plus-square"></span>&nbsp;Ajouter un barème</button>
                     <button  ng-show=" <?=($this->access('global.system.admin', null))?true:false?> && isUpdate" type="button" ng-click="updateBareme(grade)" class="btn btn-danger" ng-disabled="myForm.$invalid" ><span class="fa fa-edit"></span>&nbsp;Modifier le barème</button>
                     <span> <a href="#!/academicRankConfig">Retour</a></span>
                 </div>
@@ -117,7 +117,7 @@ li.active a.ng-binding {
                                <td ng-bind="grd.paymentRate"> </td>
                                <td>
                                    <div class="btn-group">
-                                    <button type="button" ng-click="$ctrl.updateFiliere(fil)" class="btn btn-default btn-xs btn-info"><i class="fa fa-edit"></i></button>
+                                    <button type="button" ng-click="redirectbareme(grd.id)" class="btn btn-default btn-xs btn-info"><i class="fa fa-edit"></i></button>
                                     <button  type="button" ng-click="deleteGrade(grd)" class="btn btn-default btn-xs btn-danger" ><i class="fa fa-trash-o"></i></button>   
                                    </div>
                                </td>
@@ -138,4 +138,4 @@ li.active a.ng-binding {
                 </div>
             </uib-tab>
         </div>
-
+   </md-content>
