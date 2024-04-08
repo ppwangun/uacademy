@@ -390,7 +390,7 @@ class IndexController extends AbstractActionController
                         $cmHrs = $coshs->getCmHours();
                         $tdHrs = $coshs->getTdHours();                      
 
-                        $contract = $this->entityManager->getRepository(Contract::class)->findBy(["academicYear"=>$acadYear,"teachingUnit"=>$unit,"teacher"=>$teacher]);
+                        $contract = $this->entityManager->getRepository(Contract::class)->findBy(["academicYear"=>$acadYear,"teachingUnit"=>$unit]);
 
                     }
                    if($coshs->getSubject()) 
@@ -399,7 +399,7 @@ class IndexController extends AbstractActionController
                         $tpHrs = $coshs->getSubjectTpHours();
                         $tdHrs = $coshs->getSubjectTDHours();
                         $cmHrs = $coshs->getSubjectCmHours();         
-                        $contract = $this->entityManager->getRepository(Contract::class)->findBy(["academicYear"=>$acadYear,"subject"=>$subject,"teacher"=>$teacher]);
+                        $contract = $this->entityManager->getRepository(Contract::class)->findBy(["academicYear"=>$acadYear,"subject"=>$subject]);
 
                     } 
                  
@@ -453,6 +453,7 @@ class IndexController extends AbstractActionController
                         elseif($proceeByForce && !$data["partialAttribution"])
                         {
                             foreach($contract as $key=>$con){$this->entityManager->remove($con);array_splice($contract, $key);}
+                            $this->entityManager->flush();
                             if(sizeof($contract)<=0) $contract = new Contract();
 
                         }
