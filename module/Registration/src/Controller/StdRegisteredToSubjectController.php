@@ -37,7 +37,7 @@ class StdRegisteredToSubjectController extends AbstractRestfulController
         try
         { 
            
-            $data =json_decode($id,true);      
+            $data =json_decode($id,true);    
 
             if(isset($data["classId"]))
             {
@@ -46,7 +46,7 @@ class StdRegisteredToSubjectController extends AbstractRestfulController
 
                  $std = $this->entityManager->getRepository(SubjectRegistrationView::class)->findBy(array("idUe"=>$data["ueId"],"idSubject"=>$data["subjectId"]),array("nom"=>"ASC")); 
           
-               
+            
                 
                 $classOfStudy = $this->entityManager->getRepository(ClassOfStudy::class)->find($data["classId"]); 
                 
@@ -88,14 +88,15 @@ class StdRegisteredToSubjectController extends AbstractRestfulController
                 array_multisort($tmp, $std);
 
                 return new JsonModel([ $std ]);                
-            }            
+            }           
             // retrieve the sutdent based on the UE code 
             //$sem = $this->entityManager->getRepository(Semester::class)->find($data["sem_id"]);
             //Only student that have completed registration process with status equal to 1
+
             if(!isset($data["subjectId"])) 
              $std = $this->entityManager->getRepository(SubjectRegistrationView::class)->findBy(array("idUe"=>$data,"idSubject"=>[null," "]),array("nom"=>"ASC")); 
             else
-                $std = $this->entityManager->getRepository(SubjectRegistrationView::class)->findBy(array("idUe"=>$data,"idSubject"=>$data["subjectId"]),array("nom"=>"ASC"));
+                $std = $this->entityManager->getRepository(SubjectRegistrationView::class)->findBy(array("idUe"=>$data["ueId"],"idSubject"=>$data["subjectId"]),array("nom"=>"ASC"));
             //$std_registered_subjects = $this->entityManager->getRepository(SubjectRegistrationView::class)->findByStudentId($std->getStudentId());
 
             foreach($std as $key=>$value)

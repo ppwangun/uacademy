@@ -34,7 +34,17 @@ return [
                         'action'        => 'teacherList',
                     ],
                 ],
-            ],            
+            ],  
+            'searchTeacher' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/searchTeacher',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'searchTeacher',
+                    ],
+                ],
+            ],             
             'teacherUnitFollowUp' => [
                 'type'    => Literal::class,
                 'options' => [

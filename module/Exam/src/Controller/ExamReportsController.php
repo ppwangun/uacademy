@@ -20,6 +20,7 @@ use Application\Entity\FieldOfStudy;
 use Application\Entity\Faculty;
 use Application\Entity\GradeValueRange;
 use Application\Entity\ClassOfStudy;
+use Application\Entity\TrainingCurriculum;
 use Application\Entity\AdminRegistration;
 use Application\Entity\ClassOfStudyHasSemester;
 use Application\Entity\TeachingUnit;
@@ -76,9 +77,14 @@ class ExamReportsController extends AbstractActionController
             $classeID = $data["classID"];
             
             $ue = null;
+            $classe =  $this->entityManager->getRepository(ClassOfStudy::class)->find($classeID);
+                       
             // retrieve the sutdent ID based on the student ID 
             $std = $this->entityManager->getRepository(SubjectRegistrationView::class)->findBy(array("idUe"=>$id,"status"=>1,"idSubject"=>[NULL," "]),array("nom"=>"ASC")); 
-            $std1 = $this->entityManager->getRepository(SubjectRegistrationView::class)->findBy(array("idUe"=>$id,"status"=>1,"idSubject"=>[NULL," "],"grade"=>["F","E"]),array("nom"=>"ASC")); 
+            $grode_of_failures = []; 
+            if($classe->getCycle()->getCycleLevel() == 1)  $grode_of_failures = ["F","E","D","D+","C-"];
+            else $grode_of_failures = ["F","E","D","D+","C-","C","C+"];
+            $std1 = $this->entityManager->getRepository(SubjectRegistrationView::class)->findBy(array("idUe"=>$id,"status"=>1,"idSubject"=>[NULL," "],"grade"=>$grode_of_failures),array("nom"=>"ASC")); 
            
             
            // $std_registered_subjects = $this->entityManager->getRepository(SubjectRegistrationView::class)->findByStudentId($std->getStudentId());
@@ -97,7 +103,7 @@ class ExamReportsController extends AbstractActionController
             }
             $acadYr =  $this->entityManager->getRepository(AcademicYear::class)->findOneBy(array("isDefault"=>1)); 
              
-            $classe =  $this->entityManager->getRepository(ClassOfStudy::class)->find($classeID);
+
             $sem =  $this->entityManager->getRepository(Semester::class)->find($semID);
             $subjects = $this->examManager->getSubjectFromUe($id,$sem->getId(),$classe->getId());
 
@@ -110,7 +116,7 @@ class ExamReportsController extends AbstractActionController
             $filiere = $diplome->getFieldStudy();
             $faculty = $filiere->getFaculty();
             
-            $classe = $classe->getCode();
+            //$classe = $classe->getCode();
             $diplome = $diplome->getName();
             $filiere = $filiere->getName();
             $faculty = $faculty->getName();
@@ -133,7 +139,7 @@ class ExamReportsController extends AbstractActionController
                 'students'=>$std,
                 'acadYr'=>$acadYr,
                 'semestre'=>$semestre,
-                'classe'=>$classe,
+                'classe'=>$classe->getCode(),
                 'diplome'=>$diplome,
                 'filiere'=>$filiere,
                 'faculty'=>$faculty,
@@ -141,7 +147,8 @@ class ExamReportsController extends AbstractActionController
                 'exams'=>$exams,
                 'totalStudent'=>$totalStudent,
                 'totalFailure'=>$totalFailure,
-                'credits'=>$credits
+                'credits'=>$credits,
+                'cycle_level'=>$classe->getCycle()->getCycleLevel()
             ]);
             // Disable layouts; `MvcEvent` will use this View Model instead
             $view->setTerminal(true);
@@ -170,9 +177,13 @@ class ExamReportsController extends AbstractActionController
             $classeID = $data["classID"];
             
             $ue = null;
+            $grode_of_failures = [];
+            $classe =  $this->entityManager->getRepository(ClassOfStudy::class)->find($classeID);
+            if($classe->getCycle()->getCycleLevel() == 1)  $grode_of_failures = ["F","E","D","D+","C-"];
+            else $grode_of_failures = ["F","E","D","D+","C-","C","C+"];            
             // retrieve the sutdent ID based on the student ID 
             $std1 = $this->entityManager->getRepository(SubjectRegistrationView::class)->findBy(array("idUe"=>$id,"status"=>1,"idSubject"=>[NULL," "]),array("nom"=>"ASC"));
-            $std = $this->entityManager->getRepository(SubjectRegistrationView::class)->findBy(array("idUe"=>$id,"status"=>1,"idSubject"=>[NULL," "],"grade"=>"F"),array("nom"=>"ASC")); 
+            $std = $this->entityManager->getRepository(SubjectRegistrationView::class)->findBy(array("idUe"=>$id,"status"=>1,"idSubject"=>[NULL," "],"grade"=>$grode_of_failures),array("nom"=>"ASC")); 
            // $std_registered_subjects = $this->entityManager->getRepository(SubjectRegistrationView::class)->findByStudentId($std->getStudentId());
             if($std)
             {
@@ -188,7 +199,7 @@ class ExamReportsController extends AbstractActionController
             }
             $acadYr =  $this->entityManager->getRepository(AcademicYear::class)->findOneBy(array("isDefault"=>1)); 
              
-            $classe =  $this->entityManager->getRepository(ClassOfStudy::class)->find($classeID);
+            
             $sem =  $this->entityManager->getRepository(Semester::class)->find($semID);
             $subjects = $this->examManager->getSubjectFromUe($id,$sem->getId(),$classe->getId());
 
@@ -199,7 +210,7 @@ class ExamReportsController extends AbstractActionController
             $filiere = $diplome->getFieldStudy();
             $faculty = $filiere->getFaculty();
             
-            $classe = $classe->getCode();
+            //$classe = $classe->getCode();
             $diplome = $diplome->getName();
             $filiere = $filiere->getName();
             $faculty = $faculty->getName();
@@ -223,14 +234,15 @@ class ExamReportsController extends AbstractActionController
                 'students'=>$std,
                 'acadYr'=>$acadYr,
                 'semestre'=>$semestre,
-                'classe'=>$classe,
+                'classe'=>$classe->getCode(),
                 'diplome'=>$diplome,
                 'filiere'=>$filiere,
                 'faculty'=>$faculty,
                 'subjects'=>$subjects,
                 'exams'=>$exams,
                 'totalStudent'=>$totalStudent,
-                'totalFailure'=>$totalFailure
+                'totalFailure'=>$totalFailure,
+                'cycle_level'=>$classe->getCycle()->getCycleLevel()
             ]);
             // Disable layouts; `MvcEvent` will use this View Model instead
             $view->setTerminal(true);
@@ -258,11 +270,16 @@ class ExamReportsController extends AbstractActionController
              $subjectID = $data["subjectID"];
              $semID = $data["semID"];
              $classeID = $data["classID"];
+            $classe= $this->entityManager->getRepository(ClassOfStudy::class)->findOneById($data["classID"]);
+            $grode_of_failures = ["F","E"];
+
+          //  if($classe->getCycle()->getCycleLevel() == 1)  $grode_of_failures = ["F","E","D","D+","C-"];
+          //  else $grode_of_failures = ["F","E","D","D+","C-","C","C+"];             
 
              $ue = null;
              // retrieve the sutdent ID based on the student ID 
              $std1 = $this->entityManager->getRepository(SubjectRegistrationView::class)->findBy(array("idUe"=>$ueID,"status"=>1,"idSubject"=>$subjectID),array("nom"=>"ASC"));
-             $std = $this->entityManager->getRepository(SubjectRegistrationView::class)->findBy(array("idUe"=>$ueID,"status"=>1,"idSubject"=>$subjectID,"grade"=>["F","E"]),array("nom"=>"ASC")); 
+             $std = $this->entityManager->getRepository(SubjectRegistrationView::class)->findBy(array("idUe"=>$ueID,"status"=>1,"idSubject"=>$subjectID,"grade"=>$grode_of_failures),array("nom"=>"ASC")); 
             // $std_registered_subjects = $this->entityManager->getRepository(SubjectRegistrationView::class)->findByStudentId($std->getStudentId());
              if($std1)
              {
@@ -281,7 +298,7 @@ class ExamReportsController extends AbstractActionController
              $acadYr =  $this->entityManager->getRepository(AcademicYear::class)->findOneBy(array("isDefault"=>1)); 
              $school =  $this->entityManager->getRepository(School::class)->findAll()[0]; 
              
-             $classe =  $this->entityManager->getRepository(ClassOfStudy::class)->find($classeID);
+            // $classe =  $this->entityManager->getRepository(ClassOfStudy::class)->find($classeID);
              $sem =  $this->entityManager->getRepository(Semester::class)->find($semID);
              $subjects = $this->examManager->getSubjectFromUe($ueID,$sem->getId(),$classe->getId());
 
@@ -292,7 +309,7 @@ class ExamReportsController extends AbstractActionController
              $filiere = $diplome->getFieldStudy();
              $faculty = $filiere->getFaculty();
 
-             $classe = $classe->getCode();
+             //$classe = $classe->getCode();
              $diplome = $diplome->getName();
              $filiere = $filiere->getName();
              $faculty = $faculty->getName();
@@ -304,8 +321,8 @@ class ExamReportsController extends AbstractActionController
              //List of exam performed for the given subject
              $exams = $this->examManager->getExamList($ueID,$subjectID,$semID,$classeID);
 
-             //compute statistics
-             $totalStudent = sizeof($std1);
+             //compute statistics*
+             if($std1) $totalStudent = sizeof($std1); else $totalStudent = 1;
              $totalFailure = sizeof($std);
 
              $this->entityManager->getConnection()->commit();
@@ -318,7 +335,7 @@ class ExamReportsController extends AbstractActionController
                  'students'=>$std1,
                  'acadYr'=>$acadYr,
                  'semestre'=>$semestre,
-                 'classe'=>$classe,
+                 'classe'=>$classe->getCode(),
                  'diplome'=>$diplome,
                  'filiere'=>$filiere,
                  'faculty'=>$faculty,
@@ -328,7 +345,8 @@ class ExamReportsController extends AbstractActionController
                  'subjects'=>$subjects,
                  'exams'=>$exams,
                  'totalStudent'=>$totalStudent,
-                 'totalFailure'=>$totalFailure
+                 'totalFailure'=>$totalFailure,
+                 'cycle_level'=>$classe->getCycle()->getCycleLevel()
              ]);
              // Disable layouts; `MvcEvent` will use this View Model instead
              $view->setTerminal(true);
@@ -353,12 +371,16 @@ class ExamReportsController extends AbstractActionController
              $data = $this->params()->fromRoute();             
              $subjects = [];
             $classe= $this->entityManager->getRepository(ClassOfStudy::class)->findOneById($data["classID"]);
+            $grode_of_failures = ["F","E"];
+
+           // if($classe->getCycle()->getCycleLevel() == 1)  $grode_of_failures = ["F","E","D","D+","C-"];
+           // else $grode_of_failures = ["F","E","D","D+","C-","C","C+"];             
             $semester = $this->entityManager->getRepository(Semester::class)->findOneById($data["semID"]);
             $ue = $this->entityManager->getRepository(TeachingUnit::class)->findOneById($data["ueID"]);
             $credits = $this->entityManager->getRepository(ClassOfStudyHasSemester::class)->findOneBy(array('teachingUnit'=>$ue,'semester'=>$semester,"classOfStudy"=>$classe))->getCredits();
             
             $stdRegisteredToModule = $this->entityManager->getRepository(UnitRegistration::class)->findBy(array("teachingUnit"=>$ue,"semester"=>$semester,"subject"=>[NULL," "]));
-            $stdRegisteredToModuleFailed = $this->entityManager->getRepository(UnitRegistration::class)->findBy(array("teachingUnit"=>$ue,"semester"=>$semester,"subject"=>[NULL," "],"grade"=>["E","F"," ",NULL]));
+            $stdRegisteredToModuleFailed = $this->entityManager->getRepository(UnitRegistration::class)->findBy(array("teachingUnit"=>$ue,"semester"=>$semester,"subject"=>[NULL," "],"grade"=>$grode_of_failures));
             $stdOutput = [];
             $i=0;
             //List of teaching unit of the classe
@@ -403,7 +425,7 @@ class ExamReportsController extends AbstractActionController
              $filiere = $diplome->getFieldStudy();
              $faculty = $filiere->getFaculty();
 
-             $classe = $classe->getCode();
+             //$classe = $classe->getCode();
              $diplome = $diplome->getName();
              $filiere = $filiere->getName();
              $faculty = $faculty->getName();
@@ -432,7 +454,7 @@ class ExamReportsController extends AbstractActionController
                  'students'=>$stdOutput,
                  'acadYr'=>$acadYr,
                  'semestre'=>$semestre,
-                 'classe'=>$classe,
+                 'classe'=>$classe->getCode(),
                  'diplome'=>$diplome,
                  'filiere'=>$filiere,
                  'faculty'=>$faculty,
@@ -441,7 +463,8 @@ class ExamReportsController extends AbstractActionController
                  'brandInfo'=>$brandInfo,
                  'subjects'=>$subjects,
                  'totalStudent'=>$totalStudent,
-                 'totalFailure'=>$totalFailure
+                 'totalFailure'=>$totalFailure,
+                 'cycle_level'=>$classe->getCycle()->getCycleLevel()
              ]);
              // Disable layouts; `MvcEvent` will use this View Model instead
              $view->setTerminal(true);
@@ -1446,7 +1469,7 @@ public function printTranscriptsAction()
         $k=0;
         foreach($currentYrCourses as $course)
         {
-            $teachingUnit = $this->entityManager->getRepository(TeachingUnit::class)->find($course->getId());
+            $teachingUnit = $this->entityManager->getRepository(TeachingUnit::class)->find($course->getTeachingUnitId());
             //check if the student is register to the course
             $unitRegistration = $this->entityManager->getRepository(UnitRegistration::class)->findOneBy(array("student"=>$student,"semester"=>$sem,"teachingUnit"=>$teachingUnit,"subject"=>[null," "]));
 

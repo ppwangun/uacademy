@@ -38,7 +38,7 @@ class DelibCOnfigController extends AbstractRestfulController
     {
        $this->entityManager->getConnection()->beginTransaction();
         try
-        {      
+        {     
             $delibDetails = $this->entityManager->getRepository(Deliberation::class)->find($id);
 
                 $hydrator = new ReflectionHydrator();

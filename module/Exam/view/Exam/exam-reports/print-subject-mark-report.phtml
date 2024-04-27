@@ -6,8 +6,10 @@ and open the template in the editor.
 -->
 <?php
 
-
 $totalAdmis = $this->totalStudent - $this->totalFailure;
+$grode_of_failures = ["F","E"];
+//if($this->cycle_level == 1)  $grode_of_failures = ["F","E","D","D+","C-"];
+//else $grode_of_failures = ["F","E","D","D+","C-","C","C+"];
 
 if(sizeof($this->exams)>0)
 {

@@ -395,13 +395,14 @@ class IndexController extends AbstractActionController
             $datastring = $this->params()->fromQuery(); 
             
             $registeredStd = $this->entityManager->getRepository(RegisteredStudentView::class)->findBy(array("class"=>$datastring['classe']));
+           ;
             $classe = $this->entityManager->getRepository(ClassOfStudy::class)->findOneByCode($datastring["classe"]);
             $sem = $this->entityManager->getRepository(Semester::class)->findOneById($datastring["sem"]);
             $acadYr = $this->entityManager->getRepository(AcademicYear::class)->findOneBy(array("isDefault"=>1));
             
             //Total credit at the semester of the cycle
             $totalCredits = $this->totalCreditsPerCycle($classe->getCode(),$sem); 
-          
+        
             $studyLevel = $classe->getStudyLevel();
             $sem_rank = $sem->getRanking();
             $i= 0;
@@ -434,16 +435,17 @@ class IndexController extends AbstractActionController
                 {
                    // 
                     $sem_1 = $this->entityManager->getRepository(Semester::class)->find($course->getSemId());
-                    $teachingUnit = $this->entityManager->getRepository(TeachingUnit::class)->find($course->getId());
+                    $teachingUnit = $this->entityManager->getRepository(TeachingUnit::class)->find($course->getTeachingUnitId()); 
                     //check if the student is register to the course
                     if($sem->getRanking()%2==$course->getSemRanking()%2&&$this->checkIscurrentYearSem($course->getSemId()))
                         $unitRegistration = $this->entityManager->getRepository(UnitRegistration::class)->findOneBy(array("student"=>$std,"teachingUnit"=>$teachingUnit,"subject"=>[null," "],"semester"=>$sem_1),array("noteFinal"=>"DESC"));
                     else continue;
                     //return student grade if student is registered to the course or NULL ortherwise
                     //only display subjects of the classe
-                    
+                  
                     if($unitRegistration)
-                    {
+                    { 
+                         
                         //number of credit registered to the cycle
                         
                         $classe = $this->entityManager->getRepository(ClassOfStudy::class)->findOneByCode($course->getClasse());

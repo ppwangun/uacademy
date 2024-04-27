@@ -124,11 +124,11 @@ class IndexController extends AbstractActionController
              $ueID = $data["ueId"];
              $ue = $this->entityManager->getRepository(TeachingUnit::class)->find($data["ueId"])->getCode();
          }
-         
+        
          $class= $this->entityManager->getRepository(ClassOfStudy::class)->find($data["classeId"]);
          $teachingUnit = $this->entityManager->getRepository(TeachingUnit::class)->find($data["ueId"]);
         
-         if(!is_null($class->getDeliberation()))
+         if($class->getDeliberation())
             $delibCondition = $class->getDeliberation()->getDelibCondition();
          else $delibCondition="RAS";
          $delibCondition = str_replace("IF", "SI", $delibCondition);

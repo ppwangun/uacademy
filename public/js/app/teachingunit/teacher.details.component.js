@@ -105,6 +105,7 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
     
     
     var $ctrl = this;
+    $ctrl.searchTeacher = "";
     
     $ctrl.init = function(){
      
@@ -126,6 +127,20 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
                    return response.data[0];
                 });
      };
+     
+    //Loading classes of study asynchronously
+    $ctrl.queryTeacher = function(teacher)
+    {
+       var  dataString = {id: teacher},
+          config = {
+            params: dataString,
+            headers : {'Accept' : 'application/json; charset=utf-8'}
+            };
+    
+            return  $http.get('searchTeacher',config).then(function(response){
+                   return response.data[0];
+                });
+     };     
      
      $timeout(    
          $http.get('semester').then(function(response){

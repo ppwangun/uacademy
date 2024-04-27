@@ -31,6 +31,13 @@ class CurrentYearTeachingUnitView
     /**
     * @var string
     *
+    * @ORM\Column(name="subject_id", type="integer", nullable=true)
+    */
+    private $teachingUnitId;    
+    
+    /**
+    * @var string
+    *
     * @ORM\Column(name="degree_code", type="string", length=45, nullable=true)
     */
     private $degreeCode;    
@@ -105,6 +112,11 @@ class CurrentYearTeachingUnitView
     {
         return $this->id;
     }    
+    
+    public function getTeachingUnitId()
+    {
+        return $this->teachingUnitId;
+    }      
     
      /**
      * Get string

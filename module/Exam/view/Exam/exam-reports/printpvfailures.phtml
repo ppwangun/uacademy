@@ -8,6 +8,9 @@ and open the template in the editor.
 
 
 $totalAdmis = $this->totalStudent - $this->totalFailure;
+$grode_of_failures = [];
+if($this->cycle_level == 1)  $grode_of_failures = ["F","E","D","D+","C-"];
+else $grode_of_failures = ["F","E","D","D+","C-","C","C+"];
 //($this->typeExam=="CC")||($this->typeExam=="CCTP")?$width="16.6%":$width="12.5%";
 $width="9%";
 
@@ -206,8 +209,8 @@ foreach($students as $stud)
     $tblBody.='<td style = "width: 6%; text-align: center;"> '.$stud['noteCctp'].'</td>';
     $tblBody.='<td style = "width: 9%; text-align: center;"> '.$stud['noteExamtp'].'</td>';
     $tblBody.='<td style = "width: 7%; text-align: center;"> '.$stud['noteExam'].'</td>';
-    $tblBody.='<td style = "width: 7%; text-align: center; '.(($stud["grade"]=="F"||$stud["grade"]=="E")? "background-color: #bb1924; color: #ffffff; font-weight: bold;" : ""). '">'.(number_format($stud['noteFinal'],2)).'%</td>';
-    $tblBody.='<td style = "width: 5%; text-align: center; '.(($stud["grade"]=="F"||$stud["grade"]=="E")? "background-color: #bb1924; color: #ffffff; font-weight: bold;" : ""). '">'.$stud['grade'].'</td>';
+    $tblBody.='<td style = "width: 7%; text-align: center; '.((in_array($stud["grade"],$grode_of_failures))? "background-color: #bb1924; color: #ffffff; font-weight: bold;" : ""). '">'.(number_format($stud['noteFinal'],2)).'%</td>';
+    $tblBody.='<td style = "width: 5%; text-align: center; '.((in_array($stud["grade"],$grode_of_failures))? "background-color: #bb1924; color: #ffffff; font-weight: bold;" : ""). '">'.$stud['grade'].'</td>';
     $tblBody.='<td style = "width: 5%; text-align: center;"> '.$stud['points'].'</td>';
     /*foreach($stud as $std)
     {

@@ -169,13 +169,13 @@
 
     </head>
 <body ng-app="myApp" ng-controller="testCtrl as mainController"ng-cloak >
-    <div style="height: 65px; position: relative;background-color: red;">
+    <div style="height: 3px; position: relative;background-color: red;">
         
     </div>
 <div id="wrapper" >
 
         <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top navbar-fixed-top" role="navigation"">
+        <nav class="navbar navbar-default navbar-static-top " role="navigation"">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -418,19 +418,19 @@
                         <li>
                             <a href="home"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
-                        <li>
+                        <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('view.students', null)))?true:false?>">
                             <a href="#"><i class="fa fa-graduation-cap fa-fw"></i> Etudiants<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-                                <li>
+                                <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('student.prospective.registration', null)))?true:false?>">
                                     <a href="#!/prospects">Gérer les prospects</a>
                                 </li>
-                                <li>
+                                <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('student.new.admitted', null)))?true:false?>">
                                     <a href="#!/admission">Admission</a>
                                 </li>                                
-                                <li>
+                                <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('student.academical.registration', null)))?true:false?>">
                                     <a href="#!/students">Inscription/Réinscription</a>
                                 </li>
-                                <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('view.academical.registration', null)))?true:false?>">
+                                <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('student.academical.registration', null)))?true:false?>">
                                     <a href="#!/pedagogicalReg">Inscription pédagogique</a>
                                 </li>                                 
                                 <li>
@@ -455,7 +455,7 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-                        <li>
+                        <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('view.payments', null)))?true:false?>">
                             <a href=""><i class="fa fa-credit-card fa-fw"></i> Paiements<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('manage.payment', null)))?true:false?>">
@@ -478,51 +478,51 @@
                                 </li>
                             </ul>
                         </li>
-                        <li>
+                        <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('view.lecturers', null)))?true:false?>">
                             <a href="#"><i class="fa fa-pencil-square-o fa-fw"></i> Enseignants <span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-                                <li>
+                                <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('lecturers.managment', null)))?true:false?>">
                                     <a href="#!/teacher-list"">Gérer les enseignants</a>
                                 </li>   
-                                <li>
+                                <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('lecturers.managment', null)))?true:false?>">
                                     <a href="#!/teacherAssignedSubjectsTpl">Grilles d'attribution des Ues</a>
                                 </li>                                
-                                <li>
+                                <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('lecture.follow.up', null)))?true:false?>">
                                     <a href="#!/teacher-follow-up">Suivi des cours</a>
                                 </li>
-                                <li>
+                                <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('lecture.billing', null)))?true:false?>">
                                     <a href="#!/subjectBilling">Factuation des frais de vacation</a>
                                 </li>
-                                                                <li>
-                                    <a href="#!/academicRankConfig">Barème de règlement des frais de vacation</a>
+                                <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('lecturer.grade', null)))?true:false?>">
+                                    <a href="#!/academicRankConfig">Gestion des grades</a>
                                 </li>
                                
 
                             </ul>                            
                         </li>
-                        <li>
+                        <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('view.exams', null)))?true:false?>">
                             <a href="#"><i class="fa fa-envelope fa-fw"></i> Evaluations<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-                                <li>
+                                <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('exam.managment', null)))?true:false?>">
                                     <a href="#!/examlist">Gérer les évaluations</a>
                                 </li>
-                                <li>
+                                <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('exam.marks.edit', null)))?true:false?>">
                                     <a href="#!/calculnotes">Edition des notes</a>
                                 </li>
-                                <li>
+                                <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('exam.mark.summary.edit', null)))?true:false?>">
                                     <a href="#!/calculmps">Edition des procès verbaux</a>
                                 </li>
                                 <li>
                                     <a href="#!/suiviparcourt">Suivi parcourt étudiant</a>
                                 </li>
-                                <li>
+                                <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('exam.delib.criteria.mgt', null)))?true:false?>">
                                     <a href="#!/deliberation">Délibération</a>
                                 </li>                                
 
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
-                        <li>
+                        <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('view.reports', null)))?true:false?>">
                             <a href="#"><i class="fa fa-wrench fa-fw"></i> Etats et rapports<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                
@@ -535,13 +535,13 @@
                              </ul>
                             <!-- /.nav-second-level -->
                         </li>
-                        <li>
+                        <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('view.courses', null)))?true:false?>">
                             <a href="#"><i class="fa fa-cogs"></i> Gestion des enseignements<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-                                <li>
+                                <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('course.edit', null)))?true:false?>">
                                     <a href="#!/assignedteachingunit"><i >&nbsp;</i>Unités d'enseignement</a>
                                 </li>
-                                <li>
+                                <li ng-show="<?=(($this->access('global.system.admin', ['user'=>$this->currentuser($this->identity())]))||($this->access('course.planing', null)))?true:false?>">
                                     <a href="#!/courseProgramming"><i >&nbsp;</i>Programmation</a>
                                 </li>                                
                             </ul>

@@ -662,4 +662,46 @@ class IndexController extends AbstractActionController
         }         
         
     }
+    
+    public function searchTeacherAction()
+    {
+        $this->entityManager->getConnection()->beginTransaction();
+        try
+        { 
+            $data= $this->params()->fromQuery();  
+            $id = $data["id"];
+            $subjects=[];
+           
+            $userId = $this->sessionContainer->userId;
+            $user = $this->entityManager->getRepository(User::class)->find($userId );
+           
+         
+          //  if ($this->access('all.classes.view',['user'=>$user])||$this->access('global.system.admin',['user'=>$user])) {
+                
+                $query = $this->entityManager->createQuery('SELECT t.id,t.name FROM Application\Entity\Teacher t'
+                        .' WHERE t.name LIKE :name');
+                $query->setParameter('name', '%'.$id.'%');
+                //$query->setParameter('userId', $userId);
+                $teachers = $query->getResult();  
+                
+
+           // }
+
+
+            $this->entityManager->getConnection()->commit();
+            
+           
+            $output = new JsonModel([
+                    $teachers
+            ]);
+
+            return $output;       }
+        catch(Exception $e)
+        {
+           $this->entityManager->getConnection()->rollBack();
+            throw $e;
+            
+        }         
+        
+    }    
 }

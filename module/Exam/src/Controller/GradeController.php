@@ -95,7 +95,7 @@ class GradeController extends AbstractRestfulController
             $grade->setName($data["gradeName"]);
             $this->entityManager->persist($grade);
             $this->entityManager->flush();
-            
+      
             if(isset($data["cycle"])&&!is_null($data["cycle"]))
             {
                 $cycle = $this->entityManager->getRepository(TrainingCurriculum::class)->findOneByCycleLevel($data["cycle"]);
@@ -106,7 +106,7 @@ class GradeController extends AbstractRestfulController
                    $this->entityManager->flush();
                 }
             }
-            elseif(isset($data["classes"])&&!is_null($data["class"])){
+            elseif(isset($data["classes"])&&($data["classes"])){
                 foreach($data["classes"] as $classe_id)
                 {
                    $class= $this->entityManager->getRepository(ClassOfStudy::class)->findOneByCode($classe_id);
