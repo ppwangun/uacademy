@@ -112,7 +112,7 @@ class ClassOfStudyHasSemester
      *
      * @ORM\Column(name="mark_calculation_status", type="boolean", nullable=false)
      */
-    private $markCalculationStatus;
+    private $markCalculationStatus = '0';
 
     /**
      * @var bool|null
@@ -124,7 +124,7 @@ class ClassOfStudyHasSemester
     /**
      * @var int|null
      *
-     * @ORM\Column(name="is_repeated_subject", type="integer", nullable=true)
+     * @ORM\Column(name="is_repeated_subject", type="integer", nullable=false)
      */
     private $isRepeatedSubject = '0';
 

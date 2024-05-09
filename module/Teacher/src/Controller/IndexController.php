@@ -22,9 +22,11 @@ use Application\Entity\Teacher;
 use Application\Entity\Contract;
 use Application\Entity\ClassOfStudyHasSemester;
 use Application\Entity\User;
+use Application\Entity\TeacherPaymentBill;
 use Application\Entity\CurrentYearUesAndSubjectsView;
 use Application\Entity\ContractFollowUp;
 use Application\Entity\AllContractsView;
+
 
 
 class IndexController extends AbstractActionController
@@ -703,5 +705,157 @@ class IndexController extends AbstractActionController
             
         }         
         
-    }    
+    }  
+    
+    public function generateBillAction()
+    {
+        $this->entityManager->getConnection()->beginTransaction();
+        try
+        { 
+            $data= $this->params()->fromQuery();           
+           
+            $subjects=[];
+            $bills = [];
+          
+            $userId = $this->sessionContainer->userId;
+            $user = $this->entityManager->getRepository(User::class)->find($userId );
+            
+            $contract= $this->entityManager->getRepository(Contract::class)->find($data["contractID"] );
+            $teacher= $this->entityManager->getRepository(Teacher::class)->find($data["teacherID"] );
+            $contractFollowUp= $this->entityManager->getRepository(ContractFollowUp::class)->findByContract($data["contractID"] );
+            $contractNotYetPaid= $this->entityManager->getRepository(ContractFollowUp::class)->findBy(["contract"=>$data["contractID"],"teacherPaymentBill"=>NULL] );
+            $totalTime = 0; 
+            //Check if other bills exist on this contract
+            $bills = $this->entityManager->getRepository(TeacherPaymentBill::class)->findBy(["teacher"=>$teacher,"contract"=>$contract]);
+            $alreadyBilledTime = 0;
+            foreach($bills as $bill) $alreadyBilledTime += $bill->getTotalTime();
+            
+            $pymtRate = $teacher->getAcademicRanck()->getPaymentRate();
+            
+             $paymentDetails = [];
+            
+            if($contract->getVolumeHrs()> $alreadyBilledTime && sizeof($contractNotYetPaid)>0)
+            {
+                $pymtBill = new TeacherPaymentBill();
+                $refNum = "2ABC";
+                $pymtBill->setRefNumber($refNum);
+                $pymtBill->setContract($contract);
+                $pymtBill->setTeacher($teacher);
+                $this->entityManager->persist($pymtBill);
+                $this->entityManager->flush(); 
+            
+            
+                $amount = 0;
+
+               
+                $k = 0;
+                foreach($contractNotYetPaid as $con)
+                {
+                    if(!$con->getTeacherPaymentBill())
+                    {
+                        //Very the already billed time does not exceed the contract time
+
+
+                        $alreadyBilledTime += $con->getTotalTime();
+                        if($contract->getVolumeHrs()> $alreadyBilledTime)
+                        {
+                            $amount += $con->getTotalTime() * $pymtRate;
+                            $totalTime+= $con->getTotalTime();
+
+
+                        }
+                        else 
+                        {
+                            $amount += $con->getTotalTime()-($contract->getVolumeHrs()-$alreadyBilledTime);
+                            $totalTime+= $con->getTotalTime()-($contract->getVolumeHrs()-$alreadyBilledTime);
+                        }
+
+                        $con->setTeacherPaymentBill($pymtBill);
+                        $this->entityManager->flush();
+                        $hydrator = new ReflectionHydrator();
+                        $data = $hydrator->extract($con);
+                        $data["paymentRate"] = $pymtRate;
+                        $data["paymentAmount"] = $con->getTotalTime() * $pymtRate;
+                        $paymentDetails[$k] = $data; $k++;                    
+                    }
+
+                }
+                $pymtBill->setDate(new \DateTime( date('Y-m-d')));
+                $pymtBill->setPaymentAmount($amount);
+                $pymtBill->setTotalTime($totalTime);
+
+                $this->entityManager->flush();
+            }
+           
+           /* $bills = $this->entityManager->getRepository(TeacherPaymentBill::class)->findBy(["teacher"=>$teacher,"contract"=>$contract]);
+            $hydrator = new ReflectionHydrator();
+            foreach($bills as $key=>$value)
+            $bills[$key]= $hydrator->extract($value);   */         
+         
+          //  if ($this->access('all.classes.view',['user'=>$user])||$this->access('global.system.admin',['user'=>$user])) {
+                
+            /*    $query = $this->entityManager->createQuery('SELECT t.refNumber,t.paymentAmount, t.paymentStatus FROM Application\Entity\TeacherPaymentBill t'
+                        .'WHERE t.teacher = null AND t.contract = null ');
+                $query->setParameter('teacherID', $data["teacherID"]);
+                $query->setParameter('contractIDID', $data["contractID"]);
+                //$query->setParameter('userId', $userId);
+                $teachers = $query->getResult();  */
+                
+
+           // }
+
+
+            $this->entityManager->getConnection()->commit();
+            
+           
+            $output = new JsonModel([
+                    $paymentDetails
+            ]);
+
+            return $output;       }
+        catch(Exception $e)
+        {
+           $this->entityManager->getConnection()->rollBack();
+            throw $e;
+            
+        }         
+        
+    } 
+    public function searchBillAction()
+    {
+        $this->entityManager->getConnection()->beginTransaction();
+        try
+        { 
+            $data= $this->params()->fromQuery();           
+           
+            $subjects=[];
+            $bills = [];
+           
+            $userId = $this->sessionContainer->userId;
+            $user = $this->entityManager->getRepository(User::class)->find($userId );
+            
+            $contract= $this->entityManager->getRepository(Contract::class)->find($data["contractID"] );
+            $teacher= $this->entityManager->getRepository(Teacher::class)->find($data["teacherID"] );
+           
+            $bills = $this->entityManager->getRepository(TeacherPaymentBill::class)->findBy(["teacher"=>$teacher,"contract"=>$contract]);
+            $hydrator = new ReflectionHydrator();
+            foreach($bills as $key=>$value)
+            $bills[$key]= $hydrator->extract($value);            
+         
+            $this->entityManager->getConnection()->commit();
+            
+           
+            $output = new JsonModel([
+                    $bills
+            ]);
+
+            return $output;       }
+        catch(Exception $e)
+        {
+           $this->entityManager->getConnection()->rollBack();
+            throw $e;
+            
+        }         
+        
+    }     
 }

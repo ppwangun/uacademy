@@ -106,7 +106,14 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
     
     var $ctrl = this;
     $ctrl.searchTeacher = "";
-    
+    $ctrl.selectedTeacher = null;
+    $scope.tableBillsShow = 0;
+
+    $ctrl.formatDate = function(date){
+      var dateOut = new Date(date);
+      return dateOut;
+    };
+        
     $ctrl.init = function(){
      
     $timeout(
@@ -167,21 +174,47 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
     });
 };
 
- $ctrl.loadUE = function(classe){
-    $ctrl.ues = null;
-    $ctrl.subjects = [];
-    $ctrl.selectedSubject = null;
-    var data = {id: {classe_id:classe.id,sem_id:$ctrl.selectedSem.id}};
+ $ctrl.selectedItemChange = function(teacher){
+     if(teacher)     teacherID = teacher.id; else teacherId =-1;
+     $ctrl.assignedSubjects = [];
+     $ctrl.isActivatedUeSelect = false;
+    //Loading selected class information for update
+    $timeout(
+     $http.get(`teachers/${teacherID}`).then(function (response) {
+       
+          $ctrl.assignedSubjects = response.data[0].teaching_units;
+          $ctrl.isActivatedUeSelect = true;
+          console.log($ctrl.assignedSubjects)
+     }),1000);
+  };
+  
+  $ctrl.loadBills = function(selectectedTeacher,selectedUe)
+  {
+    var data = {teacherID: selectectedTeacher.id,contractID : selectedUe.id};
     var config = {
     params: data,
     headers : {'Accept' : 'application/json'}
-    };
-    //Loading selected class information for update
-    $timeout(
-     $http.get('teacherAssignedSubjects').then(function(response){
-         $ctrl.ues = response.data[0];
-     }),1000);
-  };
+    };      
+    $http.get('searchBill',config).then(function(response){
+        $ctrl.bills = response.data[0];
+        $scope.tableBillsShow = 1
+       
+    });    
+  }
+  
+  $ctrl.generateBill = function(selectectedTeacher,selectedUe)
+  {
+    var data = {teacherID: selectectedTeacher.id,contractID : selectedUe.id};
+    var config = {
+    params: data,
+    headers : {'Accept' : 'application/json'}
+    };      
+    $http.get('generateBill',config).then(function(response){
+        $ctrl.billDetails = response.data[0];
+        $scope.tableBillsShow = 1
+       
+    });    
+  }  
 
     $scope.loadTeachers = function () {
         $scope.hasLoadedTeachers = null;

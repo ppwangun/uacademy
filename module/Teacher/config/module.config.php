@@ -44,7 +44,27 @@ return [
                         'action'        => 'searchTeacher',
                     ],
                 ],
-            ],             
+            ],  
+            'generateBill' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/generateBill',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'generateBill',
+                    ],
+                ],
+            ],  
+            'searchBill' => [
+                'type'    => Literal::class,
+                'options' => [
+                    'route'    => '/searchBill',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'searchBill',
+                    ],
+                ],
+            ],            
             'teacherUnitFollowUp' => [
                 'type'    => Literal::class,
                 'options' => [
