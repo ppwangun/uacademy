@@ -252,6 +252,9 @@ config(['$locationProvider', '$routeProvider', function($locationProvider, $rout
         }).when("/subjectBilling", {
             template: "<subject-billing></subject-billing>",
                        
+        }).when("/subjectBilling/:numRef", {
+            template: "<subject-billing></subject-billing>",
+                       
         }).when("/newAcademicRank/", {
             template: "<new-acad-rank></new-acad-rank>",
             

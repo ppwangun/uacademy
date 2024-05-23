@@ -131,7 +131,7 @@ z-index: 120000}
 
                         <tr ng-repeat="bill in $ctrl.bills" style="font-size:0.8em;">
                           <td  class="col-xs-1"> {{$index+1}}</td>
-                          <td nclass="col-xs-1"><a ng-href="home#!/subjectBilling/{{bill.refNumber}}" ng-bind="bill.refNumber"></a></td>
+                          <td nclass="col-xs-1"><a ng-href="home#!/billDetails/{{bill.refNumber}}" ng-bind="bill.refNumber"></a></td>
                           <td ng-bind="bill.totalTime+'H'" class="col-xs-3"></td>
                           <td ng-bind="bill.paymentAmount" class="col-xs-1" ng-class="{'zf-red': (exam.isMarkRegistered!==1)}"></td>
                           <td ng-bind="$ctrl.formatDate(bill.date.date) | date:'dd/MM/yyyy'" class="col-xs-2"></td>

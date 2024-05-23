@@ -988,10 +988,10 @@ class IndexController extends AbstractActionController
            //Migrating all available semester from the active year to the current year
             //Afeter migrating semester, linking semesters to classes
             
-           if($currentAcadYr!=$activeAcadYr)
+           if($currentAcadYr->getId()!=$activeAcadYr->getId())
            {
                $semesters = $this->entityManager->getRepository(Semester::class)->findByAcademicYear($activeAcadYr);
-               
+            /* 
                foreach($semesters as $sem)
                {
                    $semester = $this->entityManager->getRepository(Semester::class)->findOneBy(array("academicYear"=>$currentAcadYr,"code"=>$sem->getCode()));
@@ -1013,6 +1013,11 @@ class IndexController extends AbstractActionController
                         
                    
                     $classes =  $this->entityManager->getRepository(ClassOfStudy::class)->findAll();
+                                   $classes1 =  $this->entityManager->getRepository(ClassOfStudy::class)->findAll();
+               foreach($classes1 as $key=>$value)
+                   if(in_array($value->getCode(),["AU1","AU2","AU3"] ))
+                           $classes[$key]=$value;
+                   
                     foreach($classes as $classe)
                     { 
                        $semToClasse = $this->entityManager->getRepository(SemesterAssociatedToClass::class)->findBy(array("academicYear"=>$activeAcadYr,"semester"=>$sem,"classOfStudy"=>$classe));
@@ -1067,8 +1072,13 @@ class IndexController extends AbstractActionController
                         }
                     }
                }
-               
-               $classes =  $this->entityManager->getRepository(ClassOfStudy::class)->findAll();
+        */        
+               $classes1 =  $this->entityManager->getRepository(ClassOfStudy::class)->findAll();
+               foreach($classes1 as $key=>$value)
+                   if(in_array($value->getCode(),["AU1","AU2","AU3"] ))
+                           $classes[$key]=$value; 
+                           
+                           
                foreach($classes as $classe)
                {
                      //Register student to their new classes
@@ -1091,7 +1101,7 @@ class IndexController extends AbstractActionController
                                 $newClasse = $this->entityManager->getRepository(ClassOfStudy::class)->findOneBy(array("degree"=>$degree,"studyLevel"=>($formerClasse->getStudyLevel()+1)));
                                 //Skip if student is already registered to his new class
                                 $stud = $this->entityManager->getRepository(AdminRegistration::class)->findOneBy(array("academicYear"=>$currentAcadYr,"classOfStudy"=>$newClasse,"student"=>$std->getStudent()));
-                                if($stud) continue;
+                                //if($stud) continue;
 
                                 if($std->getDecision()=="ADM")
                                 {
@@ -1110,6 +1120,7 @@ class IndexController extends AbstractActionController
                                                $this->registerStudentToClass($std->getStudent(),$formerClasse,$newClasse,$isRepeating);
                                                if($formerClasse->getIsEndCycle()==1)$this->stdSemesterRegistrationNewCycle($formerClasse, $newClasse, $std->getStudent());
                                                else $this->stdSemesterRegistration($formerClasse, $newClasse, $std->getStudent());
+                                               $this->entityManager->flush();
                                             }
                                             break;
                                     }
@@ -1120,7 +1131,9 @@ class IndexController extends AbstractActionController
                                     $isRepeating = 1;
                                     $newClasse = $formerClasse;
                                    $this->registerStudentToClass($std->getStudent(),$formerClasse,$newClasse,$isRepeating);
+                                   $this->entityManager->flush();
                                     $this->stdSemesterRegistration($formerClasse, $newClasse, $std->getStudent());
+                                    $this->entityManager->flush();
                                 }
                                 elseif($std->getDecision()=="EXC"){
                                     $status = self::_ETUDIANT_EXCLU_;
@@ -1137,6 +1150,7 @@ class IndexController extends AbstractActionController
                                    if($formerClasse)
                                    { 
                                       $this->reportStudentBacklogsSubjects($std->getStudent(),$formerClasse);
+                                      $this->entityManager->flush();
                                        $studyLevel = $formerClasse->getStudyLevel()-1;
                                    }else $studyLevel = $studyLevel-1;
 
@@ -1170,7 +1184,7 @@ class IndexController extends AbstractActionController
         {
             $isRegistered->setStudent($std);
             $isRegistered->setClassOfStudy($newClasse);            
-            $isRegistered->setStatus(0);
+            //$isRegistered->setStatus(0);
             $isRegistered->setIsStudentRepeating($isRepeating);
             $currentDate = date_create(date('Y-m-d H:i:s'));
             $isRegistered->setRegisteringDate($currentDate);
@@ -1244,7 +1258,7 @@ class IndexController extends AbstractActionController
                 $stdNewSemRegistration->setTotalCreditsCyclePreviousYear($stdLastSemRegistration->getTotalCreditsCyclePreviousYear()+$this->totalCreditPerSem($formerClasse,$lastSem));
                 $stdNewSemRegistration->setCountingSemRegistration(($stdLastSemRegistration->getCountingSemRegistration()+1));               
 
-                //$this->entityManager->flush();
+                $this->entityManager->flush();
 
             }
             else
@@ -1262,11 +1276,12 @@ class IndexController extends AbstractActionController
                     $stdNewSemRegistration->setCountingSemRegistration(($stdLastSemRegistration->getCountingSemRegistration()+1));               
 
                     $this->entityManager->persist($stdNewSemRegistration);
+                    $this->entityManager->flush();
                 }
-                //$this->entityManager->flush();
+                //
 
             }  
-            $this->entityManager->flush();
+            
         }
 
     }
@@ -1305,8 +1320,7 @@ class IndexController extends AbstractActionController
         $stdLastSemRegistration = $this->entityManager->getRepository(StudentSemRegistration::class)->findOneBy(array("student"=>$student,"semester"=>$lastSem));
         if ($stdLastSemRegistration )
         { 
-            if($newSem)
-                $stdNewSemRegistration = $this->entityManager->getRepository(StudentSemRegistration::class)->findOneBy(array("student"=>$student,"semester"=>$newSem));
+            if($newSem)   $stdNewSemRegistration = $this->entityManager->getRepository(StudentSemRegistration::class)->findOneBy(array("student"=>$student,"semester"=>$newSem));
             if($stdNewSemRegistration)
             {
                 $stdNewSemRegistration->setMpcPrevious(0);
@@ -1315,7 +1329,7 @@ class IndexController extends AbstractActionController
                 $stdNewSemRegistration->setTotalCreditsCyclePreviousYear(0);
                 $stdNewSemRegistration->setCountingSemRegistration(1);               
 
-                //$this->entityManager->flush();
+                $this->entityManager->flush();
 
             }
             else
@@ -1331,11 +1345,12 @@ class IndexController extends AbstractActionController
                     $stdNewSemRegistration->setTotalCreditsCyclePreviousYear(0);
                     $stdNewSemRegistration->setCountingSemRegistration(1);  
                     $this->entityManager->persist($stdNewSemRegistration);
+                    $this->entityManager->flush();
                 }
-                //$this->entityManager->flush();
+                
 
             }                
-            $this->entityManager->flush();
+          
         }
 
     }    

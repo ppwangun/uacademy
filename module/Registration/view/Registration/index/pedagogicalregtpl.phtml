@@ -179,7 +179,7 @@ z-index: 120000}
                                                   <td ng-bind="std.studentCurrentClasse"></td>
                                                   
                                                   <td style="vertical-align: middle;"> 
-                                            <md-checkbox  ng-model="std.status" ng-disabled="std.isRepeated===1"  aria-label="Checkbox Indeterminate" 
+                                            <md-checkbox  ng-model="std.status" ng-disabled="std.isRepeated===1 && !<?=($this->access('global.system.admin', null))?true:false?>"  aria-label="Checkbox Indeterminate" 
                                                                   ng-true-value="1"
                                                            ng-checked="exists(std, selected)" ng-click="toggle(std, selected)"                   
                                                                   class="md-primary">

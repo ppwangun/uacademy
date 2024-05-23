@@ -64,6 +64,16 @@ return [
                         'action'        => 'searchBill',
                     ],
                 ],
+            ],   
+            'billDetails' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/billDetails[/:numRef]',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'        => 'billDetails',
+                    ],
+                ],
             ],            
             'teacherUnitFollowUp' => [
                 'type'    => Literal::class,

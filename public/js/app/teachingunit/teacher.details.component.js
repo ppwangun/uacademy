@@ -8,9 +8,12 @@ angular.module('teachingunit')
 }).component('subjectBilling',{
             templateUrl: 'subjectBillingTpl',
             controller: teacherListController 
+}).component('billDetails',{
+            templateUrl: 'billDetails',
+            controller: teacherListController 
 });
 
-function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuilder,DTColumnDefBuilder){
+function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuilder,DTColumnDefBuilder,$routeParams){
     // $scope.teachers = [
     //     {id: 1, names: 'Tiger Nixon', speciality: 'System Architect'},
     //     {id: 2, names: 'Garrett Winters', speciality: 'Accountant'},
@@ -113,7 +116,8 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
       var dateOut = new Date(date);
       return dateOut;
     };
-        
+    var numRef =$routeParams.numRef;  
+
     $ctrl.init = function(){
      
     $timeout(
@@ -184,9 +188,22 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
        
           $ctrl.assignedSubjects = response.data[0].teaching_units;
           $ctrl.isActivatedUeSelect = true;
-          console.log($ctrl.assignedSubjects)
      }),1000);
   };
+  
+  
+      //chech if numRef is setted
+    if(numRef)
+    {
+        var  dataString = {numRef: numRef},
+        config = {
+            params: dataString,
+            headers : {'Accept' : 'application/json; charset=utf-8'}
+        };
+        $http.get('billDetails',config).then(function(response){
+            var data = response.data[0];
+        });        
+    }
   
   $ctrl.loadBills = function(selectectedTeacher,selectedUe)
   {
@@ -210,8 +227,25 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
     headers : {'Accept' : 'application/json'}
     };      
     $http.get('generateBill',config).then(function(response){
-        $ctrl.billDetails = response.data[0];
-        $scope.tableBillsShow = 1
+        
+
+            var errorValue = response.data[0].error;
+            
+            if(errorValue===0)
+            {
+                alert("Facturation impssible: volume horaire en dépassement")
+            }
+            else if(errorValue===1)
+            {
+                alert("absence d'heure de cours à facturer")
+            }
+
+        $ctrl.billDetails = response.data[0].paymentDetails;
+        $ctrl.totalHrsBilled = response.data[0].totalBilledTime;
+        $ctrl.totalHrsAffected = response.data[0].totalHoursAffected;
+        $ctrl.overtime = response.data[0].overtime;
+        $ctrl.paymentRate = response.data[0].paymentRate;
+        $scope.tableBillsShow = 1;
        
     });    
   }  

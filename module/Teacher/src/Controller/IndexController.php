@@ -716,6 +716,8 @@ class IndexController extends AbstractActionController
            
             $subjects=[];
             $bills = [];
+            $actualBilledTime = null;
+            $overtime = 0;
           
             $userId = $this->sessionContainer->userId;
             $user = $this->entityManager->getRepository(User::class)->find($userId );
@@ -733,6 +735,23 @@ class IndexController extends AbstractActionController
             $pymtRate = $teacher->getAcademicRanck()->getPaymentRate();
             
              $paymentDetails = [];
+             
+             
+
+            if($contract->getVolumeHrs()<= $alreadyBilledTime)
+            {
+                $output = new JsonModel([
+                    ["error"=>0]
+                ]);
+                return $output;
+
+            }  
+            if(sizeof($contractNotYetPaid)<=0){ 
+                $output = new JsonModel([
+                    ["error"=>1]
+                ]);
+                return $output;                        
+            }             
             
             if($contract->getVolumeHrs()> $alreadyBilledTime && sizeof($contractNotYetPaid)>0)
             {
@@ -756,30 +775,59 @@ class IndexController extends AbstractActionController
                         //Very the already billed time does not exceed the contract time
 
 
-                        $alreadyBilledTime += $con->getTotalTime();
+                        $alreadyBilledTime += $con->getTotalTime(); 
+                        $billedTime = $con->getTotalTime();
+
                         if($contract->getVolumeHrs()> $alreadyBilledTime)
                         {
-                            $amount += $con->getTotalTime() * $pymtRate;
-                            $totalTime+= $con->getTotalTime();
-
+                            $con->setTeacherPaymentBill($pymtBill);
+                            $this->entityManager->flush();
+                            $hydrator = new ReflectionHydrator();
+                            $data = $hydrator->extract($con);
+                            $data["paymentRate"] = $pymtRate;
+                            $data["paymentAmount"] = $billedTime * $pymtRate;
+                            $paymentDetails[$k] = $data; $k++; 
+                            
+ 
+                            $amount += $billedTime*$pymtRate;
+                            $totalTime+= $billedTime;                            
 
                         }
                         else 
-                        {
-                            $amount += $con->getTotalTime()-($contract->getVolumeHrs()-$alreadyBilledTime);
-                            $totalTime+= $con->getTotalTime()-($contract->getVolumeHrs()-$alreadyBilledTime);
+                        { 
+                            if(!$actualBilledTime)
+                            {
+                                $overtime  = ($alreadyBilledTime-$contract->getVolumeHrs()); 
+                                $actualBilledTime = $con->getTotalTime()-$overtime;
+
+                                $billedTime = $actualBilledTime; 
+                                $amount += $billedTime*$pymtRate;
+                                $totalTime+= $billedTime;                                
+                            }
+                            else
+                            {
+                                $overtime += $con->getTotalTime();
+                            }
+                            
+                            $hydrator = new ReflectionHydrator();
+                            $data = $hydrator->extract($con);
+                            $data["paymentRate"] = $pymtRate;
+                            $data["overtime"] = $overtime;
+                            $data["paymentAmount"] = $billedTime * $pymtRate;
+                            $paymentDetails[$k] = $data; $k++;                             
+  
                         }
 
                         $con->setTeacherPaymentBill($pymtBill);
-                        $this->entityManager->flush();
-                        $hydrator = new ReflectionHydrator();
-                        $data = $hydrator->extract($con);
-                        $data["paymentRate"] = $pymtRate;
-                        $data["paymentAmount"] = $con->getTotalTime() * $pymtRate;
-                        $paymentDetails[$k] = $data; $k++;                    
+                        $this->entityManager->flush(); 
+                        
+                         
                     }
 
+
                 }
+              
+                $pymtBill->setOverTime($overtime);
                 $pymtBill->setDate(new \DateTime( date('Y-m-d')));
                 $pymtBill->setPaymentAmount($amount);
                 $pymtBill->setTotalTime($totalTime);
@@ -787,29 +835,17 @@ class IndexController extends AbstractActionController
                 $this->entityManager->flush();
             }
            
-           /* $bills = $this->entityManager->getRepository(TeacherPaymentBill::class)->findBy(["teacher"=>$teacher,"contract"=>$contract]);
-            $hydrator = new ReflectionHydrator();
-            foreach($bills as $key=>$value)
-            $bills[$key]= $hydrator->extract($value);   */         
-         
-          //  if ($this->access('all.classes.view',['user'=>$user])||$this->access('global.system.admin',['user'=>$user])) {
-                
-            /*    $query = $this->entityManager->createQuery('SELECT t.refNumber,t.paymentAmount, t.paymentStatus FROM Application\Entity\TeacherPaymentBill t'
-                        .'WHERE t.teacher = null AND t.contract = null ');
-                $query->setParameter('teacherID', $data["teacherID"]);
-                $query->setParameter('contractIDID', $data["contractID"]);
-                //$query->setParameter('userId', $userId);
-                $teachers = $query->getResult();  */
-                
-
-           // }
 
 
             $this->entityManager->getConnection()->commit();
             
            
             $output = new JsonModel([
-                    $paymentDetails
+               [ "paymentDetails"=>$paymentDetails,
+                "totalBilledTime"=>$totalTime,
+                "overtime"=>$overtime,
+                "paymentRate"=>$pymtRate,
+                "totalHoursAffected"=>$contract->getVolumeHrs()]
             ]);
 
             return $output;       }
@@ -858,4 +894,45 @@ class IndexController extends AbstractActionController
         }         
         
     }     
+    
+    public function billDetailsAction()
+    {
+        $this->entityManager->getConnection()->beginTransaction();
+        try
+        { 
+            $data= $this->params()->fromQuery();                               
+           
+            $subjects=[];
+            $bills = [];
+           
+            $userId = $this->sessionContainer->userId;
+            $user = $this->entityManager->getRepository(User::class)->find($userId );
+            
+           /* $contract= $this->entityManager->getRepository(Contract::class)->find($data["contractID"] );
+            $teacher= $this->entityManager->getRepository(Teacher::class)->find($data["teacherID"] );*/
+        
+            $bills = $this->entityManager->getRepository(TeacherPaymentBill::class)->findBy(["refNumber"=>$data["numRef"]]);
+            $hydrator = new ReflectionHydrator();
+           // $teacher = $bill->getTeacher(); 
+           // $teacher= $this->entityManager->getRepository(Teacher::class)->find($teacher->getId());
+           // $data = $hydrator->extract($teacher);  
+            //print_r($data); exit;
+            foreach($bills as $key=>$value)
+            $bills[$key]= $hydrator->extract($value);           
+         
+            $this->entityManager->getConnection()->commit();
+
+            $output = new JsonModel([
+               $bills[0]
+            ]);
+
+            return $output;       }
+        catch(Exception $e)
+        {
+           $this->entityManager->getConnection()->rollBack();
+            throw $e;
+            
+        }         
+        
+    }      
 }

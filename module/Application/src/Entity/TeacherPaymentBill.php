@@ -1,13 +1,14 @@
 <?php
 
 
-
 namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 use Application\Entity\Teacher;
 use Application\Entity\Contract;
+
+
 /**
  * TeacherPaymentBill
  *
@@ -26,7 +27,7 @@ class TeacherPaymentBill
     private $id;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="ref_number", type="string", length=45, nullable=true)
      */
@@ -61,7 +62,21 @@ class TeacherPaymentBill
     private $totalTime;
 
     /**
-     * @var Contract
+     * @var float|null
+     *
+     * @ORM\Column(name="overtime", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $overtime;
+
+    /**
+     * @var float|null
+     *
+     * @ORM\Column(name="vacation_deduction", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $vacationDeduction;
+
+    /**
+     * @var \Contract
      *
      * @ORM\ManyToOne(targetEntity="Contract")
      * @ORM\JoinColumns({
@@ -71,7 +86,7 @@ class TeacherPaymentBill
     private $contract;
 
     /**
-     * @var Teacher
+     * @var \Teacher
      *
      * @ORM\ManyToOne(targetEntity="Teacher")
      * @ORM\JoinColumns({
@@ -95,11 +110,11 @@ class TeacherPaymentBill
     /**
      * Set refNumber.
      *
-     * @param string $refNumber
+     * @param string|null $refNumber
      *
      * @return TeacherPaymentBill
      */
-    public function setRefNumber($refNumber)
+    public function setRefNumber($refNumber = null)
     {
         $this->refNumber = $refNumber;
     
@@ -109,7 +124,7 @@ class TeacherPaymentBill
     /**
      * Get refNumber.
      *
-     * @return string
+     * @return string|null
      */
     public function getRefNumber()
     {
@@ -213,6 +228,54 @@ class TeacherPaymentBill
     }
 
     /**
+     * Set overtime.
+     *
+     * @param float|null $overtime
+     *
+     * @return TeacherPaymentBill
+     */
+    public function setOvertime($overtime = null)
+    {
+        $this->overtime = $overtime;
+    
+        return $this;
+    }
+
+    /**
+     * Get overtime.
+     *
+     * @return float|null
+     */
+    public function getOvertime()
+    {
+        return $this->overtime;
+    }
+
+    /**
+     * Set vacationDeduction.
+     *
+     * @param float|null $vacationDeduction
+     *
+     * @return TeacherPaymentBill
+     */
+    public function setVacationDeduction($vacationDeduction = null)
+    {
+        $this->vacationDeduction = $vacationDeduction;
+    
+        return $this;
+    }
+
+    /**
+     * Get vacationDeduction.
+     *
+     * @return float|null
+     */
+    public function getVacationDeduction()
+    {
+        return $this->vacationDeduction;
+    }
+
+    /**
      * Set contract.
      *
      * @param Contract|null $contract
@@ -260,3 +323,4 @@ class TeacherPaymentBill
         return $this->teacher;
     }
 }
+

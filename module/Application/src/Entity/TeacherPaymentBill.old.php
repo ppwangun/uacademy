@@ -1,12 +1,13 @@
 <?php
 
+
+
 namespace Application\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 use Application\Entity\Teacher;
 use Application\Entity\Contract;
-
 /**
  * TeacherPaymentBill
  *
@@ -27,7 +28,7 @@ class TeacherPaymentBill
     /**
      * @var string
      *
-     * @ORM\Column(name="ref_number", type="string", length=45, nullable=false)
+     * @ORM\Column(name="ref_number", type="string", length=45, nullable=true)
      */
     private $refNumber;
 
@@ -51,6 +52,13 @@ class TeacherPaymentBill
      * @ORM\Column(name="payment_status", type="boolean", nullable=true)
      */
     private $paymentStatus;
+
+    /**
+     * @var float|null
+     *
+     * @ORM\Column(name="total_time", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $totalTime;
 
     /**
      * @var Contract
@@ -178,6 +186,30 @@ class TeacherPaymentBill
     public function getPaymentStatus()
     {
         return $this->paymentStatus;
+    }
+
+    /**
+     * Set totalTime.
+     *
+     * @param float|null $totalTime
+     *
+     * @return TeacherPaymentBill
+     */
+    public function setTotalTime($totalTime = null)
+    {
+        $this->totalTime = $totalTime;
+    
+        return $this;
+    }
+
+    /**
+     * Get totalTime.
+     *
+     * @return float|null
+     */
+    public function getTotalTime()
+    {
+        return $this->totalTime;
     }
 
     /**

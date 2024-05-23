@@ -219,7 +219,6 @@ class IndexController extends AbstractActionController
                 ON ((s.id = a.student_id)AND (a.class_of_study_id = c.id ))
                 WHERE a.academic_year_id = :acadYrId 
                 AND s.matricule like :matricule
-                OR s.nom like :matricule
                 AND a.class_of_study_id like :classeId
                 AND a.status=1;
                 ';
