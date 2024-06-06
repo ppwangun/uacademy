@@ -852,7 +852,7 @@
                                                          ng-click="$ctrl.deleteSubject(subject)" class="fa fa-trash-o"></i>   
                                                       
                                                       <i ng-show="subject.isRepeated===1" 
-                                                         ng-style="<?=($this->access('global.system.admin', null))?'cursor: pointer; color: red;':'cursor: pointer; color: grey;'?>" 
+                                                         ng-style="<?=($this->access('global.system.admin', null))?'cursor = pointer; color = red;':'cursor = pointer; color = grey;'?>" 
                                                          ng-click="<?=($this->access('global.system.admin', null))?'$ctrl.deleteSubject(subject)':''?>" class="fa fa-trash-o"></i>                                                            
                                                  <!--     <i ng-show="subject.isRepeated===1" style="cursor: pointer; color: grey;"  class="fa fa-trash-o"></i> -->
                                                       <span></span>

@@ -554,7 +554,7 @@ function DialogController($scope, $mdDialog, $q,toastr) {
         headers : {'Content-Type' : 'application/json'}
         };
          $timeout(
-         $http.post('subjectregistration',JSON.stringfy(data)).then(
+         $http.post('subjectregistration',JSON.stringify(data)).then(
          function successCallback(response){
             
             response.data[0]?toastr.success('Informations sauvegardées avec succès'):toastr.error('Erreur lors de la sauvegarde des information', 'Erreur');
@@ -820,8 +820,8 @@ return {
         }
         ngModel.$parsers.push(function(value) {
             var ext = value.substr(value.lastIndexOf('.')+1);
-            if(ext=='') return;
-            if(validFormats.indexOf(ext) == -1){
+            if(ext==='') return;
+            if(validFormats.indexOf(ext) ===-1){
                 return value;
             }
             validImage(true);

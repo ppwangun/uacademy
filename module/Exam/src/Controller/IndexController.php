@@ -205,10 +205,15 @@ class IndexController extends AbstractActionController
 
                   $std->setNoteFinal($note);
                   if( $class->getCycle()->getCycleLevel()==1)
+                  {
                       $std->setGrade("D");
+                      $std->setPoints(1.3);
+                  }
                   if( $class->getCycle()->getCycleLevel()==2)
+                  {
                      $std->setGrade("C");
-                  $std->setPoints(1);
+                     $std->setPoints(2);
+                  }
                   $std->setIsFromDeliberation(1);
                   if(!$data["isModularComputation"])
                   foreach ($ueExams as $ueExam)

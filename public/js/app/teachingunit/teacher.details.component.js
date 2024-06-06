@@ -191,7 +191,7 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
      }),1000);
   };
   
-  
+  $ctrl.showbillDetails = false;
       //chech if numRef is setted
     if(numRef)
     {
@@ -201,10 +201,17 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
             headers : {'Accept' : 'application/json; charset=utf-8'}
         };
         $http.get('billDetails',config).then(function(response){
-            var data = response.data[0];
+            $ctrl.billDetails = response.data[0];
+            $ctrl.selectedTeacher = response.data[1];
+            $ctrl.selectedUe = response.data[2];
+            $ctrl.bill = response.data[3];
+            $ctrl.showbillDetails = true;
+            console.log($ctrl.selectedUe)
+            
+            
         });        
     }
-  
+  console.log($ctrl.showbillDetails);
   $ctrl.loadBills = function(selectectedTeacher,selectedUe)
   {
     var data = {teacherID: selectectedTeacher.id,contractID : selectedUe.id};
@@ -338,7 +345,7 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
     }
     $scope.onSelectContract = function ($contractId) {
         $scope.selectedContractId = $contractId;
-        $scope.currentContract = $scope.currentTeacher?.teaching_units?.find(elt => elt.coshs === $contractId);
+        $scope.currentContract = $scope.currentTeacher?.teaching_units?.find(elt => elt.id === $contractId);
 
         $scope.currentProgressionStats = null;
         $scope.loadCurrentProgressionStats();

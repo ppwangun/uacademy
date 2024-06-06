@@ -110,8 +110,7 @@ class SubjectRegistrationController extends AbstractRestfulController
            // if ($this->getRequest()->isPost()){
            
            // Retrieve form data from POST variables
-            
-            
+
             if(isset($data["ueId"])&&!isset($data["subjectId"]))
             {
                 $teachingUnit = $this->entityManager->getRepository(TeachingUnit::class)->find($data['ueId']);
@@ -207,22 +206,23 @@ class SubjectRegistrationController extends AbstractRestfulController
             $std_mat = $data['id'];
             $subjects = $data['subjects'];
             $msge = false;
-            
+           
             //retrive student_id from matricule
             $student = $this->entityManager->getRepository(Student::class)->findOneByMatricule($std_mat);
             foreach ($subjects as $key=>$value)
             {
                
                 //retrive the subject based on subject code
-                $teachingUnit = $this->entityManager->getRepository(TeachingUnit::class)->find($value['id']);
+                $cosh = $this->entityManager->getRepository(ClassOfStudyHasSemester::class)->find($value['id']);
+                $teachingUnit = $cosh->getTeachingUnit();
                 $semester = $this->entityManager->getRepository(Semester::class)->find($value['semId']);
-                
+               
                 //check if the subject is already registered for the student
-                $isRegistered = $this->entityManager->getRepository(UnitRegistration::class)->findBy(array("student"=>$student,"teachingUnit"=>$teachingUnit,"semester"=>$semester));
-                
+                $isRegistered = $this->entityManager->getRepository(UnitRegistration::class)->findOneBy(array("student"=>$student,"teachingUnit"=>$teachingUnit,"subject"=>[NULL,""],"semester"=>$semester));
+             
                 if(!$isRegistered )
                 {
-                   
+                  
                     $unitRegistration = new UnitRegistration();
                     
                     $unitRegistration->setStudent($student);

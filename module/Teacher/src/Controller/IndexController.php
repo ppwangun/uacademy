@@ -176,17 +176,18 @@ class IndexController extends AbstractActionController
         $this->entityManager->getConnection()->beginTransaction();
         try
         { 
-            $data = $this->params()->fromPost(); // var_dump($data); exit;
+            $data = $this->params()->fromPost(); // 
+            //var_dump($data); exit;
         
             $contract = $this->entityManager->getRepository(Contract::class)->find($data["contractId"]);    
             $progression = $this->entityManager->getRepository(ContractFollowUp::class)->findByContract($contract);  
-       
+   
             foreach($progression as $key=>$value)
             {
                 $hydrator = new ReflectionHydrator(); 
                 $data = $hydrator->extract($value);
                 //$countries[$key] = $data; 
-            }  
+            }     
             $totalCm = 0;
             $totalTd = 0;
             $totalTp = 0;
@@ -203,7 +204,7 @@ class IndexController extends AbstractActionController
                 
             }
 
-           
+
             $dataOuput["cm"]["total"] = $contract->getCmHrs();
             $dataOuput["cm"]["progress"] = $totalCm; 
             $dataOuput["td"]["total"] = $contract->getTdHrs();
@@ -903,7 +904,9 @@ class IndexController extends AbstractActionController
             $data= $this->params()->fromQuery();                               
            
             $subjects=[];
-            $bills = [];
+            $billItems = [];
+            $teacher =[];
+            $subject = [];
            
             $userId = $this->sessionContainer->userId;
             $user = $this->entityManager->getRepository(User::class)->find($userId );
@@ -911,19 +914,50 @@ class IndexController extends AbstractActionController
            /* $contract= $this->entityManager->getRepository(Contract::class)->find($data["contractID"] );
             $teacher= $this->entityManager->getRepository(Teacher::class)->find($data["teacherID"] );*/
         
-            $bills = $this->entityManager->getRepository(TeacherPaymentBill::class)->findBy(["refNumber"=>$data["numRef"]]);
+            $bill = $this->entityManager->getRepository(TeacherPaymentBill::class)->findOneBy(["refNumber"=>$data["numRef"]]);
+            $teacher["id"]= $bill->getTeacher()->getId();
+            $teacher["name"]= $bill->getTeacher()->getName();
+            $contract = $bill->getContract();
+            
+            $pymtRate = $bill->getTeacher()->getAcademicRanck()->getPaymentRate();
+            if($contract->getTeachingUnit())
+            {
+                $subject["id"] =  $contract->getTeachingUnit()->getId();
+                $subject["codeUe"] =  $contract->getTeachingUnit()->getCode();
+                $subject["nomUe"] =  $contract->getTeachingUnit()->getName();
+            }
+            else if($contract->getSubject())
+            {
+                $subject["id"] =  $contract->getSubject()->getId();
+                $subject["codeUe"] =  $contract->getSubject()->getCode();
+                $subject["nomUe"] =  $contract->getgetSubject()->getName();              
+            }
+
+            $billItems = $this->entityManager->getRepository(ContractFollowUp::class)->findBy(["teacherPaymentBill"=>$bill]);
+           
             $hydrator = new ReflectionHydrator();
            // $teacher = $bill->getTeacher(); 
-           // $teacher= $this->entityManager->getRepository(Teacher::class)->find($teacher->getId());
+           // $teacher= $this->entityManager->getRepository(Teacher::class)->findBy($teacher->getId());
            // $data = $hydrator->extract($teacher);  
             //print_r($data); exit;
-            foreach($bills as $key=>$value)
-            $bills[$key]= $hydrator->extract($value);           
-         
+            foreach($billItems as $key=>$value)
+            {
+                $billItems[$key]= $hydrator->extract($value);
+                $billItems[$key]["paymentRate"] = $pymtRate;
+                $billItems[$key]["paymentAmount"] = $value->getTotalTime() * $pymtRate;            
+            }
+          
+            $bill = $hydrator->extract($bill); 
+            
+            
+            
             $this->entityManager->getConnection()->commit();
 
             $output = new JsonModel([
-               $bills[0]
+               $billItems,
+                $teacher,
+                $subject,
+                $bill
             ]);
 
             return $output;       }
