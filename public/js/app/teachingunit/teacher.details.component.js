@@ -206,7 +206,13 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
             $ctrl.selectedUe = response.data[2];
             $ctrl.bill = response.data[3];
             $ctrl.showbillDetails = true;
-            console.log($ctrl.selectedUe)
+            $ctrl.paymentRate = response.data[4];
+            $ctrl.totalHrsAffected = response.data[5].totalHrsAffected;
+            $ctrl.totalHrsPreviouslyBilled = response.data[5].totalHrsPreviouslyBilled
+            $ctrl.totalHrsDone= response.data[5].totalHrsDone
+            $ctrl.vacationDeduction = response.data[5].vacationDeduction
+            $ctrl.totalHrsCurrentlyBilled = response.data[5].totalHrsCurrentlyBilled
+            $ctrl.overtime = response.data[5].overTime;
             
             
         });        

@@ -6,8 +6,17 @@ angular.module('teachingunit')
             templateUrl: 'programmingtpl',
             
 });
-function programmingCtrl($timeout,$http,$location,$mdDialog,$scope,uiCalendarConfig){
+function programmingCtrl($timeout,$http,$location,$mdDialog,$scope,uiCalendarConfig,toastr){
     var $ctrl = this;
+    
+    $ctrl.time = [{id:0,time:"7:30:00",name:"7h30"},{id:1,time:"8:00:00",name:"8h00"},{id:2,time:"8:30:00",name:"8h30"},{id:3,time:"9:00:00",name:"9h00"},{id:4,time:"9:30:00",name:"9h30"},
+    {id:5,time:"10:00:00",name:"10h00"},{id:6,time:"10:30:00",name:"10h30"},{id:7,time:"11:00:00",name:"11h00"},{id:8,time:"11:30:00",name:"11h30"},{id:9,time:"12:00:00",name:"12h00"},
+    {id:10,time:"12:30:00",name:"12h30"},{id:11,time:"13:00:00",name:"13h00"},{id:12,time:"13:30:00",name:"13h30"},{id:13,time:"14:00:00",name:"14h00"},{id:14,time:"14:30:00",name:"14h30"},
+    {id:15,time:"15:00:00",name:"15h00"},{id:16,time:"15:30:00",name:"15h30"},{id:17,time:"16:00:00",name:"16h00"},{id:18,time:"16:30:00",name:"16h30"},{id:19,time:"17:00:00",name:"17h00"},
+    {id:20,time:"17:30:00",name:"17h30"}]
+
+    $ctrl.startingTime = null;
+    $ctrl.endingTime = null;
     $ctrl.isActivatedUeSelect = false;
     $scope.eventSources = [ 
         
@@ -84,6 +93,82 @@ function programmingCtrl($timeout,$http,$location,$mdDialog,$scope,uiCalendarCon
 
    
  };
+
+ $ctrl.selectedItemChange= function(item)
+ {
+     // remove all existing events
+     
+
+      angular.forEach($scope.eventSources[0].events,function(value, key){
+          $scope.eventSources[0].events.splice(key,1);
+      });     
+
+      if(item)
+       var data = {classe:item.id}
+       else var data = {classe:-1}
+       var config = {
+        params: data,
+        headers : {'Accept' : 'application/json'}
+        };      
+        $http.get('getSchedulingCourses',config).then(function(response){
+            toastr.success("Opération effectuée avec succès");
+ 
+            angular.forEach(response.data[0], function(event, key) { 
+            $scope.eventSources[0].events.push({
+              id : event.id,
+          title  : event.eventName,
+          start  : event.startingTime.date,
+          end    : event.endingTime.date
+        })
+    })
+    });
+
+ };
+ 
+ $scope.addEvent = function(ev)
+ {
+     $ctrl.date = moment($ctrl.date).format("YYYY-MM-DD");
+     if($ctrl.selectedSubject) var eventName= $ctrl.selectedSubject.code;
+     else var eventName= $ctrl.selectedUe.code;
+     
+     if($ctrl.selectedSubject)         var data = {classe:$ctrl.selectedClasse.id,sem:$ctrl.selectedSem.id,ue:$ctrl.selectedUe.id,subject:$ctrl.selectedSubject.id,date:$ctrl.date,startingTime:$ctrl.startingTime.time,endingTime:$ctrl.endingTime.time}
+     else var data = {classe:$ctrl.selectedClasse.id,sem:$ctrl.selectedSem.id,ue:$ctrl.selectedUe.id,date:$ctrl.date,startingTime:$ctrl.startingTime.time,endingTime:$ctrl.endingTime.time}
+        var config = {
+        params: data,
+        headers : {'Accept' : 'application/json'}
+        };      
+        $http.get('schedulingCourse',config).then(function(response){
+     
+            var timeConflict = response.data.timeConflict;
+            if(timeConflict)
+            {
+                    $mdDialog.show(
+                    $mdDialog.alert()
+                      .parent(angular.element(document.querySelector('#popupContainer')))
+                      .clickOutsideToClose(true)
+                      .title('Erreur ')
+                      .textContent("Conflit sur l'heure de planification  ")
+                      .ariaLabel('Alert Dialog Demo')
+                      .ok('Fermer!')
+                      .targetEvent(ev)
+                  );
+                
+                return;    
+            }
+            
+            
+            toastr.success("Opération effectuée avec succès");
+            event = response.data[0];
+            $scope.eventSources[0].events.push({
+                id : event.id,
+                title  : event.eventName,
+                start  : event.startingTime.date,
+                end    : event.endingTime.date
+            })
+
+        });     
+     
+ }
  
  $ctrl.asignedSemToClasse = function(class_code){
     $ctrl.semesters = [];

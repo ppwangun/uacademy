@@ -66,10 +66,10 @@ class TeacherPaymentBill extends \Application\Entity\TeacherPaymentBill implemen
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'refNumber', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'date', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'paymentAmount', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'paymentStatus', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'totalTime', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'overtime', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'vacationDeduction', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'contract', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'teacher'];
+            return ['__isInitialized__', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'refNumber', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'date', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'paymentAmount', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'paymentStatus', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'totalTime', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'overtime', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'vacationDeduction', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'totalTimePreviouslyBilled', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'totalTimeCurrentlyBilled', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'contract', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'teacher'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'refNumber', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'date', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'paymentAmount', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'paymentStatus', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'totalTime', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'overtime', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'vacationDeduction', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'contract', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'teacher'];
+        return ['__isInitialized__', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'id', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'refNumber', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'date', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'paymentAmount', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'paymentStatus', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'totalTime', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'overtime', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'vacationDeduction', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'totalTimePreviouslyBilled', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'totalTimeCurrentlyBilled', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'contract', '' . "\0" . 'Application\\Entity\\TeacherPaymentBill' . "\0" . 'teacher'];
     }
 
     /**
@@ -343,6 +343,50 @@ class TeacherPaymentBill extends \Application\Entity\TeacherPaymentBill implemen
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getVacationDeduction', []);
 
         return parent::getVacationDeduction();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTotalTimePreviouslyBilled($totalTimePreviouslyBilled = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTotalTimePreviouslyBilled', [$totalTimePreviouslyBilled]);
+
+        return parent::setTotalTimePreviouslyBilled($totalTimePreviouslyBilled);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTotalTimePreviouslyBilled()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTotalTimePreviouslyBilled', []);
+
+        return parent::getTotalTimePreviouslyBilled();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setTotalTimeCurrentlyBilled($totalTimeCurrentlyBilled = NULL)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setTotalTimeCurrentlyBilled', [$totalTimeCurrentlyBilled]);
+
+        return parent::setTotalTimeCurrentlyBilled($totalTimeCurrentlyBilled);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getTotalTimeCurrentlyBilled()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getTotalTimeCurrentlyBilled', []);
+
+        return parent::getTotalTimeCurrentlyBilled();
     }
 
     /**

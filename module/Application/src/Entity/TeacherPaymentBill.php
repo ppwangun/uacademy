@@ -74,6 +74,20 @@ class TeacherPaymentBill
      * @ORM\Column(name="vacation_deduction", type="float", precision=10, scale=0, nullable=true)
      */
     private $vacationDeduction;
+    
+    /**
+     * @var float|null
+     *
+     * @ORM\Column(name="total_time_previously_billed", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $totalTimePreviouslyBilled;
+
+    /**
+     * @var float|null
+     *
+     * @ORM\Column(name="total_time_currently_billed", type="float", precision=10, scale=0, nullable=true)
+     */
+    private $totalTimeCurrentlyBilled;    
 
     /**
      * @var \Contract
@@ -274,6 +288,47 @@ class TeacherPaymentBill
     {
         return $this->vacationDeduction;
     }
+    
+public function setTotalTimePreviouslyBilled($totalTimePreviouslyBilled = null)
+    {
+        $this->totalTimePreviouslyBilled = $totalTimePreviouslyBilled;
+    
+        return $this;
+    }
+
+    /**
+     * Get totalTimePreviouslyBilled.
+     *
+     * @return float|null
+     */
+    public function getTotalTimePreviouslyBilled()
+    {
+        return $this->totalTimePreviouslyBilled;
+    }
+
+    /**
+     * Set totalTimeCurrentlyBilled.
+     *
+     * @param float|null $totalTimeCurrentlyBilled
+     *
+     * @return TeacherPaymentBill
+     */
+    public function setTotalTimeCurrentlyBilled($totalTimeCurrentlyBilled = null)
+    {
+        $this->totalTimeCurrentlyBilled = $totalTimeCurrentlyBilled;
+    
+        return $this;
+    }
+
+    /**
+     * Get totalTimeCurrentlyBilled.
+     *
+     * @return float|null
+     */
+    public function getTotalTimeCurrentlyBilled()
+    {
+        return $this->totalTimeCurrentlyBilled;
+    }    
 
     /**
      * Set contract.

@@ -243,6 +243,26 @@ return [
                         'action'=>'programmingtpl'
                     ],
                 ],
+            ],  
+            'schedulingCourse' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/schedulingCourse[/:id]',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'=>'schedulingCourse'
+                    ],
+                ],
+            ],  
+            'getSchedulingCourses' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/getSchedulingCourses[/:id]',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'=>'getSchedulingCourses'
+                    ],
+                ],
             ],            
              /*  'home' => [
                 'type' => Literal::class,

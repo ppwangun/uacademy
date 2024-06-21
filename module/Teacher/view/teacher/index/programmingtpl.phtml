@@ -26,7 +26,7 @@ z-index: 120000}
             <div class="row">
                 <div class='col-md-4'>
 
-                    <button  ng-show=" <?=($this->access('global.system.admin', null))||($this->access('exam.create', null))?true:false?> && !$ctrl.isUpdate" type="button" ng-click="saveChoices($ctrl.registeredStd)" class="btn btn-danger" ng-disabled="examForm.$invalid" >Enrégistrer</button>
+                    <button  ng-show=" <?=($this->access('global.system.admin', null))||($this->access('exam.create', null))?true:false?> && !$ctrl.isUpdate" type="button" ng-click="addEvent()" class="btn btn-danger" ng-disabled="examForm.$invalid" >Enrégistrer</button>
                     <span> <a href="home">Annuler</a></span>
                 </div>
                 <div class="col-md-2"></div>
@@ -109,7 +109,7 @@ z-index: 120000}
         <md-input-container flex="100">
             <label>Matière</label>
             <md-select ng-disabled="!$ctrl.isActivatedMatiereSelect " name="matiere" ng-model="$ctrl.selectedSubject" 
-                       ng-model-options="{trackBy: '$value.id'}"  ng-required="$ctrl.isMatiereRequired"
+                       ng-model-options="{trackBy: '$value.id'}"  
                        ng-change="$ctrl.loadPedagogicalRegStd($ctrl.selectedSubject,$ctrl.selectedClasse);" md-no-asterisk>
               <md-option ng-disabled="true"><em>---Choix de la Matière---</em></md-option>
 
@@ -125,31 +125,22 @@ z-index: 120000}
             <div layout-gt-sm='row' flex="100" style="margin-top:15px;" >
 
                  <div layout-gt-sm='column' >
-                       <md-datepicker name="dateExam" ng-model="$ctrl.dateExam" md-placeholder="Date de l'examen" md-is-open="$ctrl.isOpen" required></md-datepicker>   
+                       <md-datepicker name="dateExam" ng-model="$ctrl.date" md-placeholder="Date " md-is-open="$ctrl.isOpen" required></md-datepicker>   
 
                 </div>  
             </div>            
         <div layout-gt-sm='row' flex="100" style="margin-top:15px;">
         <md-input-container flex="100">
             <label>Heure de début</label>
-            <md-select ng-disabled="!$ctrl.isActivatedMatiereSelect " name="matiere" ng-model="$ctrl.startiingTime" 
-                       ng-model-options="{trackBy: '$value.id'}"  ng-required="$ctrl.isMatiereRequired"
+            <md-select ng-disabled="!$ctrl.isActivatedMatiereSelect " name="startingTime" ng-model="$ctrl.startingTime" 
+                       ng-required="true"
                        md-no-asterisk>
               <md-option ng-disabled="true"><em>---Choix de la Matière---</em></md-option>
 
-              <md-option  ng-value="7h30" > 7h30 </md-option>
-              <md-option  ng-value="8h30" > 8h30 </md-option>
-              <md-option  ng-value="9h30" > 9h30 </md-option>
-              <md-option  ng-value="10h30" > 10h30 </md-option>
-              <md-option  ng-value="11h30" > 11h30 </md-option>
-              <md-option  ng-value="12h30" > 12h30 </md-option>
-              <md-option  ng-value="13h30" > 13h30 </md-option>
-              <md-option  ng-value="14h30" > 14h30 </md-option>
-              <md-option  ng-value="15h30" > 15h30 </md-option>
-              <md-option  ng-value="16h30" > 16h30 </md-option>
-              <md-option  ng-value="17h30" > 17h30 </md-option>
+              <md-option  ng-value="time" ng-repeat="time in $ctrl.time" > {{time.name}} </md-option>
+
             </md-select>
-            <div class="errors" ng-messages="examForm.matiere.$error">
+            <div class="errors" ng-messages="examForm.startingTime.$error">
               <div ng-message="required">Champ obligatoire</div>
             </div>
         </md-input-container>  
@@ -157,24 +148,14 @@ z-index: 120000}
         <div layout-gt-sm='row' flex="100" style="margin-top:15px;">
         <md-input-container flex="100">
             <label>Heure de fin</label>
-            <md-select ng-disabled="!$ctrl.isActivatedMatiereSelect " name="matiere" ng-model="$ctrl.endingTime" 
-                       ng-model-options="{trackBy: '$value.id'}"  ng-required="$ctrl.isMatiereRequired"
+            <md-select ng-disabled="!$ctrl.isActivatedMatiereSelect " name="endingTime"  ng-model="$ctrl.endingTime" 
+                         ng-required="true"
                        md-no-asterisk>
               <md-option ng-disabled="true"><em>---Choix de la Matière---</em></md-option>
 
-              <md-option  ng-value="7h30" > 7h30 </md-option>
-              <md-option  ng-value="8h30" > 8h30 </md-option>
-              <md-option  ng-value="9h30" > 9h30 </md-option>
-              <md-option  ng-value="10h30" > 10h30 </md-option>
-              <md-option  ng-value="11h30" > 11h30 </md-option>
-              <md-option  ng-value="12h30" > 12h30 </md-option>
-              <md-option  ng-value="13h30" > 13h30 </md-option>
-              <md-option  ng-value="14h30" > 14h30 </md-option>
-              <md-option  ng-value="15h30" > 15h30 </md-option>
-              <md-option  ng-value="16h30" > 16h30 </md-option>
-              <md-option  ng-value="17h30" > 17h30 </md-option>
+                    <md-option  ng-value="time" ng-repeat="time in $ctrl.time" > {{time.name}} </md-option>
             </md-select>
-            <div class="errors" ng-messages="examForm.matiere.$error">
+            <div class="errors" ng-messages="examForm.endingTime.$error">
               <div ng-message="required">Champ obligatoire</div>
             </div>
         </md-input-container>  

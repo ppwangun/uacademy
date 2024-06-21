@@ -19,6 +19,10 @@ use Application\Entity\Faculty;
 use Application\Entity\AcademicRanck;
 use Application\Entity\AcademicYear;
 use Application\Entity\Teacher;
+use Application\Entity\ClassOfStudy;
+use Application\Entity\TeachingUnit;
+use Application\Entity\Subject;
+use Application\Entity\Semester;
 use Application\Entity\Contract;
 use Application\Entity\ClassOfStudyHasSemester;
 use Application\Entity\User;
@@ -26,6 +30,8 @@ use Application\Entity\TeacherPaymentBill;
 use Application\Entity\CurrentYearUesAndSubjectsView;
 use Application\Entity\ContractFollowUp;
 use Application\Entity\AllContractsView;
+use Application\Entity\CourseScheduled;
+
 
 
 
@@ -919,6 +925,8 @@ class IndexController extends AbstractActionController
             $teacher["name"]= $bill->getTeacher()->getName();
             $contract = $bill->getContract();
             
+            
+            
             $pymtRate = $bill->getTeacher()->getAcademicRanck()->getPaymentRate();
             if($contract->getTeachingUnit())
             {
@@ -940,15 +948,25 @@ class IndexController extends AbstractActionController
            // $teacher= $this->entityManager->getRepository(Teacher::class)->findBy($teacher->getId());
            // $data = $hydrator->extract($teacher);  
             //print_r($data); exit;
+            $totalHrsDone = 0;
             foreach($billItems as $key=>$value)
             {
                 $billItems[$key]= $hydrator->extract($value);
                 $billItems[$key]["paymentRate"] = $pymtRate;
-                $billItems[$key]["paymentAmount"] = $value->getTotalTime() * $pymtRate;            
+                $billItems[$key]["paymentAmount"] = $value->getTotalTime() * $pymtRate;  
+                $totalHrsDone +=$value->getTotalTime();
             }
-          
+            $paymentRate = $bill->getTeacher()->getAcademicRanck()->getPaymentRate();
+            $overTime = $bill->getOverTime();
+            $totalHrs["totalHrsPreviouslyBilled"] = $bill->getTotalTimePreviouslyBilled();
+            $totalHrs["totalHrsCurrentlyBilled"] = $bill->getTotalTimeCurrentlyBilled();
+            $totalHrs["vacationDeduction"] = $bill->getVacationDeduction();
+            $totalHrs["totalHrsDone"] = $totalHrsDone;
             $bill = $hydrator->extract($bill); 
+            $totalHrs["totalHrsAffected"] = $contract->getVolumeHrs(); 
             
+            
+            $totalHrs["overTime"] =  $overTime;
             
             
             $this->entityManager->getConnection()->commit();
@@ -957,7 +975,9 @@ class IndexController extends AbstractActionController
                $billItems,
                 $teacher,
                 $subject,
-                $bill
+                $bill,
+                $paymentRate,
+                $totalHrs
             ]);
 
             return $output;       }
@@ -968,5 +988,153 @@ class IndexController extends AbstractActionController
             
         }         
         
-    }      
+    }
+    
+    public function schedulingCourseAction()
+    {
+        $this->entityManager->getConnection()->beginTransaction();
+        try
+        { 
+            $data= $this->params()->fromQuery();  
+            $subject = null;
+            $teacher =null;
+            $resource = null;
+            $classOfStudy = $this->entityManager->getRepository(ClassOfStudy::class)->find($data["classe"]);
+           // $teacher = $this->entityManager->getRepository(Teacher::class)->find($data["teacher"]);
+            
+            $teachingUnit = $this->entityManager->getRepository(TeachingUnit::class)->find($data["ue"]);
+            if(isset($data["subject"]))
+                $subject = $this->entityManager->getRepository(Subject::class)->find($data["subject"]);
+            $semester = $this->entityManager->getRepository(Semester::class)->find($data["sem"]);
+    
+            $contract = $this->entityManager->getRepository(Contract::class)->findOneBy(["teachingUnit"=>$teachingUnit,"subject"=>$subject,"semester"=>$semester]); 
+             if($contract)
+                $teacher = $contract->getTeacher();
+             
+              $dateScheduled  = new \DateTime( $data["date"]." ".$data["startingTime"]);
+                        $startingTime =new \DateTime( $data["date"]." ".$data["startingTime"]);
+            $endingTime = new \DateTime($data["date"]." ".$data["endingTime"]); 
+
+            if($this->checkTimeConflictByClass($data["classe"], $startingTime))
+              return new JsonModel([ "timeConflict"=>true ]); 
+              
+              
+            $courseScheduled = new CourseScheduled();
+            
+            $courseScheduled->setClassOfStudy($classOfStudy);
+            $courseScheduled->setTeacher($teacher);
+            $courseScheduled->setTeachingUnit($teachingUnit);
+            $courseScheduled->setSubject($subject);
+            $courseScheduled->setSemester($semester);
+            
+            
+            $courseScheduled->setDateScheduled($dateScheduled);
+            $courseScheduled->setStartingTime($startingTime);
+            $courseScheduled->setEndingTime($endingTime);
+            
+            $courseScheduled->setResource($resource);
+            
+            $this->entityManager->persist($courseScheduled);
+            $this->entityManager->flush();
+            
+           $hydrator = new ReflectionHydrator();
+
+            $data = $hydrator->extract($courseScheduled);
+            $data["eventName"] = $classOfStudy->getCode()." \n".$teachingUnit->getCode();
+                
+
+           // }
+
+
+            $this->entityManager->getConnection()->commit();
+            
+           
+            $output = new JsonModel([
+                $data
+                    
+            ]);
+
+            return $output;       }
+        catch(Exception $e)
+        {
+           $this->entityManager->getConnection()->rollBack();
+            throw $e;
+            
+        }         
+        
+    }     
+    
+public function getSchedulingCoursesAction()
+    {
+        $this->entityManager->getConnection()->beginTransaction();
+        try
+        { 
+            $key = 0;
+            $myCourse = [];
+            $data= $this->params()->fromQuery(); 
+            
+            $acadYr = $this->entityManager->getRepository(AcademicYear::class)->findOneByIsDefault(1); 
+            $semester = $this->entityManager->getRepository(Semester::class)->findByAcademicYear($acadYr); 
+            $classOfStudy = $this->entityManager->getRepository(ClassOfStudy::class)->find($data["classe"]);
+            foreach ($semester as $sem)
+            {
+                $courseScheduled = $this->entityManager->getRepository(CourseScheduled::class)->findBy(["classOfStudy"=>$classOfStudy,"semester"=>$sem]);
+                
+                foreach($courseScheduled as $course)
+                {
+                    $hydrator = new ReflectionHydrator();
+                    $teachingUnit = $course->getTeachingUnit();
+                    
+                    if($course->getTeacher())$teacher = $course->getTeacher()->getName()." ".$course->getTeacher()->getSurname(); else $teacher = ""; 
+                    $course = $hydrator->extract($course);
+                    $course["eventName"] = $classOfStudy->getCode()." \n".$teachingUnit->getCode();
+                   
+                    $course["eventName"] .= "\n".$teacher;
+                    
+                    $myCourse[$key] = $course;
+                    $key++;
+                }
+                
+            }
+
+                
+
+           // }
+
+
+            $this->entityManager->getConnection()->commit();
+            
+           
+            $output = new JsonModel([
+                $myCourse
+                    
+            ]);
+
+            return $output;       }
+        catch(Exception $e)
+        {
+           $this->entityManager->getConnection()->rollBack();
+            throw $e;
+            
+        }         
+        
+    }
+    
+    private function checkTimeConflictByClass($classe,$startingTime)
+    {
+        
+                    $query = $this->entityManager->createQuery('SELECT c.id  FROM Application\Entity\CourseScheduled c'
+                    .' JOIN c.classOfStudy cl'
+                    .' WHERE cl.id =:classe'
+                    .' AND :startingTime BETWEEN c.startingTime AND  c.endingTime'
+                    );
+            $query->setParameter('classe', $classe);
+            $query->setParameter('startingTime', $startingTime);
+            $courseScheduled = $query->getResult();
+
+            if(sizeof($courseScheduled)>0) return 1;
+            return 0;
+        
+        
+    }
 }
