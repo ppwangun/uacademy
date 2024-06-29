@@ -1126,6 +1126,8 @@ class IndexController extends AbstractActionController
                     $this->studentManager->stdAdminRegistration($row,1,0);
                     $this->studentManager->stdPedagogicRegistration($row["classe"],$std);
                     $this->studentManager->stdSemesterRegistration($row["classe"],$std,$row["mpc"],0,0,0,0,0);
+                    
+                    $this->entityManager->flush();
                 }
             }            
   /*      foreach ($reader as $row) {
