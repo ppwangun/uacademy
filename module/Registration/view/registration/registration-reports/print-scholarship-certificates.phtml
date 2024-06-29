@@ -104,20 +104,20 @@ $pdf->writeHTML($html);
 
 $pdf->SetFont('arialunicodems', '',12);
 
-$html = '    <table style="font-weight: bold; margin-top: 50px; margin-left:20%" >
+$html = '    <table style="margin-top: 50px; margin-left:20%" >
         
 
         
-        <tr style=" margin:10px;"><td >Nom(s) et Prénom(s): </td>
+        <tr style=" margin:10px;"><td ><strong>Nom(s) et Prénom(s): </strong></td>
         <td><span > '.$student["nom"].' '.$student["prenom"].'</td></tr>
 
-        <tr style=" margin:10px;"><td >matricule n° : </td>
+        <tr style=" margin:10px;"><td ><strong>matricule n° : <strong>/</td>
         <td><span > '.$student["matricule"].'</span></td></tr>
             
-        <tr style=" margin:10px;"><td >né(e) le : </td>
+        <tr style=" margin:10px;"><td ><strong>né(e) le : </strong></td>
         <td><span > '.$student["dateOfBirth"].'</span></td></tr>
             
-        <tr style=" margin:10px;"><td >à : <br></td>
+        <tr style=" margin:10px;"><td ><strong>à : </strong><br></td>
         <td><span > '.$student["bornAt"].'</span></td></tr>
 
         
