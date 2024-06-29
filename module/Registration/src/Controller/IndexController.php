@@ -1115,10 +1115,11 @@ class IndexController extends AbstractActionController
                     $row["nom"] = $sheetData[$i][1];
                     $row["prenom"] = $sheetData[$i][2];
                     $row["date_naissance"] = $sheetData[$i][3];
-                    $row["classe"] = $sheetData[$i][4];
-                    $row["fees"] = $sheetData[$i][5];
-                    $row["debt"] = $sheetData[$i][6];
-                    $row["mpc"] = $sheetData[$i][7];
+                    $row["lieu_naissance"] = $sheetData[$i][4];
+                    $row["classe"] = $sheetData[$i][5];
+                    $row["fees"] = $sheetData[$i][6];
+                    $row["debt"] = $sheetData[$i][7];
+                    $row["mpc"] = $sheetData[$i][8];
                    
                     $std = $this->studentManager->addStudent($row);
                    

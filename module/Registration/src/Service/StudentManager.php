@@ -112,6 +112,7 @@ class StudentManager {
                  $std->setNom($data["nom"]);
                  $std->setPrenom($data["prenom"]);
                  $std->setDateOfBirth(new \DateTime($date_naissance));
+                 $std->setBornAt($data["lieu_naissance"]);
                 //Update student
                // $this->entityManager->persist();   
                  $this->entityManager->flush();
@@ -127,6 +128,7 @@ class StudentManager {
                 $student->setNom($data["nom"]);
                 $student->setPrenom($data["prenom"]);
                 $student->setDateOfBirth(new \DateTime($date_naissance));
+                $student->setBornAt($data["lieu_naissance"]);
                 $this->entityManager->persist($student);
                 $this->entityManager->flush();
                 $std = $student;
