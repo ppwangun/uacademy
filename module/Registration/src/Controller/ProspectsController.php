@@ -110,8 +110,8 @@ class ProspectsController extends AbstractRestfulController
             {
             $student = $this->entityManager->getRepository(ProspectiveStudentView::class)->findOneByNumDossier($data['numDossier']);
             $prospect = $this->entityManager->getRepository(ProspetiveRegistration::class)->findOneByNumDossier($data['numDossier']);
-            $acadYr = $this->entityManager->getRepository(AcademicYear::class)->findOneByIsDefault(1);
-            $classe = $this->entityManager->getRepository(ClassOfStudy::class)->findOneByCode($student->getChoixFormation1());
+            $acadYr = $this->entityManager->getRepository(AcademicYear::class)->findOneByOnlineRegistrationDefaultYear(1);
+            $classe = $this->entityManager->getRepository(ClassOfStudy::class)->findOneByCode($data["classe"]);
            
             $degree = $classe->getDegree();
             $prospect->setStatus($data['status']);
@@ -125,6 +125,7 @@ class ProspectsController extends AbstractRestfulController
             $admission->setPrenom($student->getPrenom());
             $admission->setPhoneNumber($student->getPhoneNumber());
             $admission->setStatus(0);
+            $admission->setDateAdmission(new \DateTime(date('Y-m-d H:i:s')));
             $admission->setDegree($degree);
             $admission->setProspectiveStudent($prospect->getProspectiveStudent());
             

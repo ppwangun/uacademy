@@ -60,11 +60,18 @@ z-index: 120000}
         <div class="col-md-6"><strong>Nom:</strong>&nbsp;&nbsp;&nbsp;&nbsp;     {{$ctrl.prospect.nom+" "+$ctrl.prospect.prenom}}</div><div class="col-md-6" ></div>
     </div>
     <div layout='row'>
-        <div class="col-md-6"><strong>Ecole:</strong>&nbsp;&nbsp;&nbsp;&nbsp;{{$ctrl.prospect.faculte}}</div><div class="col-md-6" ><strong>Filière:</strong>&nbsp;&nbsp;&nbsp;&nbsp;{{$ctrl.prospect.filiere}}</div>
+        <div class="col-md-12"><strong> Choix de la Fomation :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>{{$ctrl.prospect.classe}}</div>
+        <p>
+        <div>
+        <md-radio-group ng-model="$ctrl.prospect.classe" aria-labelledby="favoriteFruit">
+          <md-radio-button ng-value="$ctrl.prospect.choixFormation1" class="md-primary">Premier choix ({{$ctrl.prospect.choixFormation1}})</md-radio-button>
+          <md-radio-button ng-value="$ctrl.prospect.choixFormation2">Deuxième choix ({{$ctrl.prospect.choixFormation2}})</md-radio-button>
+          <md-radio-button ng-value="$ctrl.prospect.choixFormation3"> Troisième choix ({{$ctrl.prospect.choixFormation3}})</md-radio-button>
+        </md-radio-group>
+        </div>
+        </p>
     </div>
-    <div layout='row'>
-        <div class="col-md-6"><strong>Diplôme:</strong>&nbsp;&nbsp;&nbsp;&nbsp; {{$ctrl.prospect.diplome}}</div><div class="col-md-6" ><strong>Classe:</strong> {{$ctrl.prospect.classe}}</div>
-    </div>
+
  
            
     

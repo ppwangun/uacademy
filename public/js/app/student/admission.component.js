@@ -78,7 +78,8 @@ function studentCtrl($timeout,$http,$location,$mdDialog,$scope,toastr,$routePara
          $http.get('getProspects',config).then(
          function successCallback(response){
            $scope.cpt = 1;
-            $ctrl.prospect = response.data[0]; 
+            $ctrl.prospect = response.data[0];
+            $ctrl.prospect.classe = $ctrl.prospect.choixFormation1;
             //$ctrl.students= response.data;
 
            //$ctrl.students=response.data.data;
@@ -118,11 +119,7 @@ function studentCtrl($timeout,$http,$location,$mdDialog,$scope,toastr,$routePara
     DTColumnDefBuilder.newColumnDef(1).withClass("td-small"),
     DTColumnDefBuilder.newColumnDef(2).notSortable(),
     DTColumnDefBuilder.newColumnDef(3).notSortable(),
-    DTColumnDefBuilder.newColumnDef(4),
-    DTColumnDefBuilder.newColumnDef(5),
-    DTColumnDefBuilder.newColumnDef(6),
-    DTColumnDefBuilder.newColumnDef(7),
-    DTColumnDefBuilder.newColumnDef(8).notSortable().withClass("td-2-small")
+    DTColumnDefBuilder.newColumnDef(4).notSortable().withClass("td-2-small")
   ];
 
     $ctrl.formatDate = function(date){
@@ -173,11 +170,11 @@ function studentCtrl($timeout,$http,$location,$mdDialog,$scope,toastr,$routePara
  $ctrl.acceptProspectivieStd = function(numDossier,ev)
  {
      
-        var data = {"numDossier":numDossier,"status":1}
+        var data = {"numDossier":numDossier,"status":1,"classe":$ctrl.prospect.classe}
      
         var confirm = $mdDialog.confirm()
             .title('Voulez vous vraiment accepter cette candidature?')
-            .textContent('Toutes les données associées à cette information seront perdues')
+            .textContent('')
              // .ariaLabel('Lucky day')
             .targetEvent(ev)
             .ok('Valider la candidature')
@@ -208,7 +205,7 @@ function studentCtrl($timeout,$http,$location,$mdDialog,$scope,toastr,$routePara
      
         var confirm = $mdDialog.confirm()
             .title('Voulez vous vraiment rejeter cette candidature?')
-            .textContent('Toutes les données associées à cette information seront perdues')
+            .textContent('')
              // .ariaLabel('Lucky day')
             .targetEvent(ev)
             .ok('Rejeter la candidature')

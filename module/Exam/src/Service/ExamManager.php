@@ -502,7 +502,7 @@ $ueExams = $this->entityManager->getRepository(CurrentYearUeExamsView::class)->f
             if ($st)
             {
 
-                $senderID = 'UdM';
+                $senderID = 'Agenla';
                 $api_key = "cnZTHTWhO0HHsivMJMWqIXSqdKt8ifH8kP5IRHbqYTquHqjux5ehSLxpWY4lWkkwNlw8";
                 $response = AVTClient::sendSMS($phoneNumber, $msge, $senderID, $api_key);
                           

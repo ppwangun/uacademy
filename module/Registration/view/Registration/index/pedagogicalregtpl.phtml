@@ -127,7 +127,7 @@ z-index: 120000}
               <!--tabs widget-->
                 <div class="row" >
                     <ul class="nav nav-tabs">
-                        <li class="active"><a href=""> Etudiant inscrits à l'UE <span style='font-weight: bold; color: red;'>{{$ctrl.selectedUe.code}} [{{$ctrl.selectedSubject.subjectCode}}] </span> &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i title='Ajouter des étudiants' style="color:lightgrey;  font-size: 22px; cursor: pointer;" class="fa fa-pencil-square-o"   ng-click="$ctrl.addStdToSubject()"></i></a></li>
+                        <li class="active"><a href=""> Etudiant inscrits à l'UE  <span style='font-weight: bold; color: red;'>{{$ctrl.selectedUe.code}} [{{$ctrl.selectedSubject.subjectCode}}] </span> &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i title='Ajouter des étudiants' style="color:lightgrey;  font-size: 22px; cursor: pointer;" class="fa fa-pencil-square-o"   ng-click="$ctrl.addStdToSubject()"></i></a></li>
                        
                             
                             
@@ -178,8 +178,8 @@ z-index: 120000}
                                                   <td ng-bind="std.nom"></td>
                                                   <td ng-bind="std.studentCurrentClasse"></td>
                                                   
-                                                  <td style="vertical-align: middle;"> 
-                                            <md-checkbox  ng-model="std.status" ng-disabled="std.isRepeated===1"  aria-label="Checkbox Indeterminate" 
+                                                  <td style="vertical-align: middle;">  
+                                            <md-checkbox  ng-model="std.status" ng-disabled="(std.isRepeated===1) && '<?=!$this->access('global.system.admin',null)?>'"  aria-label="Checkbox Indeterminate" 
                                                                   ng-true-value="1"
                                                            ng-checked="exists(std, selected)" ng-click="toggle(std, selected)"                   
                                                                   class="md-primary">
