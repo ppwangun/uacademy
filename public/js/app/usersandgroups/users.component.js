@@ -4,9 +4,14 @@ angular.module('users')
         .component('userManagement',{
             templateUrl: 'usermanagementpl',
             controller: usersCtrl 
-});
+})
 function usersCtrl($timeout,$http,$location){
     var $ctrl = this;
+    
+$ctrl.formatDate = function(date){
+  var dateOut = new Date(date);
+  return dateOut;
+};     
     
     /*$ctrl.init = function(){
      

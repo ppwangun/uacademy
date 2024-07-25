@@ -23,6 +23,7 @@ function newuserCtrl($timeout,$http,$location,$mdDialog,$routeParams,toastr){
     $ctrl.classes = []; 
     $ctrl.groups = [];
     $ctrl.users = [];
+    $ctrl.errorMsg = {error:false,msg:""};
     $ctrl.user = {email:'',status:1};
 
     $ctrl.querySearch   = querySearch;
@@ -68,6 +69,8 @@ function newuserCtrl($timeout,$http,$location,$mdDialog,$routeParams,toastr){
                         $http.get('adduser',config).then(
                         function(response){
                             $ctrl.user=response.data[0];
+
+                            
                             
                         }).then(function(){
                             
@@ -191,6 +194,7 @@ function newuserCtrl($timeout,$http,$location,$mdDialog,$routeParams,toastr){
      *----------------------------------------------------------------------- */    
    $ctrl.updateUser= function(){
        $ctrl.user["roles"] = $ctrl.groups;
+       
         var data = {id: $ctrl.user.id,data:$ctrl.user}; 
         var config = {
         params: data,
@@ -199,6 +203,8 @@ function newuserCtrl($timeout,$http,$location,$mdDialog,$routeParams,toastr){
       // $ctrl.degree.filiere_id=$ctrl.selectedItem.id;
        $http.put('adduser',data,config).then(
             function successCallback(response){
+                $ctrl.errorMsg=response.data[0];
+                console.log($ctrl.errorMsg)
                 //reinitialise form
                // $location.path("/classes");
             },

@@ -107,20 +107,24 @@ class AuthController extends AbstractActionController
 				   
 					// Get filtered and validated data
 					$data = $form->getData();
+
+                                       
 					
 					// Perform login attempt.
 					$result = $this->authManager->login($data['email'], 
 							$data['password'], $data['remember_me']);
-					
-					// Check result.
+                                        
+
+                                                 
+                                        // Check result.
 					if ($result->getCode()==Result::SUCCESS) {
 						// Get redirect URL.
 						$redirectUrl = $this->params()->fromPost('redirect_url', '');
 						$user = $this->entityManager->getRepository(User::class)->findOneByEmail($data['email']);
-						
-						 $this->sessionContainer->userName = $user->getNom();
-						 $this->sessionContainer->userId = $user->getId();
-						
+                                                $this->sessionContainer->userName = $user->getNom();
+                                                $this->sessionContainer->userEmail = $user->getEmail();
+                                                $this->sessionContainer->userId = $user->getId();
+
 						
 						if (!empty($redirectUrl)) {
 							// The below check is to prevent possible redirect attack 
@@ -162,14 +166,34 @@ class AuthController extends AbstractActionController
         }		
     }
     
+   
+    
     /**
      * The "logout" action performs logout operation.
      */
     public function logoutAction() 
-    {        
-        $this->authManager->logout();
-        
-        return $this->redirect()->toRoute('login');
+    {
+        $this->entityManager->getConnection()->beginTransaction();
+        try
+        {
+
+            $email = $this->sessionContainer->userEmail;            
+            $user = $this->entityManager->getRepository(User::class)->findOneByEmail($email);
+            $user->setConnectedStatus(0);
+            
+           
+            $this->authManager->logout();
+            $this->entityManager->flush();
+            $this->entityManager->getConnection()->commit();
+
+            return $this->redirect()->toRoute('login');
+        }
+        catch(Exception $e)
+        {
+           $this->entityManager->getConnection()->rollBack();
+            throw $e;
+            
+        }        
     }
     
     public function notAuthorizedAction()

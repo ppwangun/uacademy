@@ -18,9 +18,9 @@ function programmingCtrl($timeout,$http,$location,$mdDialog,$scope,uiCalendarCon
     $ctrl.startingTime = null;
     $ctrl.endingTime = null;
     $ctrl.isActivatedUeSelect = false;
-    $scope.eventSources = [ 
+    $scope.eventSources = [ ];
         
-        {
+    /*    {
            
       events: [ // put the array in the `events` property
         {
@@ -47,7 +47,7 @@ function programmingCtrl($timeout,$http,$location,$mdDialog,$scope,uiCalendarCon
      //textColor: 'yellow' // an option!
 
     },
-];
+];*/
     
     $scope.alertEventOnClick = function(info)
   {
@@ -99,13 +99,14 @@ function programmingCtrl($timeout,$http,$location,$mdDialog,$scope,uiCalendarCon
      // remove all existing events
      
 
-      angular.forEach($scope.eventSources[0].events,function(value, key){
-          $scope.eventSources[0].events.splice(key,1);
-      });     
-
+   //   angular.forEach($scope.eventSources[0].events,function(value, key){
+          //$scope.eventSources[0].events.splice(key,1);
+     // });     
+    
       if(item)
        var data = {classe:item.id}
        else var data = {classe:-1}
+       var events = []
        var config = {
         params: data,
         headers : {'Accept' : 'application/json'}
@@ -114,13 +115,16 @@ function programmingCtrl($timeout,$http,$location,$mdDialog,$scope,uiCalendarCon
             toastr.success("Opération effectuée avec succès");
  
             angular.forEach(response.data[0], function(event, key) { 
-            $scope.eventSources[0].events.push({
+            events.push({
               id : event.id,
           title  : event.eventName,
           start  : event.startingTime.date,
           end    : event.endingTime.date
         })
+        
+      
     })
+    $scope.eventSources[0] = events;
     });
 
  };
@@ -159,7 +163,7 @@ function programmingCtrl($timeout,$http,$location,$mdDialog,$scope,uiCalendarCon
             
             toastr.success("Opération effectuée avec succès");
             event = response.data[0];
-            $scope.eventSources[0].events.push({
+            $scope.eventSources[0].push({
                 id : event.id,
                 title  : event.eventName,
                 start  : event.startingTime.date,

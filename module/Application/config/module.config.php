@@ -45,7 +45,16 @@ return [
                     ],
                 ],
             ],
-
+               'passwordReset' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route'    => '/passwordReset',
+                    'defaults' => [
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'passwordReset',
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers' => [
@@ -97,7 +106,7 @@ return [
                 // to users having the "user.manage" permission.
                 ['actions' => ['index', 'edit', 'view', 'changePassword'], 
                  'allow' => '*'],
-                ['actions' => ['home', 'edit', 'view', 'changePassword'], 
+                ['actions' => ['home', 'edit', 'view', 'changePassword','passwordReset'], 
                  'allow' => '@']
             ],
             Controller\AuthController::class => [

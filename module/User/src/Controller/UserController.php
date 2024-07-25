@@ -41,6 +41,8 @@ class UserController extends AbstractRestfulController
 
                 $hydrator = new ReflectionHydrator();
                 $user = $hydrator->extract($user);
+                $user["password"] = "";
+                $user["confirm_password"] = "";
 
 
             $this->entityManager->getConnection()->commit();    
@@ -66,8 +68,9 @@ class UserController extends AbstractRestfulController
             {
                 $hydrator = new ReflectionHydrator();
                 $data = $hydrator->extract($value);
-
+                $data["fullName"] = $data["nom"]." ".$data["prenom"];
                 $users[$key] = $data;
+                //$users["fullName"] = $data["nom"]." ".$data["prenom"];
             }
             $this->entityManager->getConnection()->commit();    
             
@@ -125,7 +128,12 @@ class UserController extends AbstractRestfulController
             $data = $data["data"];
             $user=  $this->entityManager->getRepository(User::Class)->find($data["id"]);
             //updating user
-       
+           if($data["password"]!=$data["confirm_password"])
+                return new JsonModel([
+                 ["error"=>true,"msg"=>"les mots de passes ne correspondent pas"]
+                    
+                ]);
+               
             $this->userManager->updateUser($user,$data);
             
             //first delete all roles that user is associated with
