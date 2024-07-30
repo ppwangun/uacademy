@@ -35,7 +35,7 @@ z-index: 120000}
   
 <div  layout="column" ng-cloak class="md-inline-form">
 
-    <div ng-class="$ctrl.errorMsg.error?'alert alert-danger':''" role="alert"><span>{{$ctrl.errorMsg.error?$ctrl.errorMsg.msg:""}}</span></div>
+    <div ng-show="$ctrl.errorMsg.showAlert" ng-class="$ctrl.errorMsg.error?'alert alert-danger':'alert alert-success'" role="alert"><span>{{$ctrl.errorMsg.msg}}</span></div>
     <md-content layout-padding >
 
          

@@ -21,7 +21,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <!-- Panneau des boutton -->
-                    <div class="panel panel-default ">
+                    <div class="panel panel-default small">
                         <div class="panel-heading" style="margin-bottom: 15px;">
 
                             <a href="#!/newuser" class="btn btn-danger" id='newacadyr'>Créer</a>
@@ -49,7 +49,7 @@
 
                                       <td ng-bind="$ctrl.formatDate(user.dateCreated.date) | date:'dd/MM/yyyy HH:mm:ss'"></td>
                                       <td class="bg-info text-danger" ng-bind="$ctrl.formatDate(user.lastConnectedDate.date) | date:'dd/MM/yyyy HH:mm:ss'"></td>
-                                      <td style="font-size: 16px;" ng-class="user.connectedStatus?'text-success glyphicon glyphicon-user ':'bg-danger text-info'" ><span>{{user.connectedStatus?" En ligne":"Déconnecté"}}</span></td>
+                                      <td style="font-size: 16px;" ng-class="user.connectedStatus?'bg-warning text-success  ':'bg-danger text-info'" ><i ng-class="user.connectedStatus?'glyphicon glyphicon-user':'glyphicon glyphicon-remove-circle'"></i>{{user.connectedStatus?" Connecté":" Déconnecté"}}</td>
           <i class=""></i>                    
                                     </tr>
                                 </tbody>

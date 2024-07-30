@@ -70,12 +70,16 @@ class UserManager
         if($user->getEmail()!=$data['email'] && $this->checkUserExists($data['email'])) {
             throw new \Exception("Another user with email address " . $data['email'] . " already exists");
         }
-
+        if(!empty($data["password"]))
+        {
        // Encrypt password and store the password in encrypted state.
-        $bcrypt = new Bcrypt();
-        $passwordHash = $bcrypt->create($data['password']); 
+            $bcrypt = new Bcrypt();
+            $passwordHash = $bcrypt->create($data['password']);
+            $user->setPassword($passwordHash);
+            $user->setFirstConnection(1);
+        }
         $user->setEmail($data['email']);
-        $user->setPassword($passwordHash);
+        
         $user->setNom($data['nom']); 
         $user->setPrenom($data['prenom']); 
         $user->setStatus($data['status']);

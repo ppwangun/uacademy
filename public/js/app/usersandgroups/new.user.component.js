@@ -23,7 +23,7 @@ function newuserCtrl($timeout,$http,$location,$mdDialog,$routeParams,toastr){
     $ctrl.classes = []; 
     $ctrl.groups = [];
     $ctrl.users = [];
-    $ctrl.errorMsg = {error:false,msg:""};
+    $ctrl.errorMsg = {showAlert:false,error:false,msg:""};
     $ctrl.user = {email:'',status:1};
 
     $ctrl.querySearch   = querySearch;
@@ -204,6 +204,8 @@ function newuserCtrl($timeout,$http,$location,$mdDialog,$routeParams,toastr){
        $http.put('adduser',data,config).then(
             function successCallback(response){
                 $ctrl.errorMsg=response.data[0];
+                if($ctrl.errorMsg.error) toastr.error("Une erreur inattendue est survenue");
+                else toastr.success("Opération effectuée avec succès")
                 console.log($ctrl.errorMsg)
                 //reinitialise form
                // $location.path("/classes");
