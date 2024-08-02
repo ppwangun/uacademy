@@ -69,12 +69,7 @@ class AuthController extends AbstractActionController
         $this->entityManager->getConnection()->beginTransaction();
         try
         {		
-			//$this->authService->clearIdentity();
-			//redirect to home page if session is still active
-			if ($this->authService->getIdentity()!=null) {
-				return $this->redirect()->toRoute('home');
-				
-			}
+
 			// Retrieve the redirect URL (if passed). We will redirect the user to this
 			// URL after successfull login.
 			$redirectUrl = (string)$this->params()->fromQuery('redirectUrl', '');
@@ -84,7 +79,7 @@ class AuthController extends AbstractActionController
 			
 			// Check if we do not have users in database at all. If so, create 
 			// the 'Admin' user.
-			$this->userManager->createAdminUserIfNotExists();
+			//$this->userManager->createAdminUserIfNotExists();
 			
                         $this->entityManager->getConnection()->commit();
 			// Create login form
@@ -108,7 +103,7 @@ class AuthController extends AbstractActionController
 					// Get filtered and validated data
 					$data = $form->getData();
 
-                                       
+                                      
 					
 					// Perform login attempt.
 					$result = $this->authManager->login($data['email'], 
@@ -125,7 +120,7 @@ class AuthController extends AbstractActionController
                                                 $this->sessionContainer->userEmail = $user->getEmail();
                                                 $this->sessionContainer->userId = $user->getId();
 
-						
+                                                						
 						if (!empty($redirectUrl)) {
 							// The below check is to prevent possible redirect attack 
 							// (if someone tries to redirect user to another domain).
@@ -179,7 +174,8 @@ class AuthController extends AbstractActionController
 
             $email = $this->sessionContainer->userEmail;            
             $user = $this->entityManager->getRepository(User::class)->findOneByEmail($email);
-            $user->setConnectedStatus(0);
+            if($user)
+                $user->setConnectedStatus(0);
             
            
             $this->authManager->logout();

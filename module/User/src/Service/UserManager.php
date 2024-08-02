@@ -101,7 +101,7 @@ class UserManager
         $user = $this->entityManager->getRepository(User::class)->findOneBy([]);
         if ($user==null) {
             $user = new User();
-            $user->setEmail('admin@agenlaacademy.com');
+            $user->setEmail('admin@UdMAcademy.com');
             $user->setNom('Admin');
             $bcrypt = new Bcrypt();
             $passwordHash = $bcrypt->create('Secur1ty');        

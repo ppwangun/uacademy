@@ -23,11 +23,9 @@ return [
                 'driverClass' => PDOMySqlDriver::class,
                 'params' => [
                     'host'     => '127.0.0.1', 
-                    //'host'     => '172.16.5.12',
                     'user'     => 'udm_root',
                     'password' => 'wpp',
                     'dbname'   => 'udm_academy',
-                    //'dbname'   => 'agenla_academy',
                     'charset'  => 'utf8',
                     'driverOptions' => [1002 => 'SET NAMES utf8'],
                 ]
@@ -46,7 +44,7 @@ return [
     'session_manager' => [
         // Session validators (used for security).
         'validators' => [
-           // RemoteAddr::class,
+            RemoteAddr::class,
             HttpUserAgent::class,
         ]
     ],
@@ -62,8 +60,8 @@ return [
                     // Store cached data in this directory.
                     'cache_dir' => './data/cache',
                     // Store cached data for 1 hour.
-                    'ttl' => 60*60*1*12 
-                    //'ttl' => 30*1 
+                    'ttl' => 60*60*1
+                    //'ttl' => 60*60*1*12 
                 ],
             ],
             'plugins' => [

@@ -47,7 +47,7 @@ class Module
      */
     public function onDispatch(MvcEvent $event)
     {
-        
+       
         // Get controller and action to which the HTTP request was dispatched.
         $controller = $event->getTarget();
         $controllerName = $event->getRouteMatch()->getParam('controller', null);
@@ -65,7 +65,7 @@ class Module
         {
             $result = $authManager->filterAccess($controllerName, $actionName);
             
-            if ($result==AuthManager::AUTH_REQUIRED) {
+            if ($result==AuthManager::AUTH_REQUIRED) {  
                 // Remember the URL of the page the user tried to access. We will
                 // redirect the user to that URL after successful login.
                 $uri = $event->getApplication()->getRequest()->getUri();
@@ -85,16 +85,7 @@ class Module
                 // Redirect the user to the "Not Authorized" page.
                 return $controller->redirect()->toRoute('not-authorized');
             }
-        // Get controller and action to which the HTTP request was dispatched.
-        $controller = $event->getTarget();
-        $controllerName = $event->getRouteMatch()->getParam('controller', null);
-        $actionName = $event->getRouteMatch()->getParam('action', null);
-        
-        // Convert dash-style action name to camel-case.
-        $actionName = str_replace('-', '', lcfirst(ucwords($actionName, '-')));
-        
-        // Get the instance of AuthManager service.
-        $authManager = $event->getApplication()->getServiceManager()->get(AuthManager::class);
+
         }
 
         

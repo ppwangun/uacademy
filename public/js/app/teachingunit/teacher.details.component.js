@@ -246,15 +246,16 @@ function teacherListController($scope, $mdDialog, $http, $timeout,DTOptionsBuild
             
             if(errorValue===0)
             {
-                alert("Facturation impssible: volume horaire en dépassement")
+                alert("Facturation impossible: volume horaire en dépassement")
             }
             else if(errorValue===1)
             {
-                alert("absence d'heure de cours à facturer")
+                alert("Absence d'heure de cours à facturer")
             }
 
         $ctrl.billDetails = response.data[0].paymentDetails;
         $ctrl.totalHrsBilled = response.data[0].totalBilledTime;
+        $ctrl.totalHrsPreviouslyBilled = response.data[0].alreadyBilledTime;
         $ctrl.totalHrsAffected = response.data[0].totalHoursAffected;
         $ctrl.overtime = response.data[0].overtime;
         $ctrl.paymentRate = response.data[0].paymentRate;

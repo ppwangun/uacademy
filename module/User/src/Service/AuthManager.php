@@ -78,8 +78,9 @@ class AuthManager
      */
     public function logout()
     {
+       
         // Allow to log out only when user is logged in.
-        if ($this->authService->getIdentity()==null) {
+        if ($this->authService->getIdentity()==null) { 
             header("location: login");
            // throw new \Exception('The user is not logged in');
         }
@@ -98,7 +99,7 @@ class AuthManager
  */
 public function filterAccess($controllerName, $actionName)
 {
-
+    
 
     // Determine mode - 'restrictive' (default) or 'permissive'. In restrictive
     // mode all controller actions must be explicitly listed under the 'access_filter'
@@ -117,14 +118,14 @@ public function filterAccess($controllerName, $actionName)
             $allow = $item['allow'];
             if (is_array($actionList) && in_array($actionName, $actionList) ||
                 $actionList=='*') {
+                 if (!$this->authService->hasIdentity()) {
+                    // Only authenticated user is allowed to see the page.
+                    return self::AUTH_REQUIRED;                        
+                }               
                 if ($allow=='*')
                     // Anyone is allowed to see the page.
                     return self::ACCESS_GRANTED; 
-                else if (!$this->authService->hasIdentity()) {
-                    // Only authenticated user is allowed to see the page.
-                    return self::AUTH_REQUIRED;                        
-                }
-                    
+   
                 if ($allow=='@') {
                     // Any authenticated user is allowed to see the page.
                     return self::ACCESS_GRANTED;                         

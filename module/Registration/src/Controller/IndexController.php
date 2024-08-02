@@ -1388,7 +1388,7 @@ class IndexController extends AbstractActionController
            // create spreadsheet header
             $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
-            $sheet->setTitle("Udmacademy By ppwangun");
+            $sheet->setTitle("UdMAcademy By ppwangun");
             $sheet->setCellValue('A1', 'Matricule');
             $sheet->setCellValue('B1', 'Genre');
             $sheet->setCellValue('C1', 'Nom');

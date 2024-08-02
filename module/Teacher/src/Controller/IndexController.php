@@ -848,8 +848,11 @@ class IndexController extends AbstractActionController
             
            
             $output = new JsonModel([
-               [ "paymentDetails"=>$paymentDetails,
+               [ 
+                   
+                "paymentDetails"=>$paymentDetails,
                 "totalBilledTime"=>$totalTime,
+                "alreadyBilledTime"=>$alreadyBilledTime,
                 "overtime"=>$overtime,
                 "paymentRate"=>$pymtRate,
                 "totalHoursAffected"=>$contract->getVolumeHrs()]
